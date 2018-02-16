@@ -19,7 +19,7 @@
             echo $this->Form->control('user');
         ?>
         <?= $this->Form->control('role', [
-            'options' => ['admin' => 'Admin', 'payment_team' => 'Payment Team', 'OSCP_students'=> 'OSCP students',]
+            'options' => ['admin' => 'Admin', 'payment_team' => 'Payment Team', 'OSCP_students'=> 'OSCP students']
         ]) ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

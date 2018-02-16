@@ -177,7 +177,7 @@ return [
      * 'YourTransport.php', where 'Your' is the name of the transport.
      */
     'EmailTransport' => [
-        'default' => [
+        /*'default' => [
             'className' => 'Mail',
             // The following keys are used in SMTP transports
             'host' => 'localhost',
@@ -188,7 +188,10 @@ return [
             'client' => null,
             'tls' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
-        ],
+        ],*/
+        'local'=> [
+    'className' => 'Mail'
+     ]
     ],
 
     /**
@@ -207,6 +210,10 @@ return [
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],
+        'local' => [
+            'transport' => 'local',
+            'from' => 'you@localhost',
+        ]
     ],
 
     /**

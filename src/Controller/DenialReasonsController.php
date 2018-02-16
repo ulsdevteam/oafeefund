@@ -104,4 +104,13 @@ class DenialReasonsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    public function isAuthorized($user)
+{ 
+        //$this->Flash->success(__($this->request->action));
+    // deny index action for certain role
+        if (isset($user['role']) && $user['role'] === 'admin') {
+        return true;
+    }
+}
+ 
 }

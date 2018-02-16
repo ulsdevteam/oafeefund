@@ -22,8 +22,10 @@
         <legend><?= __('Edit User') ?></legend>
         <?php
             echo $this->Form->control('user');
-            echo $this->Form->control('role');
         ?>
+        <?= $this->Form->control('role', [
+            'options' => ['admin' => 'Admin', 'payment_team' => 'Payment Team', 'OSCP_students'=> 'OSCP students']
+        ]) ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

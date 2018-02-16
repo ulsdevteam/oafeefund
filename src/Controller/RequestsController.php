@@ -151,28 +151,27 @@ class RequestsController extends AppController
     public function approve($id = null){
         
          //or you can load it in beforeFilter()
-        $data=$this->Requests->query();
-        $data->update()
+        if($this->request->data != null)
+        {
+        $approved=$this->Requests->query();
+        $approved->update()
         ->set(['Funded' => 'Approved'])
         ->where(['id' => $id])
         ->execute();
-        $this->set('data',$data);
-        $request = $this->Requests->get($id, [
-            'contain' => ['DenialReasons', 'Articles', 'Transactions']
-        ]);
-
-        $this->set('request', $request);
-        $email = new Email('default');
+        $data = $this->request->data;
+        $test = $data["reply_to"];
+        $subject = $data["subject"];
+        $body= $data["body"];
+        $from_addr=$data["from_addr"];
+        $from_name=$data["from_name"];
+        $email = new Email('local');
+        $email->from("$from_addr","$from_name")
+        ->to("$test")
+        ->subject("$subject")
+        ->send("$body");
+        }
         
-        $email->from(['me@example.com' => 'My Site'])
-        ->to('hoshangcharania@gmail.com')
-        ->subject('About')
-        ->send('My message');
-        /*$Email = new CakeEmail('test');
-        $Email->from(array('me@example.com' => 'My Site'))
-              ->to('hoshangcharania@gmail.com')
-              ->subject('About')
-              ->send('My message');*/
+ 
     }
     public function isAuthorized($user)
 { 
@@ -185,6 +184,7 @@ class RequestsController extends AppController
         
         return true;
     }
+    
     
     
 }

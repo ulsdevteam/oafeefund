@@ -53,8 +53,21 @@ class UsersController extends AppController
                       if($query->first()!=null)
                       {
                       $this->Auth->setUser($query->first());
-                      $this->redirect(array("controller" => "Requests", 
+                      if($role === 'admin')
+                      {
+                        $this->redirect(array("controller" => "Requests", 
+                      "action" => "index"));   
+                      }
+                      else if($role === 'OSCP_students')
+                      {
+                          $this->redirect(array("controller" => "Articles", 
                       "action" => "index"));
+                      }
+                      else if($role === 'payment_team')
+                      {
+                          $this->redirect(array("controller" => "Transactions", 
+                      "action" => "index"));
+                      }
                       }
                       else
                       {
@@ -186,4 +199,12 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    public function isAuthorized($user)
+   { 
+        //$this->Flash->success(__($this->request->action));
+    // deny index action for certain role
+        if (isset($user['role']) && $user['role'] === 'admin') {
+        return true;
+    }
+   }
 }
