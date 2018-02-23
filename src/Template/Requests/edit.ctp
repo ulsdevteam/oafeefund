@@ -4,24 +4,7 @@
  * @var \App\Model\Entity\Request $request
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $request->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $request->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Requests'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Denial Reasons'), ['controller' => 'DenialReasons', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Denial Reason'), ['controller' => 'DenialReasons', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Transactions'), ['controller' => 'Transactions', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Transaction'), ['controller' => 'Transactions', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
+
 <div class="requests form large-9 medium-8 columns content">
     <?= $this->Form->create($request) ?>
     <fieldset>

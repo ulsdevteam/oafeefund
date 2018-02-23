@@ -16,6 +16,7 @@ use Cake\Mailer\Email;
 class RequestsController extends AppController
 {
     
+    public $helpers = array('TinyMCE.TinyMCE');
     
      public function adduser()
     {
@@ -57,7 +58,6 @@ class RequestsController extends AppController
             'contain' => ['DenialReasons']
         ];
         $requests = $this->paginate($this->Requests);
-
         $this->set(compact('requests'));
     }
 
@@ -151,27 +151,51 @@ class RequestsController extends AppController
     public function approve($id = null){
         
          //or you can load it in beforeFilter()
+        
+        $requests=$this->Requests->find('all');
+        $results = $requests->first();
+        $this->set('results',$results);
         if($this->request->data != null)
         {
         $approved=$this->Requests->query();
         $approved->update()
         ->set(['Funded' => 'Approved'])
         ->where(['id' => $id])
-        ->execute();
+        ->execute(); 
         $data = $this->request->data;
-        $test = $data["reply_to"];
+        $test = $data["to"];
         $subject = $data["subject"];
-        $body= $data["body"];
+        $body= $data["Message_Body"];
         $from_addr=$data["from_addr"];
         $from_name=$data["from_name"];
         $email = new Email('local');
         $email->from("$from_addr","$from_name")
         ->to("$test")
+        ->emailFormat('html')
         ->subject("$subject")
         ->send("$body");
         }
         
  
+    }
+    
+    public function pendingrequests($user)
+    {
+        
+        $requests=$this->Requests->find('all')->where(['Requests.funded' => "pending"]);
+        $this->set('requests',$requests);
+        $requests = $this->paginate($requests);
+        
+    }
+    public function approvedrequests($user)
+    {
+        $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
+        $this->set('requests',$requests);
+        $requests = $this->paginate($requests);
+    }
+    public function deniedrequests($user)
+    {
+        
     }
     public function isAuthorized($user)
 { 
@@ -180,9 +204,9 @@ class RequestsController extends AppController
         if (isset($user['role']) && $user['role'] === 'admin') {
         return true;
     }
-    if (($this->request->action==="index") && $user['role'] === 'payment_team') {
-        
-        return true;
+    if (($this->request->action==="index") && $user['role'] === 'payment_team') 
+    {
+                return true;
     }
     
     

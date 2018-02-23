@@ -26,6 +26,7 @@ class UsersController extends AppController
     }
     public function login($id = null)
     {
+        $this->viewBuilder()->layout('default2');
         $val="You are already logged in as";
        if (empty($this->request->data)) {
            if($this->Auth->user()!= null)
@@ -117,6 +118,7 @@ class UsersController extends AppController
 
     public function logout()
     {
+        $this->viewBuilder()->layout('default2');
         return $this->redirect($this->Auth->logout());
     }
 

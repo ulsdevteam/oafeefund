@@ -207,6 +207,9 @@ Type::build('timestamp')
  *
  */
 
+Configure::write('TinyMCE.editorOptions', array('height' => '300px'));
+Plugin::load('Froala');
+Plugin::load('Froala', ['autoload' => true]);
 /*
  * Only try to load DebugKit in development mode
  * Debug Kit should not be installed on a production system
@@ -214,3 +217,18 @@ Type::build('timestamp')
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
+Plugin::load('TinyMCE', ['autoload' => true]);
+Plugin::load('Froala');
+Plugin::loadAll();
+Configure::write('TinyMCE.configs',array(
+	'simple' => array(
+		'mode' => 'textareas',
+		'theme' => 'simple',
+		'editor_selector' => 'mceSimple'
+	),
+	'advanced' => array(
+		'mode' => 'textareas',
+		'theme' => 'advanced',
+		'editor_selector' => 'mceAdvanced'
+	)
+));

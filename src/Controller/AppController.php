@@ -37,10 +37,11 @@ class AppController extends Controller
      *
      * @return void
      */
+    public $helpers = array('Froala.Froala','TinyMCE.TinyMCE');
     public function initialize()
     {
         parent::initialize();
-
+        
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth',[
@@ -77,6 +78,7 @@ class AppController extends Controller
     // Default deny
     return false;
        }
+    
     public function beforeFilter(Event $event)
     {
         

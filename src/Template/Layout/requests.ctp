@@ -25,7 +25,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <?= $this->fetch('title') ?>
     </title>
     <?= $this->Html->meta('icon') ?>
-    <?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>                                                             
+    <?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>                                                             >
 
     <?= $this->fetch('script'); ?>
     <?= $this->Html->css('base.css') ?>
@@ -75,7 +75,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div>
     <footer>
     </footer>
-</body>
     <script>
         $('.additionalmethods').hide();
         function additionalmethod(num){
@@ -90,5 +89,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     
         }
     </script>
-
+</body>
 </html>
+

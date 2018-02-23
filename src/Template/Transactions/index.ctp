@@ -4,17 +4,18 @@
  * @var \App\Model\Entity\Transaction[]|\Cake\Collection\CollectionInterface $transactions
  */
 ?>
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Transaction'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Requests'), ['controller' => 'Requests', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Request'), ['controller' => 'Requests', 'action' => 'add']) ?></li>
+        <li><?php $this->Html->link(__('New Transaction'), ['action' => 'add']) ?></li>
+        <li><?php $this->Html->link(__('List Requests'), ['controller' => 'Requests', 'action' => 'index']) ?></li>
+        <li><?php $this->Html->link(__('New Request'), ['controller' => 'Requests', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="transactions index large-9 medium-8 columns content">
     <h3><?= __('Transactions') ?></h3>
-    <table cellpadding="0" cellspacing="0">
+    <table cellpadding="20" cellspacing="20">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
