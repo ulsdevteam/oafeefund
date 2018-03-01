@@ -13,9 +13,7 @@
                 ['confirm' => __('Are you sure you want to delete # {0}?', $article->id)]
             )
         ?></li>
-        <li><?= $this->Html->link(__('List Articles'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Requests'), ['controller' => 'Requests', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Request'), ['controller' => 'Requests', 'action' => 'add']) ?></li>
+              <li><?= $this->Html->link(__('Go Back'), ['controller' => 'articles', 'action' => 'index']) ?></li>
     </ul>
 </nav>
 <div class="articles form large-9 medium-8 columns content">

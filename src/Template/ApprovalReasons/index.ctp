@@ -1,36 +1,34 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Article[]|\Cake\Collection\CollectionInterface $articles
+ * @var \App\Model\Entity\ApprovalReason[]|\Cake\Collection\CollectionInterface $approvalReasons
  */
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Article'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('New Approval Reason'), ['action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="articles index large-9 medium-8 columns content">
-    <h3><?= __('Articles') ?></h3>
+<div class="approvalReasons index large-9 medium-8 columns content">
+    <h3><?= __('Approval Reasons') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('request_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('publication_date') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('approval_reason') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($articles as $article): ?>
+            <?php foreach ($approvalReasons as $approvalReason): ?>
             <tr>
-                <td><?= $this->Number->format($article->id) ?></td>
-                <td><?= $article->has('request') ? $this->Html->link($article->request->id, ['controller' => 'Requests', 'action' => 'view', $article->request->id]) : '' ?></td>
-                <td><?= h($article->publication_date) ?></td>
+                <td><?= $this->Number->format($approvalReason->id) ?></td>
+                <td><?= h($approvalReason->approval_reason) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $article->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $article->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $article->id], ['confirm' => __('Are you sure you want to delete # {0}?', $article->id)]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $approvalReason->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $approvalReason->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $approvalReason->id], ['confirm' => __('Are you sure you want to delete # {0}?', $approvalReason->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

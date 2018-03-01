@@ -17,6 +17,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\DenialReason[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\DenialReason findOrCreate($search, callable $callback = null, $options = [])
  */
+
 class DenialReasonsTable extends Table
 {
 
@@ -49,14 +50,15 @@ class DenialReasonsTable extends Table
 
         $validator
             ->scalar('denial_reason')
-            ->maxLength('denial_reason', 64)
-            ->requirePresence('denial_reason', 'create')
-            ->notEmpty('denial_reason');
+            ->maxLength('denial_reason', 512)
+            ->requirePresence('denial_reason', 'create');
+               
 
         $validator
             ->scalar('denial_email')
             ->requirePresence('denial_email', 'create')
-            ->notEmpty('denial_email');
+            ->allowEmpty('denial_email');  
+            
 
         return $validator;
     }

@@ -155,6 +155,13 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all');
         $results = $requests->first();
         $this->set('results',$results);
+        $this->loadModel('ApprovalReasons');
+        $requests2=$this->ApprovalReasons->find('list', [
+    'keyField' => 'id',
+    'valueField' => 'approval_reason'
+       ]);
+        $results2 = $requests2->toArray();
+        $this->set('results2',$results2);
         if($this->request->data != null)
         {
         $approved=$this->Requests->query();
@@ -163,13 +170,14 @@ class RequestsController extends AppController
         ->where(['id' => $id])
         ->execute(); 
         $data = $this->request->data;
-        $test = $data["to"];
+        //$test = $data["to"];
+        $test=$results->email;
         $subject = $data["subject"];
         $body= $data["Message_Body"];
-        $from_addr=$data["from_addr"];
-        $from_name=$data["from_name"];
+        //$from_addr=$data["from_addr"];
+        //$from_name=$data["from_name"];
         $email = new Email('local');
-        $email->from("$from_addr","$from_name")
+        $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
         ->to("$test")
         ->emailFormat('html')
         ->subject("$subject")
@@ -178,7 +186,44 @@ class RequestsController extends AppController
         
  
     }
-    
+    public function deny($id = null){
+        
+         //or you can load it in beforeFilter()
+        
+        $requests=$this->Requests->find('all');
+        $results = $requests->first();
+        $this->set('results',$results);
+        $this->loadModel('DenialReasons');
+        $requests2=$this->DenialReasons->find('list', [
+    'keyField' => 'id',
+    'valueField' => 'denial_reason'
+       ]);
+        $results2 = $requests2->toArray();
+        $this->set('results2',$results2);
+        if($this->request->data != null)
+        {
+        $approved=$this->Requests->query();
+        $approved->update()
+        ->set(['Funded' => 'Denied'])
+        ->where(['id' => $id])
+        ->execute(); 
+        $data = $this->request->data;
+        //$test = $data["to"];
+        $test=$results->email;
+        $subject = $data["subject"];
+        $body= $data["Message_Body"];
+        //$from_addr=$data["from_addr"];
+        //$from_name=$data["from_name"];
+        $email = new Email('local');
+        $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
+        ->to("$test")
+        ->emailFormat('html')
+        ->subject("$subject")
+        ->send("$body");
+        }
+        
+ 
+    }
     public function pendingrequests($user)
     {
         
@@ -186,12 +231,51 @@ class RequestsController extends AppController
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
         
+        
     }
     public function approvedrequests($user)
     {
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
+    }
+    public function denialchecker(){
+       $this->viewBuilder()->layout('ajax');
+        $this->render('ajax'); 
+       if ($this->request->is('ajax') && $this->request->is('post') ){
+    //$res = [
+     //   'data' => [
+      //       /* your data */
+        // ]
+       //];
+       $res= $this->request->data['id'];
+        $this->loadModel('DenialReasons');
+        $requests3=$this->DenialReasons->find('all')
+                ->where(['DenialReasons.id' => $res]);
+        $results3 = $requests3->first()->denial_email;
+        //$this->set('results2',$results2);
+       
+        return $this->json($results3);
+  }
+    }
+  public function approvalchecker(){
+       $this->viewBuilder()->layout('ajax');
+        $this->render('ajax'); 
+       if ($this->request->is('ajax') && $this->request->is('post') ){
+    //$res = [
+     //   'data' => [
+      //       /* your data */
+        // ]
+       //];
+       $res= $this->request->data['id'];
+        $this->loadModel('ApprovalReasons');
+        $requests3=$this->ApprovalReasons->find('all')
+                ->where(['ApprovalReasons.id' => $res]);
+        $results3 = $requests3->first()->approval_email;
+        //$this->set('results2',$results2);
+       
+        return $this->json($results3);
+  }
     }
     public function deniedrequests($user)
     {
@@ -204,6 +288,8 @@ class RequestsController extends AppController
         if (isset($user['role']) && $user['role'] === 'admin') {
         return true;
     }
+    
+    
     if (($this->request->action==="index") && $user['role'] === 'payment_team') 
     {
                 return true;

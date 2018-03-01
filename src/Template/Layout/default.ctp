@@ -67,6 +67,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <li><a href="/app/transactions">Transactions</a></li>
                 <li><a href="/app/articles">Articles Published</a></li>
                 <li><a href="/app/denial-reasons">Denial Reasons</a></li>
+                <li><a href="/app/approval-reasons">Approval Reasons</a></li>
             </ul>
         </div>
     <?= $this->Flash->render() ?>

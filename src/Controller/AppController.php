@@ -27,6 +27,13 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
+    public $helpers = ['TinyMCE.TinyMCE'];
+        public function json($data)
+                {
+        $this->response->type('json');
+        $this->response->body(json_encode($data));
+        return $this->response;
+    }
 
     /**
      * Initialization hook method.
@@ -37,7 +44,6 @@ class AppController extends Controller
      *
      * @return void
      */
-    public $helpers = array('Froala.Froala','TinyMCE.TinyMCE');
     public function initialize()
     {
         parent::initialize();

@@ -64,6 +64,7 @@
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $request->id]) ?>
                     <?= $this->Html->link(__('Approve'), ['action' => 'approve', $request->id]) ?>
+                    <?= $this->Html->link(__('Deny'), ['action' => 'deny', $request->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $request->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $request->id], ['confirm' => __('Are you sure you want to delete # {0}?', $request->id)]) ?>
                 </td>

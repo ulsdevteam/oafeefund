@@ -12,7 +12,7 @@ use App\Controller\AppController;
  */
 class DenialReasonsController extends AppController
 {
-
+    
     /**
      * Index method
      *
@@ -49,7 +49,8 @@ class DenialReasonsController extends AppController
     public function add()
     {
         $denialReason = $this->DenialReasons->newEntity();
-        if ($this->request->is('post')) {
+        if ($this->request->is('post')) 
+            {
             $denialReason = $this->DenialReasons->patchEntity($denialReason, $this->request->getData());
             if ($this->DenialReasons->save($denialReason)) {
                 $this->Flash->success(__('The denial reason has been saved.'));
@@ -112,5 +113,4 @@ class DenialReasonsController extends AppController
         return true;
     }
 }
- 
 }
