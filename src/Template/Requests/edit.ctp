@@ -25,7 +25,7 @@
             echo $this->Form->control('bmc');
             echo $this->Form->control('hs');
             echo $this->Form->control('funded');
-            echo $this->Form->control('denial_id', ['options' => $denialReasons, 'empty' => true]);
+            echo $this->Form->control('denial_id', ['options' => $results2, 'empty' => true]); // Ask Clinton
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
