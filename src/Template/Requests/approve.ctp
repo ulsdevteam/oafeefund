@@ -38,7 +38,7 @@ $this->assign('title', __('Send mail to Author for Approval.'));
                 </br>
                 
                     <label>Choose your approval reason:</label>
-                
+                <?php echo $this->Form->create(); ?>
                 <?php
                 //$this->Froala->plugin();
                 //$this->Froala->editor('#message-body'); // J
@@ -55,13 +55,13 @@ $this->assign('title', __('Send mail to Author for Approval.'));
  <script>
      
   function approvalcheck(){
-       var copy=$("#id option:selected").text()
+               var copy=$("#id option:selected").text()
                document.getElementById('subject').value=copy;
                var id= document.getElementById('id').value;
 		$.ajax({
 			type:'POST',
 			cache: false,
-			url: 'http://192.168.56.101/app/requests/denialchecker',
+			url: 'http://192.168.56.101/app/requests/approvalchecker',
                         data:{id: id},
 			success: function(response) {					
 				//success

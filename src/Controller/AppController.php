@@ -77,7 +77,7 @@ class AppController extends Controller
         return true;
     }
     if (isset($user['role']) && $user['role'] === 'payment_team') {
-        $this->Flash->success(__($controller));
+        //$this->Flash->success(__($controller));
         return true;
     }
 
@@ -89,7 +89,7 @@ class AppController extends Controller
     {
         
         //$role=$this->Auth->user()->user;
-        $this->Flash->success(__($this->request->action)); 
+        //$this->Flash->success(__($this->request->action)); 
         /*if($role=="admin")
         {
             $this->Auth->allow();

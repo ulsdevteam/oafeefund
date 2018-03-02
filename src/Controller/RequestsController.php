@@ -52,7 +52,7 @@ class RequestsController extends AppController
      */
     public function index()
     {
-        $this->Flash->success(__($this->request->action));   
+       // $this->Flash->success(__($this->request->action));   
         $this->viewBuilder()->layout('default');
         $this->paginate = [
             'contain' => ['DenialReasons']

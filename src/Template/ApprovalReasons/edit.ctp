@@ -6,6 +6,12 @@
 ?>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script> 
 <script src='http://code.jquery.com/jquery-1.11.0.min.js'></script>
+<script>
+   tinymce.init({ selector:'.edittextarea', height: 500,  plugins: [
+    'advlist autolink lists link print preview anchor',
+    'insertdatetime table contextmenu paste code'
+   ], });
+   </script>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
