@@ -14,8 +14,7 @@
             )
         ?></li>
         <li><?= $this->Html->link(__('List Transactions'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Requests'), ['controller' => 'Requests', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Request'), ['controller' => 'Requests', 'action' => 'add']) ?></li>
+     
     </ul>
 </nav>
 <div class="transactions form large-9 medium-8 columns content">

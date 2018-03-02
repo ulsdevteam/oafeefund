@@ -66,8 +66,8 @@ class UsersController extends AppController
                       }
                       else if($role === 'payment_team')
                       {
-                          $this->redirect(array("controller" => "Transactions", 
-                      "action" => "index"));
+                          $this->redirect(array("controller" => "Requests", 
+                      "action" => "approvedrequests"));
                       }
                       }
                       else
@@ -134,6 +134,7 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
+        
 
         $this->set('user', $user);
     }

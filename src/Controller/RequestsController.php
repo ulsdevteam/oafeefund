@@ -59,6 +59,11 @@ class RequestsController extends AppController
         ];
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+        
+        
+        
     }
 
     /**
@@ -237,6 +242,8 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "pending"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
         
         
     }
@@ -245,7 +252,18 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
     }
+    public function paidrequests($user)
+    {
+        $requests=$this->Requests->find('all')->where(['Requests.funded' => "Paid"]);
+        $this->set('requests',$requests);
+        $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+    }
+    
     public function denialchecker(){
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
@@ -297,7 +315,7 @@ class RequestsController extends AppController
     }
     
     
-    if (($this->request->action==="index") && $user['role'] === 'payment_team') 
+    if ((($this->request->action==="index")||($this->request->action==="approvedrequests") || ($this->request->action==="pendingrequests") || $this->request->action==="paidrequests") &&  $user['role'] === 'payment_team') 
     {
                 return true;
     }

@@ -49,13 +49,20 @@ class TransactionsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($id=null)
     {
         $transaction = $this->Transactions->newEntity();
+        $this->set('id',$id);
         if ($this->request->is('post')) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
+                $this->loadModel('Requests');
+                $approved=$this->Requests->query();
+                $approved->update()
+                ->set(['Funded' => 'Paid'])
+                ->where(['id' => $id])
+                ->execute(); 
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -63,6 +70,16 @@ class TransactionsController extends AppController
         }
         $requests = $this->Transactions->Requests->find('list', ['limit' => 200]);
         $this->set(compact('transaction', 'requests'));
+        
+        if($id!=null)
+        {
+        $this->loadModel('Requests');
+        $request = $this->Requests->get($id, [
+            'contain' => ['DenialReasons', 'Articles', 'Transactions']
+        ]);
+
+        $this->set('request', $request);
+        }
     }
 
     /**

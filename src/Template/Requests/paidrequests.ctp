@@ -1,5 +1,5 @@
 <div class="requests index large-9 medium-8 columns content">
-    <h3><?= __('Pending Requests') ?></h3>
+    <h3><?= __('Paid Requests') ?></h3>
     <table cellpadding="0" cellspacing="0" align="center">
         <thead>
             <tr>
@@ -41,21 +41,6 @@
                 <td><?= $request->has('denial_reason') ? $this->Html->link($request->denial_reason->id, ['controller' => 'DenialReasons', 'action' => 'view', $request->denial_reason->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $request->id]) ?>
-                    <?php
-                    if($role->role === 'admin'){
-                    echo $this->Html->link(__('Approve'), ['action' => 'approve', $request->id]);
-                    }
-                    ?>
-                    <?php 
-                     if($role->role === 'admin'){
-                    echo $this->Html->link(__('Deny'), ['action' => 'deny', $request->id]); 
-                     }
-                            ?>
-                    <?php 
-                     if($role->role === 'payment_team'){
-                     echo $this->Html->link(__('Paid'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
-                     }
-                            ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $request->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $request->id], ['confirm' => __('Are you sure you want to delete # {0}?', $request->id)]) ?>
                 </td>
@@ -74,3 +59,5 @@
         <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
     </div>
 </div>
+
+
