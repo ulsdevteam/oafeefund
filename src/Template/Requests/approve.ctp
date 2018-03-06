@@ -56,7 +56,7 @@ $this->assign('title', __('Send mail to Author for Approval.'));
      
   function approvalcheck(){
                var copy=$("#id option:selected").text()
-               document.getElementById('subject').value=copy;
+               document.getElementById('subject').value="RE: Author Fund Request: "+copy;
                var id= document.getElementById('id').value;
 		$.ajax({
 			type:'POST',

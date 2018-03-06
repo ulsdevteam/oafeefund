@@ -25,6 +25,7 @@
             echo $this->Form->control('amount_paid');
             echo $this->Form->control('description');
             echo $this->Form->control('date_paid');
+            echo $this->Form->control('date_completed');
             echo $this->Form->control('cheque_number');
             echo $this->Form->control('request_id', ['options' => $requests]);
         ?>

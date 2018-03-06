@@ -79,6 +79,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </body>
     <script>
         $('.additionalmethods').hide();
+        $('.paginator').show();
         function additionalmethod(num){
             if(num == "1")
             {

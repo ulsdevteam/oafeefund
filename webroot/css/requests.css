@@ -9,9 +9,9 @@ and open the template in the editor.
 */
 
 table{
-    position: absolute;
+    
     border: 1px solid black;
-    table-layout: fixed;
+    
     overflow:scroll;
     width: 100%;
 }

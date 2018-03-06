@@ -109,16 +109,16 @@ $this->assign('title', __('Send mail to Author for Denial.'));
     var mytextbox = document.getElementById('message-body');
     var mydropdown = document.getElementById('dropdownID');
 
-    function denialchanger(){
+    /*function denialchanger(){
         var a=$('#test').find('option:selected').val();
         document.getElementById('message-body').innerHTML=document.getElementById(a-1).innerHTML;
         //document.getElementById('txt').innerHTML=a;
        tinyMCE.activeEditor.setContent(document.getElementById(a-1).innerHTML);
         
-    }
+    }*/
     function denialcheck(){
                          var copy=$("#id option:selected").text()
-               document.getElementById('subject').value=copy;
+               document.getElementById('subject').value="RE: Author Fund Request: "+copy;
                var id= document.getElementById('id').value;
 		$.ajax({
 			type:'POST',

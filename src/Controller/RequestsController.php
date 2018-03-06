@@ -85,6 +85,8 @@ class RequestsController extends AppController
         ]);
 
         $this->set('request', $request);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
     }
     
     /**
@@ -319,7 +321,10 @@ class RequestsController extends AppController
     {
                 return true;
     }
-    
+    if ((($this->request->action==="index")|| ($this->request->action==="view")||($this->request->action==="approvedrequests") ||  ($this->request->action==="paidrequests")) &&  $user['role'] === 'OSCP_students')
+    {
+                return true;
+    }
     
     
 }

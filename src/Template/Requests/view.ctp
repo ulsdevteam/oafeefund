@@ -4,10 +4,38 @@
  * @var \App\Model\Entity\Request $request
  */
 ?>
-
+<?= $this->Html->css('options.css'); ?>
 <div class="requests view large-9 medium-8 columns content">
     <h3><?= h($request->id) ?></h3>
-    <table class="vertical-table">
+   
+        <div class="options1">
+        <tr>
+                    
+                    <?php
+                    if($role->role === 'admin'){
+                    
+                    echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id]);
+                    echo "<br>"; 
+                    
+                    }
+                    ?>
+                    <?php 
+                     if($role->role === 'admin'){
+                    echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id]); 
+                    echo "<br>"; 
+                    
+                     }
+                            ?>
+                    <?php 
+                     if($role->role === 'payment_team'){
+                     echo $this->Html->link(__('Paid'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
+                     echo "<br>"; 
+                     
+                     }
+                            ?>
+        </tr>
+        </div>
+     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Username') ?></th>
             <td><?= h($request->username) ?></td>

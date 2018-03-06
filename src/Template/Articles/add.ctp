@@ -14,8 +14,8 @@
     <?= $this->Form->create($article) ?>
     <fieldset>
         <legend><?= __('Add Article') ?></legend>
-        <?php
-            echo $this->Form->control('request_id', ['options' => $requests]);
+        <?php 
+            echo $this->Form->hidden('request_id', ['options' => $requests,'value'=> $id ]);
             echo $this->Form->control('publication_date', ['empty' => true]);
             echo $this->Form->control('article_url');
             echo $this->Form->control('dscholarship_archive');

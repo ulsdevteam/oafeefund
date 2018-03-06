@@ -67,6 +67,11 @@ class TransactionsTable extends Table
             ->date('date_paid')
             ->requirePresence('date_paid', 'create')
             ->notEmpty('date_paid');
+        
+        $validator
+            ->date('date_completed')
+            ->requirePresence('date_completed', 'create')
+            ->allowEmpty('date_completed');
 
         $validator
             ->integer('cheque_number')
