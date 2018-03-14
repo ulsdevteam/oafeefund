@@ -37,12 +37,12 @@ $this->assign('title', __('Send mail to Author for Approval.'));
                 ?>
                 </br>
                 
-                    <label>Choose your approval reason:</label>
+                    <label></label>
                 <?php echo $this->Form->create(); ?>
                 <?php
                 //$this->Froala->plugin();
                 //$this->Froala->editor('#message-body'); // J
-                
+                echo $this->Form->input('internal_note');
                 echo $this->Form->input('subject');
                 echo $this->Form->input('Message_Body', array('type' => 'textarea','class' => 'edittextarea form-control','label' => 'Content :'));
         ?>

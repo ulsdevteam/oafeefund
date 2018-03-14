@@ -13,7 +13,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'OAAFF application';
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,6 +61,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                          <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/pendingrequests" >Pending Requests</a></ul>
                          <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/approvedrequests">Approved Requests</a></ul>
                          <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/paidrequests">Paid Requests</a></ul>
+                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/deniedrequests">Denied Requests</a></ul>
                     </div>
                 </li>
                 <li><a href="/app/users">Users</a></li>
@@ -68,6 +69,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <li><a href="/app/articles">Articles Published</a></li>
                 <li><a href="/app/denial-reasons">Denial Reasons</a></li>
                 <li><a href="/app/approval-reasons">Approval Reasons</a></li>
+                <li><a href="/app/budgets">Check Budget</a></li>
             </ul>
         </div>
     <?= $this->Flash->render() ?>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
+use Cake\Datasource\ConnectionManager;
 
 
 /**
@@ -83,8 +84,24 @@ class RequestsController extends AppController
         $request = $this->Requests->get($id, [
             'contain' => ['DenialReasons', 'Articles', 'Transactions']
         ]);
-
+        
+        $connection = ConnectionManager::get('default');
         $this->set('request', $request);
+        $request2= $this->Requests->find('all')
+                ->where(['id'=>$id]);
+           $request2= $request2->first();   
+            $this->loadModel('budgets');
+           $name=$request2->username;
+//$request3=$request3->find('all')
+          //      ->where(['username'=>$requests2]);
+       $date= date('m');
+       $results3 = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
+       $date= $results3[0][inquiry_date]; 
+       $results2 = $connection->execute('SELECT SUM(Requests.amount_requested) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<:date AND Budgets.budget_date_end>:date AND Requests.username= :name',['name'=>$name,'date'=>$date])->fetchAll('assoc');
+        $this->set('request2', $results);
+        //$this->set('request3', $results2[0][total_amount]);
+        $this->set('request3', $results2[0][total_amount]);
+        //$this->set('request3', intval($date));
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
@@ -166,7 +183,8 @@ class RequestsController extends AppController
         
          //or you can load it in beforeFilter()
         
-        $requests=$this->Requests->find('all');
+        $requests=$this->Requests->find('all')
+                ->where(['id' => $id]);
         $results = $requests->first();
         $this->set('results',$results);
         $this->loadModel('ApprovalReasons');
@@ -188,6 +206,11 @@ class RequestsController extends AppController
         $test=$results->email;
         $subject = $data["subject"];
         $body= $data["Message_Body"];
+        $internal_note= $data["internal_note"];
+        $this->Requests->updateAll(
+        array('internal_note' => "$internal_note"),
+        array('id' => $id)
+            );
         //$from_addr=$data["from_addr"];
         //$from_name=$data["from_name"];
         $email = new Email('local');
@@ -196,6 +219,8 @@ class RequestsController extends AppController
         ->emailFormat('html')
         ->subject("$subject")
         ->send("$body");
+        $this->Flash->success(__('The approval mail has been sent.'));
+        return $this->redirect(['action' => 'index']);
         }
         
  
@@ -204,7 +229,8 @@ class RequestsController extends AppController
         
          //or you can load it in beforeFilter()
         
-        $requests=$this->Requests->find('all');
+        $requests=$this->Requests->find('all')
+                ->where(['id' => $id]);
         $results = $requests->first();
         $this->set('results',$results);
         $this->loadModel('DenialReasons');
@@ -234,6 +260,8 @@ class RequestsController extends AppController
         ->emailFormat('html')
         ->subject("$subject")
         ->send("$body");
+        
+        
         }
         
  
@@ -306,7 +334,11 @@ class RequestsController extends AppController
     }
     public function deniedrequests($user)
     {
-        
+         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
+        $this->set('requests',$requests);
+        $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
     }
     public function isAuthorized($user)
 { 

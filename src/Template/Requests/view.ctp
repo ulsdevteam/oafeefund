@@ -7,7 +7,9 @@
 <?= $this->Html->css('options.css'); ?>
 <div class="requests view large-9 medium-8 columns content">
     <h3><?= h($request->id) ?></h3>
-   
+    <h3><?php echo "The total amount used by ".h($request->username)." is $".h($request3)."";
+    
+    ?></h3>
         <div class="options1">
         <tr>
                     
@@ -30,7 +32,6 @@
                      if($role->role === 'payment_team'){
                      echo $this->Html->link(__('Paid'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
                      echo "<br>"; 
-                     
                      }
                             ?>
         </tr>
@@ -95,6 +96,10 @@
         <tr>
             <th scope="row"><?= __('Inquiry Date') ?></th>
             <td><?= h($request->inquiry_date) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Internal Note') ?></th>
+            <td><?= h($request->internal_note) ?></td>
         </tr>
     </table>
     <div class="row">

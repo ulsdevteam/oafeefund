@@ -56,6 +56,7 @@ class Request extends Entity
         'denial_id' => true,
         'denial_reason' => true,
         'articles' => true,
-        'transactions' => true
+        'transactions' => true,
+        'internal_note' => true
     ];
 }

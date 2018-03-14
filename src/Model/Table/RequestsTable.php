@@ -147,6 +147,10 @@ class RequestsTable extends Table
             ->maxLength('funded', 16)
             ->requirePresence('funded', 'create')
             ->notEmpty('funded');
+        $validator
+            ->scalar('internal_note')
+            ->allowEmpty('internal_note');
+                
 
         return $validator;
     }
