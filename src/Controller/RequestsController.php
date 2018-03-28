@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Mailer\Email;
 use Cake\Datasource\ConnectionManager;
-
+use App\View\Helper\LdapHelper;
 
 /**
  * Requests Controller
@@ -19,16 +19,28 @@ class RequestsController extends AppController
     
     public $helpers = array('TinyMCE.TinyMCE');
     
-     public function adduser()
+    public function LDAPconn(){
+        $this->viewBuilder()->layout('ajax');
+        $this->render('ajax'); 
+       if ($this->request->is('ajax') && $this->request->is('post') ){
+       $res= $this->request->data['val'];
+       $var= LdapHelper::getInfo($res);
+       $this->set('var', $var);
+       echo json_encode($var);
+  }
+
+    }
+
+    public function adduser()
     {
          /* Now here you can put your default values */
 	
         $this->viewBuilder()->layout('default2');
         $request = $this->Requests->newEntity();
-        
-	
-	
-            
+        $var= LdapHelper::getInfo('HOK14');
+        $this->set('var', $var);
+         //$var=$this->LdapHelper->getInfo('HOK14');
+	//import('Helper', 'LdapHelper');
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
@@ -38,6 +50,7 @@ class RequestsController extends AppController
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
         }
+        
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
         $this->set(compact('request', 'denialReasons'));
     }

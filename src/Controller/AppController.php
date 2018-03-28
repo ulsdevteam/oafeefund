@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use App\View\Helper\LdapHelper;
 
 /**
  * Application Controller
@@ -35,7 +36,11 @@ class AppController extends Controller
         $this->response->body(json_encode($data));
         return $this->response;
     }
-
+        protected function setJsonResponse(){
+    $this->loadComponent('RequestHandler');
+    $this->RequestHandler->renderAs($this, 'json');
+    $this->response->type('application/json');
+}
     /**
      * Initialization hook method.
      *
@@ -49,6 +54,7 @@ class AppController extends Controller
     {
         parent::initialize();
         
+        //$this->loadHelper('LdapHelper');
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth',[

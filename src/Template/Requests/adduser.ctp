@@ -16,12 +16,18 @@
         <li><?php //$this->Html->link(__('New Transaction'), ['controller' => 'Transactions', 'action' => 'add']) ?></li>
     </ul>
 </nav> -->
+
+<?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>                                                             
+
+<?= $this->fetch('script'); ?>
 <div class="requests form large-9 medium-8 columns content">
     <?= $this->Form->create($request) ?>
     <fieldset>
         <legend><?= __('OAPPP funding') ?></legend>
         <?php
             echo $this->Form->control('username');
+            echo $this->Form->button('AutoFill',['type'=>'button','onclick'=>'auto()']);
+            echo "</br>";
             echo $this->Form->control('first_name');
             echo $this->Form->control('last_name');
             echo $this->Form->control('email');
@@ -46,7 +52,39 @@
             echo $this->Form->hidden('denial_id', ['options' => $denialReasons, 'empty' => true]);
         ?>
     </fieldset>
+    <?= print_r($var)?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
+    
 </div>
+<script>
+    function auto()
+    {
+        var val=document.getElementById('username').value;
+        //console.log(val);
+        //document.getElementById('first-name').value=val;
+        $.ajax({
+			type:'POST',
+			cache: false,
+			url: 'http://192.168.56.101/app/requests/LDAPconn',
+                        data:{val: val},
+			success: function(response) {					
+				//success 
+                                var json = JSON.parse(response);
+                                console.log(json["first_name"]); 
+                                document.getElementById('first-name').value=json["first_name"];
+                                document.getElementById('last-name').value=json["last_name"];
+                                document.getElementById('email').value=json["email"];
+                                document.getElementById('department').value=json["department"];
+                                
+                                
+			},
+			error: function(response) {					
+				console.log(response.responseText);
+			},
+			
+		});
+        
+    }
+</script>
 
