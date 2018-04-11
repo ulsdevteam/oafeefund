@@ -52,6 +52,7 @@ class DenialReasonsController extends AppController
         if ($this->request->is('post')) 
             {
             $denialReason = $this->DenialReasons->patchEntity($denialReason, $this->request->getData());
+            
             if ($this->DenialReasons->save($denialReason)) {
                 $this->Flash->success(__('The denial reason has been saved.'));
 

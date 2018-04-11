@@ -8,7 +8,11 @@ $this->assign('title', __('Send mail to Author for Approval.'));
 <?= $this->fetch('script'); ?>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   <script>
-   tinymce.init({ selector:'.edittextarea', height: 500,  plugins: [
+   tinymce.init({
+       mode : "textareas",
+       force_br_newlines : false,
+       force_p_newlines : false,
+       selector:'.edittextarea', height: 500,  plugins: [
     'advlist autolink lists link print preview anchor',
     'insertdatetime table contextmenu paste code'
    ], });
@@ -65,7 +69,7 @@ $this->assign('title', __('Send mail to Author for Approval.'));
                         data:{id: id},
 			success: function(response) {					
 				//success
-                                var resp_data= response;
+                                response=JSON.parse(response)
                                 tinyMCE.activeEditor.setContent(response);
 				console.log(response);                
 			},

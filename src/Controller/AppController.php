@@ -32,7 +32,7 @@ class AppController extends Controller
     public $helpers = ['TinyMCE.TinyMCE'];
         public function json($data)
                 {
-        $this->response->type('json');
+        //$this->response->type('json');
         $this->response->body(json_encode($data));
         return $this->response;
     }
@@ -91,6 +91,7 @@ class AppController extends Controller
     // Default deny
     return false;
        }
+
     
     public function beforeFilter(Event $event)
     {

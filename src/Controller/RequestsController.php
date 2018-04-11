@@ -25,7 +25,7 @@ class RequestsController extends AppController
        if ($this->request->is('ajax') && $this->request->is('post') ){
        $res= $this->request->data['val'];
        $var= LdapHelper::getInfo($res);
-       $this->set('var', $var);
+       //$this->set('var', $var);
        echo json_encode($var);
   }
 
@@ -57,7 +57,6 @@ class RequestsController extends AppController
      public function saved()
     {
        $this->viewBuilder()->layout('default2');
-       
      }
     /**
      * Index method
@@ -252,6 +251,7 @@ class RequestsController extends AppController
     'valueField' => 'denial_reason'
        ]);
         $results2 = $requests2->toArray();
+       // $results2['denial_reason']=striptags($results2['denial_reason'])
         $this->set('results2',$results2);
         if($this->request->data != null)
         {
@@ -322,10 +322,10 @@ class RequestsController extends AppController
                 ->where(['DenialReasons.id' => $res]);
         $results3 = $requests3->first()->denial_email;
         //$this->set('results2',$results2);
-       
-        return $this->json($results3);
+       return $this->json($results3);
   }
     }
+    
   public function approvalchecker(){
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
@@ -340,9 +340,7 @@ class RequestsController extends AppController
         $requests3=$this->ApprovalReasons->find('all')
                 ->where(['ApprovalReasons.id' => $res]);
         $results3 = $requests3->first()->approval_email;
-        //$this->set('results2',$results2);
-       
-        return $this->json($results3);
+        echo $this->json($results3);
   }
     }
     public function deniedrequests($user)

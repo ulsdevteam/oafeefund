@@ -18,20 +18,19 @@ class LdapHelper{
         //ldap_set_option($this->ldap, LDAP_OPT_REFERRALS, 0);
         //ldap_set_option($this->ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
     }
-    public function __destruct(){
+    public function __destruct(){   
         //ldap_unbind($ldap);
         $ldapServer = 'REPLACED_LDAP_HOST';
         $ldapPort = '389';
-        $ldapuser= 'HOK14';
-        ldap_unbind($ldap);
-        //$ldappassword= 'TRuegunner@786';
+        $ldapuser= 'HOK14'; // 
+        ldap_unbind($ldap); // unbind the connection
     }
  
     public static function getInfo($user)
     {
         
-        $username = $user;
-        $attributes = array('givenName','sn','mail','department');
+        $username = $user; // Get the username from the code
+        $attributes = array('givenName','sn','mail','department'); // 
         $filter = "(cn=$user)";
         $ldapUser = 'REPLACED_LDAP_USER';
         $ldappassword = 'REPLACED_LDAP_PASSWORD';
@@ -41,10 +40,11 @@ class LdapHelper{
           or die("Could not connect to $ldapServer");
         $ldapbind=ldap_bind($ldap, $ldapUser, $ldappassword);
         $baseDN = 'REPLACED_LDAP_CONTEXT';
-        if (ldap_bind($ldap, $ldapUser, $ldappassword)) {
+        if (ldap_bind($ldap, $ldapUser, $ldappassword))
+              {
         $result = ldap_search($ldap, $baseDN, $filter,$attributes);
         $array = ldap_get_entries($ldap, $result);
-        $info = array();
+        $info = array(); // Save the contents in the form of an array.
         $info['first_name'] = $array[0]['givenname'][0];
         $info['last_name'] = $array[0]['sn'][0];
      //   $info['name'] = $info['first_name'] .' '. $info['last_name'];
