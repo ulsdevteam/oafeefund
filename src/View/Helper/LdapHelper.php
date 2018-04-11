@@ -11,20 +11,7 @@ class LdapHelper{
     public $suffix = '@pitt.edu';
     public $a='Hoshang';
  */
-    public function  __construct() {
-        
- 
-        //these next two lines are required for windows server 03
-        //ldap_set_option($this->ldap, LDAP_OPT_REFERRALS, 0);
-        //ldap_set_option($this->ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-    }
-    public function __destruct(){   
-        //ldap_unbind($ldap);
-        $ldapServer = 'REPLACED_LDAP_HOST';
-        $ldapPort = '389';
-        $ldapuser= 'HOK14'; // 
-        ldap_unbind($ldap); // unbind the connection
-    }
+    
  
     public static function getInfo($user)
     {
