@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Datasource\ConnectionManager;
+use App\View\Helper\LdapHelper;
 /**
  * Users Controller
  *
@@ -18,6 +20,20 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+          public function details()
+                  {
+        $this->viewBuilder()->layout('ajax');
+        $this->render('ajax'); 
+       if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+       $res= $_GET['val'];
+       $var= LdapHelper::getInfo($res);
+       //$this->set('var', $var);
+       echo json_encode($var);
+           }
+ // echo "AJAX call failed";
+
+    }
     public function index()
     {
         $users = $this->paginate($this->Users);

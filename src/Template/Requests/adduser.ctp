@@ -64,12 +64,13 @@
         //console.log(val);
         //document.getElementById('first-name').value=val;
         $.ajax({
-			type:'POST',
+			type:'GET',
 			cache: false,
-			url: 'http://192.168.56.101/app/requests/LDAPconn',
+			url: 'http://192.168.56.101/app/users/details',
                         data:{val: val},
 			success: function(response) {					
 				//success 
+                                console.log(response);
                                 var json = JSON.parse(response);
                                 console.log(json["first_name"]); 
                                 document.getElementById('first-name').value=json["first_name"];

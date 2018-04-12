@@ -27,7 +27,7 @@ use App\View\Helper\LdapHelper;
  * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller
-{
+{   
     
     public $helpers = ['TinyMCE.TinyMCE'];
         public function json($data)
@@ -66,7 +66,7 @@ class AppController extends Controller
         'authorize' => array('Controller'), // Added this line
         'storage' => 'Session'
     ]);
-        
+       $this->loadModel('cron_checks'); 
         
         
         
@@ -91,7 +91,7 @@ class AppController extends Controller
     // Default deny
     return false;
        }
-
+    
     
     public function beforeFilter(Event $event)
     {

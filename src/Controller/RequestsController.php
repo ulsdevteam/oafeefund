@@ -19,17 +19,7 @@ class RequestsController extends AppController
     
     public $helpers = array('TinyMCE.TinyMCE');
     
-    public function LDAPconn(){
-        $this->viewBuilder()->layout('ajax');
-        $this->render('ajax'); 
-       if ($this->request->is('ajax') && $this->request->is('post') ){
-       $res= $this->request->data['val'];
-       $var= LdapHelper::getInfo($res);
-       //$this->set('var', $var);
-       echo json_encode($var);
-  }
-
-    }
+  
 
     public function adduser()
     {
