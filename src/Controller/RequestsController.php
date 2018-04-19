@@ -300,13 +300,13 @@ class RequestsController extends AppController
     public function denialchecker(){
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
-       if ($this->request->is('ajax') && $this->request->is('post') ){
+       if ($this->request->is('ajax') && $this->request->is('get') ){
     //$res = [
      //   'data' => [
       //       /* your data */
         // ]
        //];
-       $res= $this->request->data['id'];
+       $res= $_GET['id'];
         $this->loadModel('DenialReasons');
         $requests3=$this->DenialReasons->find('all')
                 ->where(['DenialReasons.id' => $res]);
@@ -319,18 +319,18 @@ class RequestsController extends AppController
   public function approvalchecker(){
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
-       if ($this->request->is('ajax') && $this->request->is('post') ){
+       if ($this->request->is('ajax') && $this->request->is('get') ){
     //$res = [
      //   'data' => [
       //       /* your data */
         // ]
        //];
-       $res= $this->request->data['id'];
+       $res= $_GET['id'];
         $this->loadModel('ApprovalReasons');
         $requests3=$this->ApprovalReasons->find('all')
                 ->where(['ApprovalReasons.id' => $res]);
         $results3 = $requests3->first()->approval_email;
-        echo $this->json($results3);
+        return $this->json($results3);
   }
     }
     public function deniedrequests($user)

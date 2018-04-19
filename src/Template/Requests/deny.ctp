@@ -126,7 +126,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
                document.getElementById('subject').value="RE: Author Fund Request: "+copy;
                var id= document.getElementById('id').value;
 		$.ajax({
-			type:'POST',
+			type:'GET',
 			cache: false,
 			url: 'http://192.168.56.101/app/requests/denialchecker',
                         data:{id: id},
