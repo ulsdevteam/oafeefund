@@ -236,8 +236,8 @@ return [
              * the following line and set the port accordingly
              */
             //'port' => 'non_standard_port_number',
-            'username' => 'root',
-            'password' => 'REPLACED_DATABASE_PASSWORD',
+            'username' => 'OAFeeFund',
+            'password' => 'EEOoxUVL51oL6wbF',
             'database' => 'OAAFFApplication',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
@@ -270,23 +270,7 @@ return [
         /**
          * The test connection is used during the test suite.
          */
-        'test' => [
-            'className' => 'Cake\Database\Connection',
-            'driver' => 'Cake\Database\Driver\Mysql',
-            'persistent' => false,
-            'host' => 'localhost',
-            //'port' => 'non_standard_port_number',
-            'username' => 'root',
-            'password' => 'REPLACED_DATABASE_PASSWORD',
-            'database' => 'OAAFFApplication',
-            'encoding' => 'utf8',
-            'timezone' => 'UTC',
-            'cacheMetadata' => true,
-            'quoteIdentifiers' => false,
-            'log' => false,
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
-            'url' => env('DATABASE_TEST_URL', null),
-        ],
+       
     ],
 
     /**

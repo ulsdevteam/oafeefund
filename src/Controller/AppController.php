@@ -29,7 +29,7 @@ use App\View\Helper\LdapHelper;
 class AppController extends Controller
 {   
     
-    public $helpers = ['TinyMCE.TinyMCE'];
+  //  public $helpers = ['TinyMCE.TinyMCE'];
         public function json($data)
                 {
         //$this->response->type('json');

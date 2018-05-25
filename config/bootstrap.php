@@ -214,7 +214,7 @@ Configure::write('debug', 2);
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
-Plugin::load('TinyMCE', ['autoload' => true]);
+//Plugin::load('TinyMCE', ['autoload' => true]);
 
 
 $dsn = 'mysql://hok14:test@localhost/OAAFFApplication';

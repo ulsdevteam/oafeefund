@@ -17,7 +17,7 @@ use App\View\Helper\LdapHelper;
 class RequestsController extends AppController
 {
     
-    public $helpers = array('TinyMCE.TinyMCE');
+   // public $helpers = array('TinyMCE.TinyMCE');
     
   
 
