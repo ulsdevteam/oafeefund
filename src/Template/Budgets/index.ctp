@@ -44,10 +44,10 @@
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $budget->id], ['confirm' => __('Are you sure you want to delete # {0}?', $budget->id)]) ?>
                 </td>
             </tr>
-            <?= $i= $i+1; ?>
+            <?php $i= $i+1; ?>
             <?php endforeach; ?>
             
-                 <?= print_r($results) ?>
+                 <?php //print_r($results) ?>
             
     </table>
     <div class="paginator">

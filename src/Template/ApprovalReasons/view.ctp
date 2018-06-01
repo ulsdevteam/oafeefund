@@ -27,6 +27,6 @@
     </table>
     <div class="row">
         <h4><?= __('Approval Email') ?></h4>
-        <?= $this->Text->autoParagraph(h($approvalReason->approval_email)); ?>
+        <?= $approvalReason->approval_email ?>
     </div>
 </div>

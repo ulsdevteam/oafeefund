@@ -68,16 +68,10 @@ class RequestsTable extends Table
             ->notEmpty('username');
 
         $validator
-            ->scalar('first_name')
-            ->maxLength('first_name', 64)
-            ->requirePresence('first_name', 'create')
-            ->notEmpty('first_name');
-
-        $validator
-            ->scalar('last_name')
-            ->maxLength('last_name', 64)
-            ->requirePresence('last_name', 'create')
-            ->notEmpty('last_name');
+            ->scalar('author_name')
+            ->maxLength('author_name', 128)
+            ->requirePresence('author_name', 'create')
+            ->notEmpty('author_name');
 
         $validator
             ->scalar('email')
@@ -150,6 +144,12 @@ class RequestsTable extends Table
         $validator
             ->scalar('internal_note')
             ->allowEmpty('internal_note');
+        $validator
+            ->scalar('other_authors')
+            ->allowEmpty('other_authors');
+        $validator
+            ->scalar('application_completed')
+            ->allowEmpty('application_completed');
                 
 
         return $validator;

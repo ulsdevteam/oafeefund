@@ -36,17 +36,25 @@ $cakeDescription = 'OAAFF application';
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <style>
+        #image2{
+            width:15%;
+            height: 100%;
+            margin-left: 15%;
+        }
+    </style>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
+        <ul class="title-area columns">
             <li class="name">
                 <h1><a href=""><?= $this->fetch('title') ?></a></h1>
             </li>
         </ul>
         <div class="top-bar-section">
+            <img src="http://www.pitt.edu/sites/default/files/pitt_logo.png">
             <ul class="right">
-                <li><a href="http://192.168.56.101/app/users/logout">Logout</a></li>
+                <li><a href="/app/users/logout">Logout</a></li>
                <!--<li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
                 <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>-->
             </ul>

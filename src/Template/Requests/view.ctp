@@ -42,12 +42,8 @@
             <td><?= h($request->username) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('First Name') ?></th>
-            <td><?= h($request->first_name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Last Name') ?></th>
-            <td><?= h($request->last_name) ?></td>
+            <th scope="row"><?= __('Author Name') ?></th>
+            <td><?= h($request->author_name) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Email') ?></th>
@@ -83,7 +79,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Denial Reason') ?></th>
-            <td><?= $request->has('denial_reason') ? $this->Html->link($request->denial_reason->id, ['controller' => 'DenialReasons', 'action' => 'view', $request->denial_reason->id]) : '' ?></td>
+            <td><?= $request->has('denial_reason') ? $this->Html->link($request->denial_reason->denial_reason, ['controller' => 'DenialReasons', 'action' => 'view', $request->denial_reason->id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Id') ?></th>
@@ -101,6 +97,14 @@
             <th scope="row"><?= __('Internal Note') ?></th>
             <td><?= h($request->internal_note) ?></td>
         </tr>
+        <tr>
+            <th scope="row"><?= __('Other Authors') ?></th>
+            <td><?= h($request->other_authors) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Application Completed') ?></th>
+            <td><?= h($request->application_completed) ?></td>
+        </tr>
     </table>
     <div class="row">
         <h4><?= __('Publication Name') ?></h4>
@@ -110,6 +114,7 @@
         <h4><?= __('Article Title') ?></h4>
         <?= $this->Text->autoParagraph(h($request->article_title)); ?>
     </div>
+   
     <div class="related">
         <h4><?= __('Related Articles') ?></h4>
         <?php if (!empty($request->articles)): ?>

@@ -27,8 +27,7 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('first_name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('last_name') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('author_name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('email') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('school') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('department') ?></th>
@@ -48,8 +47,7 @@
             <tr>
                 <td><?= $this->Number->format($request->id) ?></td>
                 <td><?= h($request->username) ?></td>
-                <td><?= h($request->first_name) ?></td>
-                <td><?= h($request->last_name) ?></td>
+                <td><?= h($request->author_name) ?></td>
                 <td><?= h($request->email) ?></td>
                 <td><?= h($request->school) ?></td>
                 <td><?= h($request->department) ?></td>

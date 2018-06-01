@@ -39,8 +39,7 @@ class Request extends Entity
      */
     protected $_accessible = [
         'username' => true,
-        'first_name' => true,
-        'last_name' => true,
+        'author_name' => true,
         'email' => true,
         'school' => true,
         'department' => true,
@@ -57,6 +56,8 @@ class Request extends Entity
         'denial_reason' => true,
         'articles' => true,
         'transactions' => true,
-        'internal_note' => true
+        'internal_note' => true,
+        'other_authors' => true,
+        'application_completed' => true
     ];
 }

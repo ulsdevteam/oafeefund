@@ -31,7 +31,7 @@ class BudgetsController extends AppController
         //array_push($array, 100);
         //array_push($array, 101);
         
-        $results=$connection->execute('SELECT B.id AS id, SUM( R.amount_requested ) AS sum_amtreqt
+        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
                                         FROM requests R, budgets B
                                         WHERE R.inquiry_date > B.budget_date_begin
                                         AND R.inquiry_date < budget_date_end

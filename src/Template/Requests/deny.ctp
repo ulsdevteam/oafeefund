@@ -42,7 +42,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
                 ?>
                 </br>
               
-                    <label>Choose your denial reason:</label>
+            
                 
                 <?php
                 //$this->Froala->plugin();
@@ -64,7 +64,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
                 echo '</select>';*/
              
                 ?>
-                  <p id="txt">This will change</p>
+                 
                    
                    <?php
                     echo $this->Form->input('id',array('options' => $results2, 'empty' =>'(Choose one)'));
@@ -128,7 +128,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
 		$.ajax({
 			type:'GET',
 			cache: false,
-			url: 'http://192.168.56.101/app/requests/denialchecker',
+			url: '/app/requests/denialchecker',
                         data:{id: id},
 			success: function(response) {					
 				//success

@@ -27,6 +27,6 @@
     </table>
     <div class="row">
         <h4><?= __('Denial Email') ?></h4>
-        <?= $this->Text->autoParagraph(h($denialReason->denial_email)); ?>
+        <?= $denialReason->denial_email ?>
     </div>
 </div>

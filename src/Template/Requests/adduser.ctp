@@ -28,8 +28,7 @@
             echo $this->Form->control('username');
             echo $this->Form->button('AutoFill',['type'=>'button','onclick'=>'auto()']);
             echo "</br>";
-            echo $this->Form->control('first_name');
-            echo $this->Form->control('last_name');
+            echo $this->Form->control('author_name');
             echo $this->Form->control('email');
             echo $this->Form->control('school');
             echo $this->Form->control('department');
@@ -66,15 +65,14 @@
         $.ajax({
 			type:'GET',
 			cache: false,
-			url: 'http://192.168.56.101/app/users/details',
+			url: '/app/users/details',
                         data:{val: val},
 			success: function(response) {					
 				//success 
                                 console.log(response);
                                 var json = JSON.parse(response);
                                 console.log(json["first_name"]); 
-                                document.getElementById('first-name').value=json["first_name"];
-                                document.getElementById('last-name').value=json["last_name"];
+                                document.getElementById('author-name').value=json["first_name"]+json["last_name"];
                                 document.getElementById('email').value=json["email"];
                                 document.getElementById('department').value=json["department"];
                                 
