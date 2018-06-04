@@ -69,6 +69,7 @@
                         data:{val: val},
 			success: function(response) {					
 				//success 
+                                console.log(val);
                                 console.log(response);
                                 var json = JSON.parse(response);
                                 console.log(json["first_name"]); 
