@@ -12,6 +12,7 @@ Software for Normalization of Data: Python (Jupyter Notebook)
 ## Situation of concern
 
 *Previously, the data was managed via Microsoft Excel, which would result in difficulty of managing information.
+
 *Effective communication between different teams was not possible.
 
 
