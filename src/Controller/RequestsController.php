@@ -27,15 +27,14 @@ class RequestsController extends AppController
 	
         $this->viewBuilder()->layout('default2');
         $request = $this->Requests->newEntity();
-        $var= LdapHelper::getInfo('HOK14');
-        $this->set('var', $var);
+        //$var= LdapHelper::getInfo('HOK14');
+        //$this->set('var', $var);
          //$var=$this->LdapHelper->getInfo('HOK14');
 	//import('Helper', 'LdapHelper');
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
                 $this->Flash->success(__('The request has been saved.'));
-
                return $this->redirect(['action' => 'saved']);
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
@@ -358,6 +357,7 @@ class RequestsController extends AppController
     {
                 return true;
     }
+    
     
     
 }

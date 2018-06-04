@@ -19,7 +19,7 @@ class LdapHelper{
         $username = $user; // Get the username from the code
         $attributes = array('givenName','sn','mail','department'); // 
         $filter = "(cn=$user)";
-        $ldapUser = 'REPLACED_LDAP_USER';
+        $ldapUser = 'REPLACED_LDAP_USER'; // LDAP creds
         $ldappassword = 'REPLACED_LDAP_PASSWORD';
         $ldapServer = 'ldap://REPLACED_LDAP_HOST';
         $ldapPort = '389';
@@ -39,7 +39,7 @@ class LdapHelper{
         $info['department'] = $array[0]['department'][0];
       //  $info['user'] = $array[0]['samaccountname'][0];
       //  $info['groups'] = $this->groups($array[0]['memberof']);
-        $test=$array["count"]." entries returned\n";
+        $test=$array["count"]." entries returned\n"; 
         return $info;
         }
         else

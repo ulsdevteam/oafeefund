@@ -51,7 +51,7 @@
             echo $this->Form->hidden('denial_id', ['options' => $denialReasons, 'empty' => true]);
         ?>
     </fieldset>
-    <?= print_r($var)?>
+    
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
     

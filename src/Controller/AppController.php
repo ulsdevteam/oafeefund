@@ -37,7 +37,8 @@ class AppController extends Controller
         return $this->response;
     }
         protected function setJsonResponse(){
-    $this->loadComponent('RequestHandler');
+    $this->loadComponent('RequestHandler'); /// If JSON data has been posted to the controllers(via AJAX) 
+    //it will convert them into an arrayy.
     $this->RequestHandler->renderAs($this, 'json');
     $this->response->type('application/json');
 }
@@ -66,7 +67,7 @@ class AppController extends Controller
         'authorize' => array('Controller'), // Added this line
         'storage' => 'Session'
     ]);
-       $this->loadModel('cron_checks'); 
+       
         
         
         

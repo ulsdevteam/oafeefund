@@ -110,7 +110,7 @@ class ArticlesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-     public function isAuthorized($user)
+     public function isAuthorized($user) // OSCP students and admin are allowed to edit the articles
 { 
         //$this->Flash->success(__($this->request->action));
     // deny index action for certain role

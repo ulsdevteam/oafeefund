@@ -59,13 +59,13 @@ class UsersController extends AppController
             
             if($user1 != null)
             {
-                $this->Flash->success(__($user1['user']));
+                $this->Flash->success(__("Hey, ".$user1['user']));
                 $value=$user1['user'];
                 $query = $this->Users->find('all')
                         ->where(['Users.user' => "$value"]);
                   
                    
-                      $this->Flash->success(__($query->first()->role));
+                      //$this->Flash->success(__($query->first()->role));
                       $role=$query->first()->role;
                       if($query->first()!=null)
                       {
@@ -222,8 +222,12 @@ class UsersController extends AppController
    { 
         //$this->Flash->success(__($this->request->action));
     // deny index action for certain role
-        if (isset($user['role']) && $user['role'] === 'admin') {
+        if (isset($user['role']) && $user['role'] === 'admin' ) {
         return true;
     }
+      if(isset($user['role']) && (($this->request->action)=="logout"))
+      {
+          return true;
+      }
    }
 }
