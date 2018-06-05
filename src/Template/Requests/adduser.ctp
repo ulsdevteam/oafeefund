@@ -65,11 +65,10 @@
         $.ajax({
 			type:'GET',
 			cache: false,
-			url: '/app/users/details',
+			url: '/users/details',
                         data:{val: val},
 			success: function(response) {					
 				//success 
-                                console.log(val);
                                 console.log(response);
                                 var json = JSON.parse(response);
                                 console.log(json["first_name"]); 

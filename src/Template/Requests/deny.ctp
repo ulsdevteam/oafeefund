@@ -128,7 +128,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
 		$.ajax({
 			type:'GET',
 			cache: false,
-			url: '/app/requests/denialchecker',
+			url: '/requests/denialchecker',
                         data:{id: id},
 			success: function(response) {					
 				//success

@@ -65,7 +65,7 @@ $this->assign('title', __('Send mail to Author for Approval.'));
 		$.ajax({
 			type:'GET',
 			cache: false,
-			url: '/app/requests/approvalchecker',
+			url: '/requests/approvalchecker',
                         data:{id: id},
 			success: function(response) {					
 				//success
