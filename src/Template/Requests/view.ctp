@@ -6,9 +6,9 @@
 ?>
 <?= $this->Html->css('options.css'); ?>
 <div class="requests view large-9 medium-8 columns content">
-    <h3><?= h($request->id) ?></h3>
-    <h3><?php echo "The total amount used by ".h($request->username)." is $".h($request3)."";
     
+    <h3><?php echo "Author Name: ". h($request->author_name) ."  (Username: ". h($request->username). ")" ?></h3>
+    <h3><?php echo "Total amount used: $".h($request3)."";
     ?></h3>
         <div class="options1">
         <tr>
@@ -16,14 +16,14 @@
                     <?php
                     if($role->role === 'admin'){
                     
-                    echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id]);
-                    echo "<br>"; 
+                    echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id],['class' => 'button', 'target' => '_blank']); //
+                    
                     
                     }
                     ?>
                     <?php 
                      if($role->role === 'admin'){
-                    echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id]); 
+                    echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id],['class' => 'button', 'target' => '_blank']); 
                     echo "<br>"; 
                     
                      }

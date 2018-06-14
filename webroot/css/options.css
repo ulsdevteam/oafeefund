@@ -7,12 +7,26 @@ and open the template in the editor.
     Created on : Mar 6, 2018, 1:37:18 PM
     Author     : hok14
 */
+
 .options1 a{
-    color: #000;
-    margin-left: 0.8%;
+    display: block;
+    background: #000;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+.options1 a:hover{
+    display: block;
+    background: #116d76;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: #C5B358;
+    font-weight: bold;
 }
 
-.options1 a:hover{
-    color: #AAA;
-}
+
+
 
