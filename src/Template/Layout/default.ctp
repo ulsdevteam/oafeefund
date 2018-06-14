@@ -31,8 +31,6 @@ $cakeDescription = 'OAAFF application';
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
     <?= $this->Html->css('navbar.css') ?>
-    <?= $this->Html->css('/app/Froala/css/froala_editor.min.css');
-       $this->Html->script('/app/Froala/js/froala_editor.min.js'); ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -54,7 +52,7 @@ $cakeDescription = 'OAAFF application';
         <div class="top-bar-section">
             <img src="http://www.pitt.edu/sites/default/files/pitt_logo.png">
             <ul class="right">
-                <li><a href="/users/logout">Logout</a></li>
+                <li><?= $this->Html->link('Logout',['controller' => 'Users', 'action' => 'logout', '_full' => true]);?></li>
                <!--<li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
                 <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>-->
             </ul>
