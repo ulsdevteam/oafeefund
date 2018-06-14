@@ -54,7 +54,7 @@ $cakeDescription = 'OAAFF application';
         <div class="top-bar-section">
             <img src="http://www.pitt.edu/sites/default/files/pitt_logo.png">
             <ul class="right">
-                <li><a href="/app/users/logout">Logout</a></li>
+                <li><a href="/users/logout">Logout</a></li>
                <!--<li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
                 <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>-->
             </ul>
@@ -64,20 +64,20 @@ $cakeDescription = 'OAAFF application';
         <div id="navbar1">
             <ul>
                 <li>
-                    <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/">Requests</a></ul>
+                    <ul><?= $this->Html->link('Requests',['controller' => 'Requests', 'action' => 'index', '_full' => true],['onmouseover'=>'additionalmethod(1)','onmouseout'=>'additionalmethod(2)']);?></ul>
                     <div class="additionalmethods">
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/pendingrequests" >Pending Requests</a></ul>
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/approvedrequests">Approved Requests</a></ul>
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/paidrequests">Paid Requests</a></ul>
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/deniedrequests">Denied Requests</a></ul>
+                         <ul><?= $this->Html->link('Pending Requests',['controller' => 'Requests', 'action' => 'pendingrequests', '_full' => true],['onmouseover'=>'additionalmethod(1)','onmouseout'=>'additionalmethod(2)']);?></ul>
+                         <ul><?= $this->Html->link('Approved Requests',['controller' => 'Requests', 'action' => 'approvedrequests', '_full' => true],['onmouseover'=>'additionalmethod(1)','onmouseout'=>'additionalmethod(2)']);?></ul>
+                         <ul><?= $this->Html->link('Paid Requests',['controller' => 'Requests', 'action' => 'paidrequests', '_full' => true],['onmouseover'=>'additionalmethod(1)','onmouseout'=>'additionalmethod(2)']);?></ul>
+                         <ul><?= $this->Html->link('Denied Requests',['controller' => 'Requests', 'action' => 'deniedrequests', '_full' => true],['onmouseover'=>'additionalmethod(1)','onmouseout'=>'additionalmethod(2)']);?></ul>
                     </div>
                 </li>
-                <li><a href="/app/users">Users</a></li>
-                <li><a href="/app/transactions">Transactions</a></li>
-                <li><a href="/app/articles">Articles Published</a></li>
-                <li><a href="/app/denial-reasons">Denial Reasons</a></li>
-                <li><a href="/app/approval-reasons">Approval Reasons</a></li>
-                <li><a href="/app/budgets">Check Budget</a></li>
+                <li><?= $this->Html->link('Users',['controller' => 'Users', 'action' => 'index', '_full' => true]);?></li>
+                <li><?= $this->Html->link('Transactions',['controller' => 'Transactions', 'action' => 'index', '_full' => true]);?></li>
+                <li><?= $this->Html->link('Articles Published',['controller' => 'Articles', 'action' => 'index', '_full' => true]);?></li>
+                <li><?= $this->Html->link('Denial Reasons',['controller' => 'DenialReasons', 'action' => 'index', '_full' => true]);?></li>
+                <li><?= $this->Html->link('Approval Reasons',['controller' => 'ApprovalReasons', 'action' => 'index', '_full' => true]);?></li>
+                <li><?= $this->Html->link('Check Budget',['controller' => 'Budgets', 'action' => 'index', '_full' => true]);?></li>
             </ul>
         </div>
     <?= $this->Flash->render() ?>

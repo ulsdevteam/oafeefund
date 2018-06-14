@@ -116,6 +116,34 @@
     </div>
    
     <div class="related">
+        <h4><?= __('Other requests made by same username') ?></h4>
+        <?php if (!empty($other_requests)): ?>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th scope="col"><?= __('Id') ?></th>
+                <th scope="col"><?= __('Publisher') ?></th>
+                <th scope="col"><?= __('Publication Date') ?></th>
+                <th scope="col"><?= __('Article Title') ?></th>
+                <th scope="col"><?= __('Inquiry Date') ?></th>
+                <th scope="col"><?= __('Amount Requested') ?></th>
+                <th scope="col"><?= __('Funded') ?></th>
+            </tr>
+        <?php foreach ($other_requests as $otr): ?>
+        <tr>
+                <td><?= h($otr["id"] ) ?></td>
+                <td><?= h($otr["publisher"] ) ?></td>
+                <td><?= h($otr["publication_name"] ) ?></td>
+                <td><?= h($otr["article_title"] ) ?></td>
+                <td><?= h($otr["inquiry_date"] ) ?></td>
+                <td><?= h($otr["amount_requested"] ) ?></td>
+                <td><?= h($otr["funded"] ) ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+        <?php endif; ?>
+         
+    </div>
+    <div class="related">
         <h4><?= __('Related Articles') ?></h4>
         <?php if (!empty($request->articles)): ?>
         <table cellpadding="0" cellspacing="0">
