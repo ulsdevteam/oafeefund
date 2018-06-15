@@ -100,11 +100,11 @@ class RequestsController extends AppController
           //      ->where(['username'=>$requests2]);
        $date= date('m');
        $results3 = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
-       $date= $results3[0][inquiry_date]; 
+       $date= $results3[0]["inquiry_date"]; 
        $results2 = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!=""',['name'=>$name,'date'=>$date])->fetchAll('assoc');
-        $this->set('request2', $results);
+        //$this->set('request2', $results);
         //$this->set('request3', $results2[0][total_amount]);
-        $this->set('request3', $results2[0][total_amount]);
+        $this->set('request3', $results2[0]["total_amount"]);
         //$this->set('request3', intval($date));
         $role=$this->Auth->user();
         $this->set('role',$role);
@@ -282,7 +282,7 @@ class RequestsController extends AppController
         
         
     }
-    public function approvedrequests($user)
+    public function approvedrequests()
     {
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
         $this->set('requests',$requests);
@@ -290,7 +290,7 @@ class RequestsController extends AppController
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
-    public function paidrequests($user)
+    public function paidrequests()
     {
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Paid"]);
         $this->set('requests',$requests);
@@ -335,7 +335,7 @@ class RequestsController extends AppController
         return $this->json($results3);
   }
     }
-    public function deniedrequests($user)
+    public function deniedrequests()
     {
          $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
         $this->set('requests',$requests);

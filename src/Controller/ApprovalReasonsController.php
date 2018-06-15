@@ -75,7 +75,7 @@ class ApprovalReasonsController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $approvalReason = $this->ApprovalReasons->patchEntity($approvalReason, $this->request->getData());
-            if ($this->ApprovalReasons->save(addslashes($approvalReason))) {
+            if ($this->ApprovalReasons->save($approvalReason)) {
                 $this->Flash->success(__('The approval reason has been saved.'));
 
                 return $this->redirect(['action' => 'index']);

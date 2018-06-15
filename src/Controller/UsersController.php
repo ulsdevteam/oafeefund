@@ -43,12 +43,29 @@ class UsersController extends AppController
     public function login($id = null)
     {
         $this->viewBuilder()->layout('default2');
-        $val="You are already logged in as";
+        //$val="You are already logged in as";
        if (empty($this->request->data)) {
            if($this->Auth->user()!= null)
            {
-       $this->Flash->success(__("{$val} {$this->Auth->user()->user}"));
-           }
+       //$this->Flash->success(__("{$val} {$this->Auth->user()->user}"));
+               $role=$this->Auth->user()->role; 
+                      if($role === 'admin')
+                      {
+                        $this->redirect(array("controller" => "Requests", 
+                      "action" => "index"));   
+                      }
+                      else if($role === 'OSCP_students')
+                      {
+                          $this->redirect(array("controller" => "Articles", 
+                      "action" => "index"));
+                      }
+                      else if($role === 'payment_team')
+                      {
+                          $this->redirect(array("controller" => "Requests", 
+                      "action" => "approvedrequests"));
+                      }
+                      }
+                     
         } else if($this->request->data) {
         // Save logic goes here
             $user1=$this->request->data;
@@ -59,16 +76,17 @@ class UsersController extends AppController
             
             if($user1 != null)
             {
-                $this->Flash->success(__("Hey, ".$user1['user']));
+                //$this->Flash->success(__("Hey, ".$user1['user']));
                 $value=$user1['user'];
                 $query = $this->Users->find('all')
                         ->where(['Users.user' => "$value"]);
                   
                    
                       //$this->Flash->success(__($query->first()->role));
-                      $role=$query->first()->role;
+                      //$role=$query->first()->role;
                       if($query->first()!=null)
                       {
+                          $role=$query->first()->role;
                       $this->Auth->setUser($query->first());
                       if($role === 'admin')
                       {

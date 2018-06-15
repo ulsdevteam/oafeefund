@@ -16,6 +16,7 @@ and open the template in the editor.
     border-radius: 5px;
     color: white;
     font-weight: bold;
+    width: 25%;
 }
 .options1 a:hover{
     display: block;
@@ -25,6 +26,7 @@ and open the template in the editor.
     border-radius: 5px;
     color: #C5B358;
     font-weight: bold;
+    
 }
 
 
