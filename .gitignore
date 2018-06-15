@@ -1,8 +1,8 @@
 # CakePHP 3
 
 /vendor/*
-/config/app.php
 
+/tmp/debug_kit.sqlite
 /tmp/cache/models/*
 !/tmp/cache/models/empty
 /tmp/cache/persistent/*
@@ -13,6 +13,6 @@
 !/tmp/sessions/empty
 /tmp/tests/*
 !/tmp/tests/empty
-
+/composer.lock
 /logs/*
 !/logs/empty
