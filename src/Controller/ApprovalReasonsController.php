@@ -104,13 +104,18 @@ class ApprovalReasonsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    public function isAuthorized($user)
-{ 
-        //$this->Flash->success(__($this->request->action));
-    // deny index action for certain role
+    /*
+     * @param string $user is passed, which can  be received from 
+     * $this->Auth->user() . This is the array of the current user who 
+     * has logged in. Depending on the permissions of that user's 
+     * specific role in the organization access to the page requested 
+     * is given.
+     * @return boolean , true if access granted. 
+     */
+    public function isAuthorized($user){ 
         if (isset($user['role']) && $user['role'] === 'admin') {
         return true;
+        }
     }
-}
     
 }

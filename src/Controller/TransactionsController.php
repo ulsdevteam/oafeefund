@@ -46,7 +46,7 @@ class TransactionsController extends AppController
 
     /**
      * Add method
-     *
+     * If a new transaction is added, it will be set as paid in the Requests table.
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add($id=null)
@@ -126,7 +126,14 @@ class TransactionsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    
+    /*
+     * @param string $user is passed, which can  be received from 
+     * $this->Auth->user() . This is the array of the current user who 
+     * has logged in. Depending on the permissions of that user's 
+     * specific role in the organization access to the page requested 
+     * is given.
+     * @return boolean , true if access granted. 
+     */
     public function isAuthorized($user) {
     // Admin can access every action
         

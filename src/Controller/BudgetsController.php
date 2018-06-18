@@ -15,7 +15,7 @@ class BudgetsController extends AppController
 
     /**
      * Index method
-     *
+     * 
      * @return \Cake\Http\Response|void
      */
     public function index()
@@ -25,19 +25,12 @@ class BudgetsController extends AppController
         $this->set(compact('budgets'));
         $this->loadModel('requests');
         $connection = ConnectionManager::get('default');
-        //$results=$connection->execute('SELECT count( * ) FROM budgets');
-        //$count=$results;
-        
-        //array_push($array, 100);
-        //array_push($array, 101);
-        
         $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
                                         FROM requests R, budgets B
                                         WHERE R.inquiry_date > B.budget_date_begin
                                         AND R.inquiry_date < budget_date_end
                                         GROUP BY B.id')->fetchAll('assoc');
-        $results1=$results;
-        $this->set('results',$results1);
+        $this->set('results',$results);
         $this->set(compact('budgets'));
     }
 

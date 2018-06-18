@@ -28,27 +28,46 @@ use App\View\Helper\LdapHelper;
  */
 class AppController extends Controller
 {   
-    
-  //  public $helpers = ['TinyMCE.TinyMCE'];
+     /*
+      * This method is called by the RequestsController::approvalchecker() 
+      * and RequestsController::denialchecker() to convert the response 
+      * which is sent to the view into a json response. 
+      * @return json response
+      */
         public function json($data)
-                {
-        //$this->response->type('json');
+        {
         $this->response->body(json_encode($data));
         return $this->response;
-    }
-        protected function setJsonResponse(){
-    $this->loadComponent('RequestHandler'); /// If JSON data has been posted to the controllers(via AJAX) 
-    //it will convert them into an arrayy.
-    $this->RequestHandler->renderAs($this, 'json');
-    $this->response->type('application/json');
-}
+        }  
+        /*
+         * If an isAuthorized method is not created in a specific Controller,
+         * this will be implemented as the default one, such as there isn't one
+         * created for the BudgetsController, so both the admin and 
+         * payment_team will have access to all of it's actions.
+         * @return boolean 
+         */
+        public function isAuthorized($user) {
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        if (isset($user['role']) && $user['role'] === 'payment_team') {
+            return true;
+        }
+       // Default deny
+        return false;
+       }
     /**
      * Initialization hook method.
      *
      * Use this method to add common initialization code like loading components.
      *
      * e.g. `$this->loadComponent('Security');`
-     *
+     * The Auth component is loaded to authenticate 
+     * the username field matches the user in the 
+     * user table.
+     * The storage is a session so we do have a session 
+     * saved on the server, when the client logs in, 
+     * so the client doesn't have to login again.
      * @return void
      */
     public function initialize()
@@ -64,13 +83,13 @@ class AppController extends Controller
                 'fields' => ['username' => 'user']
             ]
         ],
+        'loginAction' => [
+            'controller' => 'Users',
+            'action' => 'login'
+        ],
         'authorize' => array('Controller'), // Added this line
         'storage' => 'Session'
-    ]);
-       
-        
-        
-        
+    ]);  
 
         /*
          * Enable the following components for recommended CakePHP security settings.
@@ -78,49 +97,19 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
-    }
-    public function isAuthorized($user) {
-    // Admin can access every action
-    if (isset($user['role']) && $user['role'] === 'admin') {
-        return true;
-    }
-    if (isset($user['role']) && $user['role'] === 'payment_team') {
-        //$this->Flash->success(__($controller));
-        return true;
-    }
-
-    // Default deny
-    return false;
-       }
-    
-    
+    }  
+    /*
+     * The beforeFilter is applied before 
+     * accessing the controller requested.
+     * The AddUser page in Requests can be 
+     * accessed by anyone without any authentication.
+     */
     public function beforeFilter(Event $event)
     {
-        
-        //$role=$this->Auth->user()->user;
-        //$this->Flash->success(__($this->request->action)); 
-        /*if($role=="admin")
-        {
-            $this->Auth->allow();
-        }
-        if($role=="payment_team")
-        {
-        switch ($this->name) # this will allow everyone to access addUSer page of Requests https://stackoverflow.com/questions/2793629/cakephp-auth-how-to-allow-specific-controller-and-actions
+        switch ($this->name) # We get the controller name
         { 
         case 'Requests':
-            $this->Auth->allow(['view', 'index']);
-            break;
-        case 'Users':
-            $this->Auth->deny();
-            break;
-        
-        }
-        
-        }*/
-        switch ($this->name) # This will allow everyone to access addUSer page of Requests.
-        { 
-        case 'Requests':
-            $this->Auth->allow(['addUser']);
+            $this->Auth->allow(['addUser']); // Allowed if method is addUser
             break;
         }
     }

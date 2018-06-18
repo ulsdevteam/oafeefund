@@ -20,34 +20,31 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-          public function details()
-                  {
-        $this->viewBuilder()->layout('ajax');
-        $this->render('ajax'); 
-       if ($this->request->is('ajax') && $this->request->is('get') )
-           {
-       $res= $_GET['val'];
-       $var= LdapHelper::getInfo($res);
-       //$this->set('var', $var);
-       echo json_encode($var);
-           }
- // echo "AJAX call failed";
-
-    }
     public function index()
     {
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
     }
+    /*
+     * Login method
+     * 
+     * Layout is set to default2.
+     * If there is no data present in the input box, while the user first 
+     * tries loading the page, it does a check to see if there is a session 
+     * saved for the current user and if there is a current session, we redirect 
+     * the user to the the default page for that particular role.
+     * If data is entered it creates a session for the user.
+     * @param String $user1 data entered by user on the login page
+     * @param Object $query query the database to find if the specific user is 
+     * present in the users table.
+     */
     public function login($id = null)
     {
         $this->viewBuilder()->layout('default2');
-        //$val="You are already logged in as";
        if (empty($this->request->data)) {
            if($this->Auth->user()!= null)
            {
-       //$this->Flash->success(__("{$val} {$this->Auth->user()->user}"));
                $role=$this->Auth->user()->role; 
                       if($role === 'admin')
                       {
@@ -108,46 +105,8 @@ class UsersController extends AppController
                       {
                       $this->Flash->error(__('Username or password is incorrect'));
                       }
-                      
-                      //$user = $this->Auth->identify();
-                      /*if ($user) 
-                          {
-                              $this->Auth->setUser($query->first());
-                              return $this->redirect($this->Auth->redirectUrl());
-                          } 
-                   else 
-                       {
-                              $this->Flash->error(__('Username or password is incorrect'));
-                      }*/
-                /*$query = $this->Users->find('all', [
-                         'conditions' => ['Users.user' => "$value"],
-                         'fields'=>array('role')
-                         
-                          ]);*/
-                //$userconfirmed=$query->jsonSerialize();
-                
-                /*$userconfirmed=$query->toArray();
-                $userconfirmed1=$userconfirmed;
-                $this->Flash->success(var_export($userconfirmed1, true));
-                $this->Flash->success(__($userconfirmed1));*/
-                
-                
             }
-            //$this->Flash->success(__($userconfirmed));
-            //if($this->request->data = $this->Users->find('all');
-            
         }
-        
-        
-        /*if ($this->request->is('post')) 
-      {
-        $user = $this->Auth->identify();
-        $user = $this->Users->find('all',[
-            'conditions' => ['users.user' => "$user"]
-           ]);
-           $number = $user->count();
-           
-       }*/  
     }
 
     public function logout()
@@ -216,6 +175,23 @@ class UsersController extends AppController
         }
         $this->set(compact('user'));
     }
+    /*
+     * AJAX call made from Requests Template adduser to Users/details.
+     * @param String $res , it gives us the username.
+     * @param array $var, it gives us the response from LDAP helper in an 
+     * array format containing all the necessary information.
+     */
+    public function details()
+    {
+        $this->viewBuilder()->layout('ajax');
+        $this->render('ajax'); 
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+            $res= $_GET['val'];
+            $var= LdapHelper::getInfo($res);
+            echo json_encode($var);
+           }
+    }
 
     /**
      * Delete method
@@ -236,10 +212,16 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    /*
+     * @param string $user is passed, which can  be received from 
+     * $this->Auth->user() . This is the array of the current user who 
+     * has logged in. Depending on the permissions of that user's 
+     * specific role in the organization access to the page requested 
+     * is given.
+     * @return boolean , true if access granted. 
+     */
     public function isAuthorized($user)
    { 
-        //$this->Flash->success(__($this->request->action));
-    // deny index action for certain role
         if (isset($user['role']) && $user['role'] === 'admin' ) {
         return true;
     }

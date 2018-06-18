@@ -35,17 +35,12 @@ $this->assign('title', __('Send mail to Author for Approval.'));
                 echo "<br />\n"; 
                 echo $this->Form->input('id',array('options' => $results2, 'empty' =>'(Choose one)'));
                 echo $this->Form->button('AutoFill',['onclick'=>'approvalcheck()']);
-                //echo $this->Form->input('to');
-                //echo $this->Form->input('from_name');
-                //echo $this->Form->input('from_addr', array('label' => 'From Address'));
                 ?>
                 </br>
                 
                     <label></label>
                 <?php echo $this->Form->create(); ?>
                 <?php
-                //$this->Froala->plugin();
-                //$this->Froala->editor('#message-body'); // J
                 echo $this->Form->input('internal_note');
                 echo $this->Form->input('subject');
                 echo $this->Form->input('Message_Body', array('type' => 'textarea','class' => 'edittextarea form-control','label' => 'Content :'));

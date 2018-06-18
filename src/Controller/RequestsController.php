@@ -16,11 +16,13 @@ use App\View\Helper\LdapHelper;
  */
 class RequestsController extends AppController
 {
-    
-   // public $helpers = array('TinyMCE.TinyMCE');
-    
-  
-
+    /*
+     * Add new request method.(adduser)
+     * 
+     * Access is given to every person for this specfic function.
+     * The layout set for this is blank.
+     * @param Object $denialReasons It consists of the denialreasons.
+     */
     public function adduser()
     {
          /* Now here you can put your default values */
@@ -29,7 +31,7 @@ class RequestsController extends AppController
         $request = $this->Requests->newEntity();
         //$var= LdapHelper::getInfo('HOK14');
         //$this->set('var', $var);
-         //$var=$this->LdapHelper->getInfo('HOK14');
+        //$var=$this->LdapHelper->getInfo('HOK14');
 	//import('Helper', 'LdapHelper');
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
@@ -182,7 +184,15 @@ class RequestsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    
+    /*
+     *  Approve method
+     * 
+     * @param array $results, contains an array 
+     * of the request for requested id 
+     * @param array $results2 , contains an array 
+     * of the Approved reasons, with id and approval reason. 
+     * @param Object $email, contains the email template to be sent
+     */
     public function approve($id = null){
         
          //or you can load it in beforeFilter()
@@ -229,10 +239,16 @@ class RequestsController extends AppController
         
  
     }
+     /*
+     *  Denial method
+     * 
+     * @param array $results, contains an array 
+     * of the request for requested id 
+     * @param array $results2 , contains an array 
+     * of the Denial reasons, with id and denial reason. 
+     * @param Object $email, contains the email template to be sent
+     */
     public function deny($id = null){
-        
-         //or you can load it in beforeFilter()
-        
         $requests=$this->Requests->find('all')
                 ->where(['id' => $id]);
         $results = $requests->first();
@@ -243,7 +259,7 @@ class RequestsController extends AppController
     'valueField' => 'denial_reason'
        ]);
         $results2 = $requests2->toArray();
-       // $results2['denial_reason']=striptags($results2['denial_reason'])
+     // $results2['denial_reason']=striptags($results2['denial_reason'])
         $this->set('results2',$results2);
         if($this->request->data != null)
         {
@@ -271,6 +287,13 @@ class RequestsController extends AppController
         
  
     }
+    /*
+     * Pending requests method
+     * 
+     * Show all requests which are still pending
+     * @param Object $requests , entity which contains all pending requests
+     * @param array $role, user information.
+     */
     public function pendingrequests()
     {
         
@@ -282,6 +305,13 @@ class RequestsController extends AppController
         
         
     }
+    /*
+     * Approved requests method
+     * 
+     * Show all requests which are approved
+     * @param Object $requests , entity which contains all approved requests
+     * @param array $role, user information.
+     */
     public function approvedrequests()
     {
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
@@ -290,6 +320,13 @@ class RequestsController extends AppController
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
+    /*
+     * Paid requests method
+     * 
+     * Show all requests which are paid
+     * @param Object $requests , entity which contains all paid requests
+     * @param array $role, user information.
+     */
     public function paidrequests()
     {
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Paid"]);
@@ -298,17 +335,34 @@ class RequestsController extends AppController
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
-    
+    /*
+     * Denied requests method
+     * 
+     * Show all requests which are denied
+     * @param Object $requests , entity which contains all denied requests
+     * @param array $role, user information.
+     */
+    public function deniedrequests()
+    {
+        $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
+        $this->set('requests',$requests);
+        $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+    }
+    /*
+     * Denial Checker method
+     * 
+     * AJAX method call, which checks the ID of the denial reason
+     * and responds with the Denial reason email
+     * @param String $results3 , string which contains the denial email
+     * @return json format of $results3
+     */
     public function denialchecker(){
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
        if ($this->request->is('ajax') && $this->request->is('get') ){
-    //$res = [
-     //   'data' => [
-      //       /* your data */
-        // ]
-       //];
-       $res= $_GET['id'];
+        $res= $_GET['id'];
         $this->loadModel('DenialReasons');
         $requests3=$this->DenialReasons->find('all')
                 ->where(['DenialReasons.id' => $res]);
@@ -317,16 +371,18 @@ class RequestsController extends AppController
        return $this->json($results3);
   }
     }
-    
+    /*
+     * Approved Checker method
+     * 
+     * AJAX method call, which checks the ID of the approval reason
+     * and responds with the approval reason email
+     * @param String $results3 , string which contains the approval email
+     * @return json format of $results3
+     */
   public function approvalchecker(){
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
        if ($this->request->is('ajax') && $this->request->is('get') ){
-    //$res = [
-     //   'data' => [
-      //       /* your data */
-        // ]
-       //];
        $res= $_GET['id'];
         $this->loadModel('ApprovalReasons');
         $requests3=$this->ApprovalReasons->find('all')
@@ -335,18 +391,17 @@ class RequestsController extends AppController
         return $this->json($results3);
   }
     }
-    public function deniedrequests()
-    {
-         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
-        $this->set('requests',$requests);
-        $requests = $this->paginate($requests);
-        $role=$this->Auth->user();
-        $this->set('role',$role);
-    }
+    
+    /*
+     * @param string $user is passed, which can  be received from 
+     * $this->Auth->user() . This is the array of the current user who 
+     * has logged in. Depending on the permissions of that user's 
+     * specific role in the organization access to the page requested 
+     * is given.
+     * @return boolean , true if access granted. 
+     */
     public function isAuthorized($user)
 { 
-        //$this->Flash->success(__($this->request->action));
-    // deny index action for certain role
         if (isset($user['role']) && $user['role'] === 'admin') {
         return true;
     }
