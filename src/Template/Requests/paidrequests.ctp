@@ -7,7 +7,7 @@
 <?= $this->Html->css('requests.css') ?>
 <div class="test">
     
-    <h3><?= __('Approved Requests') ?></h3>
+    <h3><?= __('Paid Requests') ?></h3>
     <table cellpadding="20" cellspacing="20" align="center">
         <thead>
             <tr>

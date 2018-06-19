@@ -12,28 +12,31 @@
     ?></h3>
         <div class="options1">
         <tr>
-                    
-                    <?php
+                    <?php if(h($request->funded)=="Pending"): 
+                    {
                     if($role->role === 'admin'){
                     
                     echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id],['class' => 'button', 'target' => '_blank']); //
                     
                     
-                    }
-                    ?>
-                    <?php 
+                    } 
                      if($role->role === 'admin'){
                     echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id],['class' => 'button', 'target' => '_blank']); 
                     echo "<br>"; 
                     
                      }
-                            ?>
+                    }
+                    endif; ?>
                     <?php 
+                    if(h($request->funded)=="Approved"): 
+                    {
                      if($role->role === 'payment_team'){
-                     echo $this->Html->link(__('Paid'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
+                     echo $this->Html->link(__('Payment for this request'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
                      echo "<br>"; 
                      }
-                            ?>
+                    }
+                     endif;
+                    ?>
         </tr>
         </div>
      <table class="vertical-table">
