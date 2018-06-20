@@ -37,6 +37,25 @@
                     }
                      endif;
                     ?>
+            
+                    <?php 
+                    if( (h($request->funded)=="Paid") && ($role->role === 'OSCP_students')){
+                        if(empty($request->articles))
+                        {
+                            echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
+                            echo "<br>"; 
+                        }
+                        elseif(!empty($request->articles))
+                        {
+                            $article_id=$request->articles;
+                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article_id[0]->id ]); 
+                            echo "<br>";   
+                        }
+                     }
+                    
+                    
+                     
+                     ?>
         </tr>
         </div>
      <table class="vertical-table">

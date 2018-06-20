@@ -110,7 +110,10 @@ class AppController extends Controller
         switch ($this->name) # We get the controller name
         { 
         case 'Requests':
-            $this->Auth->allow(['addUser']); // Allowed if method is addUser
+            $this->Auth->allow(['addUser','saved']); // Allowed if method is addUser or saved
+            break;
+        case 'Users':
+            $this->Auth->allow(['details']); // Allowed if method is details
             break;
         }
     }

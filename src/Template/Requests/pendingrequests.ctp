@@ -53,11 +53,6 @@
                     echo $this->Html->link(__('Deny'), ['action' => 'deny', $request->id]); 
                      }
                             ?>
-                    <?php 
-                     if($role->role === 'payment_team'){
-                     echo $this->Html->link(__('Paid'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
-                     }
-                            ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $request->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $request->id], ['confirm' => __('Are you sure you want to delete # {0}?', $request->id)]) ?>
                 </td>

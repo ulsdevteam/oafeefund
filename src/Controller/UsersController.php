@@ -236,5 +236,8 @@ class UsersController extends AppController
       {
           return true;
       }
+      //if(($this->request->action)=="details"){
+         // return true;
+      //}
    }
 }

@@ -93,14 +93,18 @@
                      endif;
                             ?>
                     <?php 
-                    if(h($request->funded)=="Paid"): 
-                     {
-                     if($role->role === 'OSCP_students'){
-                     echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
+                    if( (h($request->funded)=="Paid") && ($role->role === 'OSCP_students')){
+                        if(empty($request->articles))
+                        {
+                            echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
+                        }
+                        elseif(!empty($request->articles))
+                        {
+                            $article_id=$request->articles;
+                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article_id[0]->id ]);  
+                        }
                      }
-                     }
-                     endif;
-                            ?>
+                     ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $request->id]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $request->id], ['confirm' => __('Are you sure you want to delete # {0}?', $request->id)]) ?>
                 </td>
