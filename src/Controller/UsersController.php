@@ -35,13 +35,15 @@ class UsersController extends AppController
      * saved for the current user and if there is a current session, we redirect 
      * the user to the the default page for that particular role.
      * If data is entered it creates a session for the user.
-     * @param String $user1 data entered by user on the login page
-     * @param Object $query query the database to find if the specific user is 
      * present in the users table.
+     * @param string|null $id User id.
+     * @return \Cake\Http\Response|void
      */
     public function login($id = null)
     {
-        $this->viewBuilder()->layout('default2');
+      /* @var String $user1 data entered by user on the login page
+       * @var Object $query query the database to find if the specific user is */ 
+       $this->viewBuilder()->layout('default2');
        if (empty($this->request->data)) {
            if($this->Auth->user()!= null)
            {
@@ -108,6 +110,11 @@ class UsersController extends AppController
             }
         }
     }
+    /*
+     * Logout method
+     * 
+     * On clicking this button the current session for user will be destroyed.
+     */
 
     public function logout()
     {
@@ -177,12 +184,12 @@ class UsersController extends AppController
     }
     /*
      * AJAX call made from Requests Template adduser to Users/details.
-     * @param String $res , it gives us the username.
-     * @param array $var, it gives us the response from LDAP helper in an 
      * array format containing all the necessary information.
      */
     public function details()
     {
+       /* @var String $res , it gives us the username.
+        * @var array $var, it gives us the response from LDAP helper in an */
         $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
          if ($this->request->is('ajax') && $this->request->is('get') )

@@ -15,7 +15,9 @@ class BudgetsController extends AppController
 
     /**
      * Index method
-     * 
+     * This method is used to show the budgets for all the fiscal years, it also 
+     * does an aggregation on each year to compute the total sum of budget which 
+     * was used in each year. 
      * @return \Cake\Http\Response|void
      */
     public function index()

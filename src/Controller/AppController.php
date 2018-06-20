@@ -99,10 +99,11 @@ class AppController extends Controller
         //$this->loadComponent('Csrf');
     }  
     /*
-     * The beforeFilter is applied before 
-     * accessing the controller requested.
-     * The AddUser page in Requests can be 
-     * accessed by anyone without any authentication.
+     * The beforeFilter is applied before accessing the controller requested.
+     * The AddUser page in Requests can be accessed by anyone without any 
+     * authentication.
+     * @param Cake\Event\Event Object $event, used to get the current event
+     * @return void
      */
     public function beforeFilter(Event $event)
     {

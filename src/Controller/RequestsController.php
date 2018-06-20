@@ -21,7 +21,7 @@ class RequestsController extends AppController
      * 
      * Access is given to every person for this specfic function.
      * The layout set for this is blank.
-     * @param Object $denialReasons It consists of the denialreasons.
+     * @return void
      */
     public function adduser()
     {
@@ -41,14 +41,14 @@ class RequestsController extends AppController
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
         }
-        
-        $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
+        $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]); 
+        //@var Object $denialReasons It consists of the denialreasons.
         $this->set(compact('request', 'denialReasons'));
     }
      public function saved()
     {
        $this->viewBuilder()->layout('default2');
-     }
+    }
     /**
      * Index method
      *
@@ -64,10 +64,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
         $role=$this->Auth->user();
-        $this->set('role',$role);
-        
-        
-        
+        $this->set('role',$role);  
     }
 
     /**
@@ -77,10 +74,6 @@ class RequestsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function export($limit =3){
-        $requests=$this->Requests->find('all', array('conditions' => array('Requests.id' => 4)))->contain(['DenialReasons']);
-        $this->set('requests',$requests); // Name of variable being set in the view layer, set the variable request.
-    }
     
     public function view($id = null)
     {
@@ -98,8 +91,6 @@ class RequestsController extends AppController
            $request2= $request2->first();   
             $this->loadModel('budgets');
            $name=$request2->username;
-//$request3=$request3->find('all')
-          //      ->where(['username'=>$requests2]);
        $date= date('m');
        $results3 = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
        $date= $results3[0]["inquiry_date"]; 
@@ -187,15 +178,17 @@ class RequestsController extends AppController
     /*
      *  Approve method
      * 
-     * @param array $results, contains an array 
-     * of the request for requested id 
-     * @param array $results2 , contains an array 
-     * of the Approved reasons, with id and approval reason. 
-     * @param Object $email, contains the email template to be sent
+     * @param string|null $id Request id.
      */
     public function approve($id = null){
-        
-         //or you can load it in beforeFilter()
+        /*
+         * @var array $results, contains an array 
+         * of the request for requested id 
+         * @var array $results2 , contains an array 
+         * of the Approved reasons, with id and approval reason. 
+         * @var Cake\Mailer\Email Object $email, contains the email template 
+         * to be sent.
+         */
         
         $requests=$this->Requests->find('all')
                 ->where(['id' => $id]);
@@ -242,13 +235,17 @@ class RequestsController extends AppController
      /*
      *  Denial method
      * 
-     * @param array $results, contains an array 
-     * of the request for requested id 
-     * @param array $results2 , contains an array 
-     * of the Denial reasons, with id and denial reason. 
-     * @param Object $email, contains the email template to be sent
+     * @param string|null $id Request id.
+     * @return void
      */
     public function deny($id = null){
+        /*
+         * @var array $results, contains an array 
+         * of the request for requested id 
+         * @var array $results2 , contains an array of the Denial reasons,
+         * with id and denial reason. 
+         * @var Object $email, contains the email template to be sent
+         */
         $requests=$this->Requests->find('all')
                 ->where(['id' => $id]);
         $results = $requests->first();
@@ -291,12 +288,12 @@ class RequestsController extends AppController
      * Pending requests method
      * 
      * Show all requests which are still pending
-     * @param Object $requests , entity which contains all pending requests
-     * @param array $role, user information.
+     * @return void
      */
     public function pendingrequests()
     {
-        
+        /* @var Object $requests , entity which contains all pending requests
+         * @var array $role, user information.*/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "pending"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
@@ -309,11 +306,12 @@ class RequestsController extends AppController
      * Approved requests method
      * 
      * Show all requests which are approved
-     * @param Object $requests , entity which contains all approved requests
-     * @param array $role, user information.
+     * @return void
      */
     public function approvedrequests()
     {
+        /* @var Object $requests , entity which contains all approved requests
+         * @var array $role, user information. */
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
@@ -324,11 +322,12 @@ class RequestsController extends AppController
      * Paid requests method
      * 
      * Show all requests which are paid
-     * @param Object $requests , entity which contains all paid requests
-     * @param array $role, user information.
+     * @return void
      */
     public function paidrequests()
-    {
+    { 
+        /* @var Object $requests , entity which contains all paid requests
+        * @var array $role, user information.*/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Paid"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
@@ -339,11 +338,12 @@ class RequestsController extends AppController
      * Denied requests method
      * 
      * Show all requests which are denied
-     * @param Object $requests , entity which contains all denied requests
-     * @param array $role, user information.
+     * @return void
      */
     public function deniedrequests()
     {
+        /* @var Object $requests , entity which contains all denied requests
+         * @var array $role, user information.*/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
@@ -355,10 +355,11 @@ class RequestsController extends AppController
      * 
      * AJAX method call, which checks the ID of the denial reason
      * and responds with the Denial reason email
-     * @param String $results3 , string which contains the denial email
+     * 
      * @return json format of $results3
      */
     public function denialchecker(){
+        /*@var String $results3 , string which contains the denial email*/
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
        if ($this->request->is('ajax') && $this->request->is('get') ){
@@ -376,10 +377,10 @@ class RequestsController extends AppController
      * 
      * AJAX method call, which checks the ID of the approval reason
      * and responds with the approval reason email
-     * @param String $results3 , string which contains the approval email
      * @return json format of $results3
      */
   public function approvalchecker(){
+      /*@var String $results3 , string which contains the approval email*/
        $this->viewBuilder()->layout('ajax');
         $this->render('ajax'); 
        if ($this->request->is('ajax') && $this->request->is('get') ){
@@ -407,7 +408,7 @@ class RequestsController extends AppController
     }
     
     
-    if ((($this->request->action==="index")||($this->request->action==="approvedrequests") || ($this->request->action==="pendingrequests") || $this->request->action==="paidrequests") &&  $user['role'] === 'payment_team') 
+    if ((($this->request->action==="index")||($this->request->action==="approvedrequests") || ($this->request->action==="pendingrequests") || $this->request->action==="paidrequests") || ($this->request->action==="view") &&  $user['role'] === 'payment_team') 
     {
                 return true;
     }
