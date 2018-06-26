@@ -27,7 +27,8 @@ class RequestsController extends AppController
     {
          /* Now here you can put your default values */
 	
-        $this->viewBuilder()->layout('default2');
+        $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
+        
         $request = $this->Requests->newEntity();
         //$var= LdapHelper::getInfo('HOK14');
         //$this->set('var', $var);
@@ -260,12 +261,12 @@ class RequestsController extends AppController
         $this->set('results2',$results2);
         if($this->request->data != null)
         {
+        $data = $this->request->data;
         $approved=$this->Requests->query();
         $approved->update()
-        ->set(['Funded' => 'Denied'])
+        ->set(['Funded' => 'Denied','denial_id' => $data["id"]])
         ->where(['id' => $id])
-        ->execute(); 
-        $data = $this->request->data;
+        ->execute();
         //$test = $data["to"];
         $test=$results->email;
         $subject = $data["subject"];
@@ -278,6 +279,9 @@ class RequestsController extends AppController
         ->emailFormat('html')
         ->subject("$subject")
         ->send("$body");
+        //$this->Flash->success(__($data));
+        $this->Flash->success(__('The denial mail has been sent.'));
+        return $this->redirect(['action' => 'index']);
         
         
         }

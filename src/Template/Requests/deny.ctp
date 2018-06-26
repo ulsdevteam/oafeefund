@@ -34,22 +34,23 @@ $this->assign('title', __('Send mail to Author for Denial.'));
                 echo "<br />\n"; 
                 echo h($results-> email);
                 echo "<br />\n"; 
+                
+                echo $this->Form->create();
                 echo "</br>";
                 echo $this->Form->input('id',array('options' => $results2, 'empty' =>'(Choose one)'));
-                echo $this->Form->button('AutoFill',['onclick'=>'denialcheck()']);
+                echo $this->Form->button('AutoFill',['onclick'=>'denialcheck()','type'=>'button']);
                 echo '';
-                echo $this->Form->create();
+                //echo $this->Form->hidden('denial',["id"=>"denial"]);
                 echo $this->Form->input('subject');
                 echo $this->Form->input('Message_Body', array('type' => 'textarea','class' => 'edittextarea form-control','label' => 'Content :'));
         ?>
+                
         </fieldset>
     
     <label>Upon clicking submit, a denial message will be sent to the sender and this particular request will be shown as denied in our records.</label>
 <script type="text/javascript">
     var mytextbox = document.getElementById('message-body');
     var mydropdown = document.getElementById('dropdownID');
-
-   
     function denialcheck(){
                          var copy=$("#id option:selected").text()
                document.getElementById('subject').value="RE: Author Fund Request: "+copy;
@@ -71,7 +72,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
 		});
                 
 	
-    }
+     }
     </script>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
