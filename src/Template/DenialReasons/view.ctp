@@ -8,7 +8,6 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit Denial Reason'), ['action' => 'edit', $denialReason->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Denial Reason'), ['action' => 'delete', $denialReason->id], ['confirm' => __('Are you sure you want to delete # {0}?', $denialReason->id)]) ?> </li>
         <li><?= $this->Html->link(__('List Denial Reasons'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Denial Reason'), ['action' => 'add']) ?> </li>
     </ul>
