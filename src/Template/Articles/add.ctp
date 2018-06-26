@@ -17,8 +17,8 @@
         <?php 
             echo $this->Form->hidden('request_id', ['options' => $requests,'value'=> $id ]);
             echo $this->Form->control('publication_date', ['empty' => true]);
-            echo $this->Form->control('article_url');
-            echo $this->Form->control('dscholarship_archive');
+            echo $this->Form->control('article_url', array('type' => 'url','placeholder'=> "http://example.com"));
+            echo $this->Form->control('dscholarship_archive', array('type' => 'url','placeholder'=> "http://example.com"));
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
