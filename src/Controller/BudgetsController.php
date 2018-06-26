@@ -29,8 +29,8 @@ class BudgetsController extends AppController
         $connection = ConnectionManager::get('default');
         $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
                                         FROM requests R, budgets B
-                                        WHERE R.inquiry_date > B.budget_date_begin
-                                        AND R.inquiry_date < budget_date_end
+                                        WHERE R.inquiry_date >= B.budget_date_begin
+                                        AND R.inquiry_date <= budget_date_end
                                         GROUP BY B.id')->fetchAll('assoc');
         $this->set('results',$results);
         $this->set(compact('budgets'));
