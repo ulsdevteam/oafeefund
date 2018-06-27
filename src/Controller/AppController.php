@@ -17,6 +17,7 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use App\View\Helper\LdapHelper;
+use App\Auth\EnvAuthenticate;
 
 /**
  * Application Controller
@@ -79,17 +80,13 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->loadComponent('Auth',[
         'authenticate' => [
-            'Form' => [
+            'Env' => [
                 'fields' => ['username' => 'user']
-            ]
-        ],
-        'loginAction' => [
-            'controller' => 'Users',
-            'action' => 'login'
-        ],
-        'authorize' => array('Controller'), // Added this line
-        'storage' => 'Session'
-    ]);  
+            ],
+    ],
+        'authorize'=>array("Controller"),
+        'storage' => 'Memory'
+            ]);  
 
         /*
          * Enable the following components for recommended CakePHP security settings.
