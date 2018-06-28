@@ -398,6 +398,20 @@ class RequestsController extends AppController
   }
     }
     
+    
+    public function reports(){
+         $query1=$this->Requests->find('all');
+         $query1->select([
+            'Requests.school',
+            'count' => $query1->func()->count('*'),
+         ])
+        ->group('Requests.school');
+         $query1->hydrate(false); // Results as arrays instead of entities
+         $result = $query1->toList();
+         $result= json_encode($result);
+         $this->set('query1',$result);
+    }
+    
     /*
      * @param string $user is passed, which can  be received from 
      * $this->Auth->user() . This is the array of the current user who 
