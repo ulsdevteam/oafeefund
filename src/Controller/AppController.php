@@ -28,17 +28,8 @@ use App\View\Helper\LdapHelper;
  */
 class AppController extends Controller
 {   
-     /*
-      * This method is called by the RequestsController::approvalchecker() 
-      * and RequestsController::denialchecker() to convert the response 
-      * which is sent to the view into a json response. 
-      * @return json response
-      */
-        public function json($data)
-        {
-        $this->response->body(json_encode($data));
-        return $this->response;
-        }  
+     
+       
         /*
          * If an isAuthorized method is not created in a specific Controller,
          * this will be implemented as the default one, such as there isn't one
@@ -46,6 +37,7 @@ class AppController extends Controller
          * payment_team will have access to all of it's actions.
          * @return boolean 
          */
+    
         public function isAuthorized($user) {
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
