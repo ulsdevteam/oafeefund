@@ -191,13 +191,13 @@ class UsersController extends AppController
        /* @var String $res , it gives us the username.
         * @var array $var, it gives us the response from LDAP helper in an */
         $this->viewBuilder()->layout('ajax');
-        $this->render('ajax'); 
          if ($this->request->is('ajax') && $this->request->is('get') )
            {
             $res= $_GET['val'];
             $var= LdapHelper::getInfo($res);
-            echo json_encode($var);
+            $this->set("details",json_encode($var));
            }
+        $this->render('ajax');
     }
 
     /**

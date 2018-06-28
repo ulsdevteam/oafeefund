@@ -57,7 +57,6 @@ class RequestsController extends AppController
      */
     public function index()
     {
-       // $this->Flash->success(__($this->request->action));   
         $this->viewBuilder()->layout('default');
         $this->paginate = [
             'contain' => ['DenialReasons', 'Articles']
@@ -65,7 +64,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
         $role=$this->Auth->user();
-        $this->set('role',$role);  
+        $this->set('role',$role); 
     }
 
     /**
@@ -230,8 +229,6 @@ class RequestsController extends AppController
         $this->Flash->success(__('The approval mail has been sent.'));
         return $this->redirect(['action' => 'index']);
         }
-        
- 
     }
      /*
      *  Denial method
@@ -368,7 +365,6 @@ class RequestsController extends AppController
     public function denialchecker(){
         /*@var String $results3 , string which contains the denial email*/
        $this->viewBuilder()->layout('ajax');
-        $this->render('ajax'); 
        if ($this->request->is('ajax') && $this->request->is('get') ){
         $res= $_GET['id'];
         $this->loadModel('DenialReasons');
@@ -376,7 +372,8 @@ class RequestsController extends AppController
                 ->where(['DenialReasons.id' => $res]);
         $results3 = $requests3->first()->denial_email;
         //$this->set('results2',$results2);
-       return $this->json($results3);
+       $this->set("details",json_encode($results3));
+       $this->render('ajax'); 
   }
     }
     /*
@@ -389,14 +386,15 @@ class RequestsController extends AppController
   public function approvalchecker(){
       /*@var String $results3 , string which contains the approval email*/
        $this->viewBuilder()->layout('ajax');
-        $this->render('ajax'); 
        if ($this->request->is('ajax') && $this->request->is('get') ){
        $res= $_GET['id'];
         $this->loadModel('ApprovalReasons');
         $requests3=$this->ApprovalReasons->find('all')
                 ->where(['ApprovalReasons.id' => $res]);
         $results3 = $requests3->first()->approval_email;
-        return $this->json($results3);
+        $this->set("details",json_encode($results3));
+        $this->render('ajax'); 
+        
   }
     }
     
@@ -409,7 +407,7 @@ class RequestsController extends AppController
      * @return boolean , true if access granted. 
      */
     public function isAuthorized($user)
-{ 
+   { 
         if (isset($user['role']) && $user['role'] === 'admin') {
         return true;
     }
@@ -424,6 +422,5 @@ class RequestsController extends AppController
                 return true;
     }
    
-    
-}
+    }
 }

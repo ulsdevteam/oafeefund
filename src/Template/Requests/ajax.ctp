@@ -14,4 +14,4 @@
  */
 
 //echo $this->fetch('content');
-// echo $var;
+echo $details;
