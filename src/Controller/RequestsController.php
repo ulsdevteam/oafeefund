@@ -64,7 +64,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
         $role=$this->Auth->user();
-        $this->set('role',$role); 
+        $this->set('role',$role);
     }
 
     /**
@@ -300,6 +300,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
         
         
     }
@@ -318,6 +319,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Paid requests method
@@ -337,6 +339,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Denied requests method
@@ -353,6 +356,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Denial Checker method

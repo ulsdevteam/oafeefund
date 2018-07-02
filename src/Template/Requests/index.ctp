@@ -21,7 +21,27 @@
 </nav> -->
 <?= $this->Html->css('requests.css') ?>
 <div class="test">
-    <h3><?= __('Requests') ?></h3>
+    <?php print_r($this->request->params["action"]); ?>
+    
+    
+    <h3>
+   <?php 
+   if($this->request->params["action"]=="index"){
+   echo 'Requests';
+   }
+   elseif ($this->request->params["action"]=="pendingrequests") {
+   echo 'Pending Requests';
+    }
+    elseif ($this->request->params["action"]=="approvedrequests") {
+    echo 'Approved Requests';
+    }
+    elseif ($this->request->params["action"]=="deniedrequests") {
+    echo 'Denied Requests';
+    }
+    elseif ($this->request->params["action"]=="paidrequests") {
+    echo 'Paid Requests';
+    } 
+   ?></h3>
     
     <table cellpadding="20" cellspacing="20" align="center">
         <thead>
@@ -35,12 +55,12 @@
                 <th scope="col"><?= $this->Paginator->sort('publisher') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('amount_requested') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('inquiry_date') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('funded') ?></th>             
-<!--   <th scope="col"><?php $this->Paginator->sort('author_status') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('bmc') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('hs') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('funded') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('denial_id') ?></th> -->
+               <?php if($this->request->params["action"]=="index"){
+                    echo "<th scope='col'>";
+                    echo $this->Paginator->sort('funded');
+                    echo "</th>";
+                } ?>         
+
                 
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -57,7 +77,15 @@
                 <td><?= h($request->publisher) ?></td>
                 <td><?= $this->Number->format($request->amount_requested) ?></td>
                 <td><?= h($request->inquiry_date) ?></td>
-                <td><?= h($request->funded) ?></td>
+               <?php
+                
+                if($this->request->params["action"]=="index"){
+                    echo "<td>";
+                echo $request->funded;
+                echo "</td>";
+                }
+                
+                ?>
   <!--    <td><?php //h($request->author_status) ?></td>
                 <td><?php //h($request->bmc) ?></td>
                 <td><?php //h($request->hs) ?></td>
