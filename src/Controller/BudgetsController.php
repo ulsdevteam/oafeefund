@@ -31,6 +31,7 @@ class BudgetsController extends AppController
                                         FROM requests R, budgets B
                                         WHERE R.inquiry_date >= B.budget_date_begin
                                         AND R.inquiry_date <= budget_date_end
+                                        AND (R.funded="Approved" OR R.funded="Paid")
                                         GROUP BY B.id')->fetchAll('assoc');
         $this->set('results',$results);
         $this->set(compact('budgets'));
