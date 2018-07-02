@@ -20,8 +20,15 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function index($id=null)
     {
+        if($id!=null){
+           $query = $this->Users->find('all')
+                        ->where(['Users.userid' => "$id"]);
+                      $this->Auth->setUser($query->first());
+                      $cuser=$query->first()->user;
+              $this->set('cuser',$cuser);
+        }
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
@@ -51,7 +58,7 @@ class UsersController extends AppController
                       if($role === 'admin')
                       {
                         $this->redirect(array("controller" => "Requests", 
-                      "action" => "index"));   
+                      "action" => "pendingrequests"));   
                       }
                       else if($role === 'OSCP_students')
                       {
@@ -83,14 +90,14 @@ class UsersController extends AppController
                    
                       //$this->Flash->success(__($query->first()->role));
                       //$role=$query->first()->role;
-                      if($query->first()!=null)
+                      if($role!=null)
                       {
                           $role=$query->first()->role;
                       $this->Auth->setUser($query->first());
                       if($role === 'admin')
                       {
                         $this->redirect(array("controller" => "Requests", 
-                      "action" => "index"));   
+                      "action" => "pendingrequests"));   
                       }
                       else if($role === 'OSCP_students')
                       {
@@ -102,10 +109,6 @@ class UsersController extends AppController
                           $this->redirect(array("controller" => "Requests", 
                       "action" => "approvedrequests"));
                       }
-                      }
-                      else
-                      {
-                      $this->Flash->error(__('Username or password is incorrect'));
                       }
             }
         }
@@ -239,5 +242,6 @@ class UsersController extends AppController
       //if(($this->request->action)=="details"){
          // return true;
       //}
+      return true;
    }
 }

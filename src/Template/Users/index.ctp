@@ -12,6 +12,11 @@
 </nav>
 <div class="users index large-9 medium-8 columns content">
     <h3><?= __('Users') ?></h3>
+    
+    <?php 
+    if(isset($cuser)){
+    echo "You're currently logged in as ".$cuser;
+    }?>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -34,6 +39,7 @@
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $user->userid]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->userid]) ?>
+                    <?= $this->Html->link(__('Masquerade'), ['action' => 'index', $user->userid]) ?>
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->userid], ['confirm' => __('Are you sure you want to delete # {0}?', $user->userid)]) ?>
                 </td>
             </tr>
