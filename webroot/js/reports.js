@@ -15,7 +15,7 @@ var dataArray=document.getElementById("para").innerHTML;
 dataArray=JSON.parse(dataArray);
 dataArray=replaceEmpty(dataArray);
 dataArray=addIndex(dataArray);
-
+$("#para").hide();
 createGraph(dataArray);
 
 var tooltip = d3.select("body").append("div").attr("id","ttip").style("opacity","0").style("position","absolute");
@@ -222,8 +222,9 @@ function createGraph(dataArray){
     var chartGroup= svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
     
     
-    chartGroup.append("text")
-    .attr("x","50")
+    svg.append("text")
+            .attr("id","reports")
+    .attr("x","30")
     .attr("y","30")
     .attr("fill","black")
     .attr("font-size","40")
@@ -272,31 +273,32 @@ function createGraph(dataArray){
         chartGroup
             .append("g")
             .attr("class","axis y")
-            .style("font", "30")
             .call(yAxis);
     
         chartGroup.selectAll("text")
             .select(".tick")
             .attr("font-size","30");
-    
+    chartGroup.append("text")
+    .attr("font-size","40");
         chartGroup.append("text")
+                .attr("id","max")
     .attr("x","50")
     .attr("y",30*(dataArray.length+4))
     .attr("fill","black")
     .attr("font-size","40")
     .text("Max requests: "+getMax(dataArray)+" School: "+getMaxSchool(dataArray));
-    /*chartGroup.append("text")
+    chartGroup.append("text")
             .attr("id","requeststabletext")
-            .attr("x","50")
-            .attr("y","700")
+            .attr("x","0")
+            .attr("y","1200")
             .attr("fill","black")
-            .attr("font-size","40")
-            .text("Tabular representation:");*/
-    //tabulate(dataArray, ['Index(X-axis)','school', 'count'])
+            .text("Tabular representation:");
+    tabulate(dataArray, ['Index(X-axis)','school', 'count'])
+    
 }
 function tabulate(data, columns) {
         
-		var table = d3.select('body').append('table').attr("id","requeststable");
+		var table = d3.select('.container').append('table').attr("id","requeststable").attr("x","100");
 		var thead = table.append('thead');
 		var tbody = table.append('tbody');
                 // append the header row
