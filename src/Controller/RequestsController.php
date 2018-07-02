@@ -67,6 +67,43 @@ class RequestsController extends AppController
         $this->set('role',$role);
     }
 
+    public function search()
+    {
+        if ($this->request->is(['get'])) {
+        $parameter = $this->request->query('Parameter');
+        $this->set('parameter',$parameter);
+        $value = $this->request->query('value');
+        $this->set('value',$value);
+        if($parameter=="username"):
+        {
+        $requests=$this->Requests->find('all')->where(["Requests.username LIKE" => "%$value%"]);
+        }
+        elseif($parameter=="author_name"):
+            {
+        $requests=$this->Requests->find('all')->where(["Requests.author_name LIKE" => "%$value%"]);    
+        }
+        elseif($parameter=="publisher"):
+            {
+        $requests=$this->Requests->find('all')->where(["Requests.publisher LIKE" => "%$value%"]);    
+        }
+        endif;
+        $this->set('requests',$requests);
+        $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+    }
+    else{
+        $this->viewBuilder()->layout('default');
+        $this->paginate = [
+            'contain' => ['DenialReasons', 'Articles']
+        ];
+        $requests = $this->paginate($this->Requests);
+        $this->set(compact('requests'));
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+    }
+    }	
+
     /**
      * View method
      *
