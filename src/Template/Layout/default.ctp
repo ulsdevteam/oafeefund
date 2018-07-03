@@ -61,15 +61,7 @@ $cakeDescription = 'OAAFF application';
             
                <!--<li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
                 <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>-->
-            
-          <ul class="right bottom">
-                <?= $this->Form->create(null,['url' => ['controller'=>'Requests','action' => 'search'],'type' => 'get','div'=>false]); ?>
-              <?= $this->Form->input('Parameter',[
-            'options' => ['username' => 'Username', 'author_name' => 'Author Name', 'publisher'=> 'Publisher'],'label' => false]);?>
-                <?= $this->Form->input('value',array( 'label' => false ));?>
-              <?= $this->Form->button('search');?>
-                <?= $this->Form->end();?>
-            </ul>
+
         </div>
         
     </nav>

@@ -69,39 +69,70 @@ class RequestsController extends AppController
 
     public function search()
     {
-        if ($this->request->is(['get'])) {
         $parameter = $this->request->query('Parameter');
-        $this->set('parameter',$parameter);
         $value = $this->request->query('value');
+        $action = $this->request->query('action');
         $this->set('value',$value);
-        if($parameter=="username"):
-        {
-        $requests=$this->Requests->find('all')->where(["Requests.username LIKE" => "%$value%"]);
+        switch($action){
+            case "index":
+                $prev_action="index";
+                $prev_value="All";
+                $query_check="";
+                break;
+            case "pendingrequests":
+                $prev_action="pendingrequests";
+                 $prev_value="Pending";
+                $query_check="Pending";
+                break;
+            case "approvedrequests":
+                $prev_action="approvedgrequests";
+                $prev_value="Approved";
+                $query_check="Approved";
+                break;
+            case "paidrequests":
+                $prev_action="paidrequests";
+                $prev_value="Paid";
+                $query_check="Paid";
+                break;
+            case "deniedrequests":
+                $prev_action="deniedrequests";
+                $prev_value="Denied";
+                $query_check="Denied";
+                break;
         }
-        elseif($parameter=="author_name"):
-            {
-        $requests=$this->Requests->find('all')->where(["Requests.author_name LIKE" => "%$value%"]);    
+        switch($parameter){
+            case "username":
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.username LIKE" => "%$value%","Requests.funded LIKE"=>"%$query_check%"]);
+                break;
+            case "author_name":
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.author_name LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]);
+                break;
+            case "publisher":
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.publisher LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]); 
+                break;
         }
-        elseif($parameter=="publisher"):
-            {
-        $requests=$this->Requests->find('all')->where(["Requests.publisher LIKE" => "%$value%"]);    
+        $count=$requests->toArray();
+        if($parameter=="username"){
+            $parameter="Username";
         }
-        endif;
+        elseif($parameter=="author_name"){
+            $parameter="Author Name";
+        }
+        elseif ($parameter=="publisher") {
+            $parameter="Publisher";
+        }
+        $this->set('count',$count);
+        $this->set('prev_action',$prev_action);
+        $this->set('prev_value',$prev_value);
+        $this->set('parameter',$parameter);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
-    }
-    else{
-        $this->viewBuilder()->layout('default');
-        $this->paginate = [
-            'contain' => ['DenialReasons', 'Articles']
-        ];
-        $requests = $this->paginate($this->Requests);
-        $this->set(compact('requests'));
-        $role=$this->Auth->user();
-        $this->set('role',$role);
-    }
+        $this->render("index");
     }	
 
     /**
