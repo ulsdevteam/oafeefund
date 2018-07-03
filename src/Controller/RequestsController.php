@@ -170,7 +170,14 @@ class RequestsController extends AppController
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
-    
+    public function export(){
+                $this->response->download('export.csv');
+		$data = $this->Requests->find('all')->toArray();
+		$_serialize = 'data';
+   		$this->set(compact('data', '_serialize'));
+		$this->viewBuilder()->className('CsvView.Csv');
+		return;
+    }
     /**
      * Add method
      *
