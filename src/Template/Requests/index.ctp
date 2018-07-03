@@ -19,10 +19,47 @@
         <li><//?= $this->Html->link(__('New Transaction'), ['controller' => 'Transactions', 'action' => 'add']) ?> </li>
     </ul>
 </nav> -->
+<style>
+    form {
+  display: flex; /* 2. display flex to the rescue */
+  flex-direction: row;
+}
+
+.adjust{
+    margin-top: 0.5%;
+}
+#search{
+    display: block;
+    height:2.4em;
+    width: 7em;
+    -webkit-border-radius:10px;
+    padding: 3px 2px;
+}
+</style>
 <?= $this->Html->css('requests.css') ?>
 <div class="test">
-    <?php print_r($this->request->params["action"]); ?>
     
+    <ul class="right adjust">
+                <?= $this->Form->create(null,['url' => ['controller'=>'Requests','action' => 'search'],'type' => 'get','div'=>false]); ?>
+                <?php
+                if(!isset($value)){
+                    $value="";
+                }
+                if(!isset($prev_value)){
+                    $prev_value="";
+                }
+                $action=$this->request->params["action"];
+               if($action=="search" & isset($prev_action)){
+                    $action=$prev_action;
+                } 
+                ?>
+        <?= $this->Form->input('action', array('options' => ['index'=>'All','pendingrequests'=>'Pending Requests','approvedrequests'=>'Approved Requests','paidrequests'=>'Paid Requests','deniedrequests'=>'Denied Requests'], 'label' => false, 'default'=>$action));?>
+                <?= $this->Form->input('Parameter',[
+            'options' => ['username' => 'Username', 'author_name' => 'Author Name', 'publisher'=> 'Publisher'],'label' => false]);?>
+                <?= $this->Form->input('value',array( 'label' => false, 'default'=>$value));?>
+              <?= $this->Form->button('search',array('id'=>'search'));?>
+                <?= $this->Form->end();?>
+            </ul>
     
     <h3>
    <?php 
@@ -41,8 +78,14 @@
     elseif ($this->request->params["action"]=="paidrequests") {
     echo 'Paid Requests';
     } 
+    elseif ($this->request->params["action"]=="search") {
+    echo 'Requests';
+    } 
    ?></h3>
-    
+    <?php if ($this->request->params["action"]=="search") {
+        echo "The parameter '<b>".$parameter."</b>' for the pattern of '<b>".$value."</b>' returned '<b>". sizeof($count)."</b>' of '<b>".$prev_value."</b>' requests:";
+    }
+    ?>
     <table cellpadding="20" cellspacing="20" align="center">
         <thead>
             <tr>
@@ -55,7 +98,7 @@
                 <th scope="col"><?= $this->Paginator->sort('publisher') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('amount_requested') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('inquiry_date') ?></th>
-               <?php if($this->request->params["action"]=="index"){
+               <?php if(($this->request->params["action"]=="index") || ($this->request->params["action"]=="search")){
                     echo "<th scope='col'>";
                     echo $this->Paginator->sort('funded');
                     echo "</th>";
@@ -79,7 +122,7 @@
                 <td><?= h($request->inquiry_date) ?></td>
                <?php
                 
-                if($this->request->params["action"]=="index"){
+                if(($this->request->params["action"]=="index") || ($this->request->params["action"]=="search")){
                     echo "<td>";
                 echo $request->funded;
                 echo "</td>";
@@ -154,3 +197,8 @@
     </div>
     </div>
 </div>
+
+
+<script>
+    
+</script>
