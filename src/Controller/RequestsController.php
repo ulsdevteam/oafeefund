@@ -171,12 +171,102 @@ class RequestsController extends AppController
         $this->set('role',$role);
     }
     public function export(){
+        $parameter = $this->request->query('parameter');
+        $value = $this->request->query('value');
+        $action = $this->request->query('action');
+        $this->set('value',$value);
+        
+        if($parameter!= null && $value!=null){
+        switch($action){
+            case "index":
+                $prev_action="index";
+                $prev_value="All";
+                $query_check="";
+                break;
+            case "pendingrequests":
+                $prev_action="pendingrequests";
+                 $prev_value="Pending";
+                $query_check="Pending";
+                break;
+            case "approvedrequests":
+                $prev_action="approvedgrequests";
+                $prev_value="Approved";
+                $query_check="Approved";
+                break;
+            case "paidrequests":
+                $prev_action="paidrequests";
+                $prev_value="Paid";
+                $query_check="Paid";
+                break;
+            case "deniedrequests":
+                $prev_action="deniedrequests";
+                $prev_value="Denied";
+                $query_check="Denied";
+                break;
+        }
+        switch($parameter){
+            case "username":
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.username LIKE" => "%$value%","Requests.funded LIKE"=>"%$query_check%"]);
+                break;
+            case "author_name":
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.author_name LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]);
+                break;
+            case "publisher":
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.publisher LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]); 
+                break;
+        }
+        }
+        else{
+            switch($action){
+            case "index":
+                $prev_action="index";
+                $prev_value="All";
+                $query_check="";
+                $requests=$this->Requests->find('all');
+                break;
+            case "pendingrequests":
+                $prev_action="pendingrequests";
+                 $prev_value="Pending";
+                $query_check="Pending";
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.funded LIKE"=>"$query_check"]);
+                break;
+            case "approvedrequests":
+                $prev_action="approvedgrequests";
+                $prev_value="Approved";
+                $query_check="Approved";
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.funded LIKE"=>"$query_check"]);
+                break;
+            case "paidrequests":
+                $prev_action="paidrequests";
+                $prev_value="Paid";
+                $query_check="Paid";
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.funded LIKE"=>"$query_check"]);
+                break;
+            case "deniedrequests":
+                $prev_action="deniedrequests";
+                $prev_value="Denied";
+                $query_check="Denied";
+                $requests=$this->Requests->find('all')
+                    ->where(["Requests.funded LIKE"=>"$query_check"]);
+                break;
+        }
+         
+                
+        }
                 $this->response->download('export.csv');
-		$data = $this->Requests->find('all')->toArray();
+		$data = $requests->toArray();
+                $_header=["id","Username","Author Name","Email","School","Department","Publisher","Publication Name","Amount Requested","Article Title","Inquiry Date","Author Status","BMC","HS","Funded?","Denial ID","Internal Note","Other Authors","Application Completed"];
 		$_serialize = 'data';
-   		$this->set(compact('data', '_serialize'));
+   		$this->set(compact('data', '_serialize','_header'));
 		$this->viewBuilder()->className('CsvView.Csv');
 		return;
+        
     }
     /**
      * Add method

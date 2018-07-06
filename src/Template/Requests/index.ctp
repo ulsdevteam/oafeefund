@@ -19,11 +19,29 @@
         <li><//?= $this->Html->link(__('New Transaction'), ['controller' => 'Transactions', 'action' => 'add']) ?> </li>
     </ul>
 </nav> -->
+<?= $this->Html->css('options.css'); ?>
 <style>
-    form {
+    #export{
+    background: #000;
+    padding: 0.4%;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+  #export:hover{
+    background: #116d76;
+    text-align: center;
+    border-radius: 5px;
+    color: #C5B358;
+    font-weight: bold;
+    
+}
+    
+    form{
   display: flex; /* 2. display flex to the rescue */
   flex-direction: row;
-}
+    }
 
 .adjust{
     margin-top: 0.5%;
@@ -40,6 +58,7 @@
 <div class="test">
     
     <ul class="right adjust">
+        
                 <?= $this->Form->create(null,['url' => ['controller'=>'Requests','action' => 'search'],'type' => 'get','div'=>false]); ?>
                 <?php
                 if(!isset($value)){
@@ -64,7 +83,7 @@
     <h3>
    <?php 
    if($this->request->params["action"]=="index"){
-   echo 'Requests';
+   echo 'Requests ';
    }
    elseif ($this->request->params["action"]=="pendingrequests") {
    echo 'Pending Requests';
@@ -82,6 +101,16 @@
     echo 'Requests';
     } 
    ?></h3>
+    <?php
+    $link="?action=".$this->request->params["action"];
+    if((isset($prev_action))&&(isset($value))&&(isset($parameter))){
+        $link="?action=".$prev_action."&parameter=".$parameter."&value=".$value;
+    }
+    echo $this->Html->link('Export to CSV', [
+	'controller' => 'Requests', 
+	'action' => 'export.csv'.$link
+        ],["id"=>"export","type"=>"button"]);
+    ?>
     <?php if ($this->request->params["action"]=="search") {
         echo "The parameter '<b>".$parameter."</b>' for the pattern of '<b>".$value."</b>' returned '<b>". sizeof($count)."</b>' of '<b>".$prev_value."</b>' requests:";
     }
