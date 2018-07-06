@@ -1,1 +1,1 @@
-
+Still have questions? See the <a href="//library.pitt.edu/open-access-author-fee-fund-faq" title="Author Fees Fund FAQ">FAQ</a> or contact us at <a href="mailto:oscp@mail.pitt.edu">oscp@mail.pitt.edu</a>.</p>

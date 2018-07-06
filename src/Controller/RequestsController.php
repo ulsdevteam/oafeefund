@@ -5,8 +5,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Mailer\Email;
 use Cake\Datasource\ConnectionManager;
-use App\View\Helper\LdapHelper;
-
+use App\Controller\Component\SearchQueryComponent;
 /**
  * Requests Controller
  *
@@ -18,12 +17,9 @@ class RequestsController extends AppController
 {
     /*
      * Add new request method.(adduser)
-     * 
-     * Access is given to every person for this specfic function.
-     * The layout set for this is blank.
-     * @return void
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function adduser()
+    public function add()
     {
          /* Now here you can put your default values */
 	
@@ -37,7 +33,7 @@ class RequestsController extends AppController
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
+                $this->Flash->success(__('The request has been submitted.'));
                return $this->redirect(['action' => 'saved']);
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
@@ -45,6 +41,7 @@ class RequestsController extends AppController
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]); 
         //@var Object $denialReasons It consists of the denialreasons.
         $this->set(compact('request', 'denialReasons'));
+        $this->render("adduser");
     }
      public function saved()
     {
@@ -73,60 +70,16 @@ class RequestsController extends AppController
         $value = $this->request->query('value');
         $action = $this->request->query('action');
         $this->set('value',$value);
-        switch($action){
-            case "index":
-                $prev_action="index";
-                $prev_value="All";
-                $query_check="";
-                break;
-            case "pendingrequests":
-                $prev_action="pendingrequests";
-                 $prev_value="Pending";
-                $query_check="Pending";
-                break;
-            case "approvedrequests":
-                $prev_action="approvedgrequests";
-                $prev_value="Approved";
-                $query_check="Approved";
-                break;
-            case "paidrequests":
-                $prev_action="paidrequests";
-                $prev_value="Paid";
-                $query_check="Paid";
-                break;
-            case "deniedrequests":
-                $prev_action="deniedrequests";
-                $prev_value="Denied";
-                $query_check="Denied";
-                break;
+        $requests= $this->SearchQuery->getRequests($action,$parameter,$value);
+        if($requests== false){
+            $this->redirect(['action' => 'index']); 
         }
-        switch($parameter){
-            case "username":
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.username LIKE" => "%$value%","Requests.funded LIKE"=>"%$query_check%"]);
-                break;
-            case "author_name":
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.author_name LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]);
-                break;
-            case "publisher":
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.publisher LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]); 
-                break;
-        }
-        $count=$requests->toArray();
-        if($parameter=="username"){
-            $parameter="Username";
-        }
-        elseif($parameter=="author_name"){
-            $parameter="Author Name";
-        }
-        elseif ($parameter=="publisher") {
-            $parameter="Publisher";
-        }
+        $requests_for_count=$requests->toArray();
+        $count= sizeof($requests_for_count);
+        
         $this->set('count',$count);
-        $this->set('prev_action',$prev_action);
-        $this->set('prev_value',$prev_value);
+        $this->set('prev_action',$action);
+        $this->set('prev_value',$value);
         $this->set('parameter',$parameter);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
@@ -174,119 +127,21 @@ class RequestsController extends AppController
         $parameter = $this->request->query('parameter');
         $value = $this->request->query('value');
         $action = $this->request->query('action');
-        $this->set('value',$value);
-        
-        if($parameter!= null && $value!=null){
-        switch($action){
-            case "index":
-                $prev_action="index";
-                $prev_value="All";
-                $query_check="";
-                break;
-            case "pendingrequests":
-                $prev_action="pendingrequests";
-                 $prev_value="Pending";
-                $query_check="Pending";
-                break;
-            case "approvedrequests":
-                $prev_action="approvedgrequests";
-                $prev_value="Approved";
-                $query_check="Approved";
-                break;
-            case "paidrequests":
-                $prev_action="paidrequests";
-                $prev_value="Paid";
-                $query_check="Paid";
-                break;
-            case "deniedrequests":
-                $prev_action="deniedrequests";
-                $prev_value="Denied";
-                $query_check="Denied";
-                break;
-        }
-        switch($parameter){
-            case "username":
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.username LIKE" => "%$value%","Requests.funded LIKE"=>"%$query_check%"]);
-                break;
-            case "author_name":
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.author_name LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]);
-                break;
-            case "publisher":
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.publisher LIKE" => "%$value%","Requests.funded LIKE"=>"$query_check"]); 
-                break;
-        }
+        if($value!=null && $parameter!=null){
+           $requests= $this->SearchQuery->getRequests($action,$parameter,$value); 
         }
         else{
-            switch($action){
-            case "index":
-                $prev_action="index";
-                $prev_value="All";
-                $query_check="";
-                $requests=$this->Requests->find('all');
-                break;
-            case "pendingrequests":
-                $prev_action="pendingrequests";
-                 $prev_value="Pending";
-                $query_check="Pending";
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.funded LIKE"=>"$query_check"]);
-                break;
-            case "approvedrequests":
-                $prev_action="approvedgrequests";
-                $prev_value="Approved";
-                $query_check="Approved";
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.funded LIKE"=>"$query_check"]);
-                break;
-            case "paidrequests":
-                $prev_action="paidrequests";
-                $prev_value="Paid";
-                $query_check="Paid";
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.funded LIKE"=>"$query_check"]);
-                break;
-            case "deniedrequests":
-                $prev_action="deniedrequests";
-                $prev_value="Denied";
-                $query_check="Denied";
-                $requests=$this->Requests->find('all')
-                    ->where(["Requests.funded LIKE"=>"$query_check"]);
-                break;
+           $requests= $this->SearchQuery->getRequests($action);  
         }
-         
-                
-        }
-                $this->response->download('export.csv');
-		$data = $requests->toArray();
-                $_header=["id","Username","Author Name","Email","School","Department","Publisher","Publication Name","Amount Requested","Article Title","Inquiry Date","Author Status","BMC","HS","Funded?","Denial ID","Internal Note","Other Authors","Application Completed"];
-		$_serialize = 'data';
-   		$this->set(compact('data', '_serialize','_header'));
-		$this->viewBuilder()->className('CsvView.Csv');
-		return;
+        $this->response->download('export.csv');
+	$requests=$requests->fetchAll('assoc');;
+        $data = $requests->toArray();
+        //$_header=["id","Username","Author Name","Email","School","Department","Publisher","Publication Name","Amount Requested","Article Title","Inquiry Date","Author Status","BMC","HS","Funded?","Denial ID","Internal Note","Other Authors","Application Completed"];
+	$_serialize = 'data';
+   	$this->set(compact('data', '_serialize'));
+	$this->viewBuilder()->className('CsvView.Csv');
+	return;
         
-    }
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $request = $this->Requests->newEntity();
-        if ($this->request->is('post')) {
-            $request = $this->Requests->patchEntity($request, $this->request->getData());
-            if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The request could not be saved. Please, try again.'));
-        }
-        $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
-        $this->set(compact('request', 'denialReasons'));
     }
    
     /**

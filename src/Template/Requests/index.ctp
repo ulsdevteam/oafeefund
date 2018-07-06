@@ -102,17 +102,25 @@
     } 
    ?></h3>
     <?php
-    $link="?action=".$this->request->params["action"];
     if((isset($prev_action))&&(isset($value))&&(isset($parameter))){
-        $link="?action=".$prev_action."&parameter=".$parameter."&value=".$value;
-    }
     echo $this->Html->link('Export to CSV', [
 	'controller' => 'Requests', 
-	'action' => 'export.csv'.$link
+	'action' => 'export',
+        '_ext' => 'csv',
+        '?'=>["action"=>$prev_action,"parameter"=>$parameter,"value"=>$value]
         ],["id"=>"export","type"=>"button"]);
+    }
+    else{
+        echo $this->Html->link('Export to CSV', [
+	'controller' => 'Requests', 
+	'action' => 'export',
+        '_ext' => 'csv',
+        '?'=>["action"=>$action]
+        ],["id"=>"export","type"=>"button"]);
+    }
     ?>
     <?php if ($this->request->params["action"]=="search") {
-        echo "The parameter '<b>".$parameter."</b>' for the pattern of '<b>".$value."</b>' returned '<b>". sizeof($count)."</b>' of '<b>".$prev_value."</b>' requests:";
+        echo "The parameter '<b>".$parameter."</b>' for the pattern of '<b>".$value."</b>' returned '<b>". $count."</b>' of '<b>".$prev_value."</b>' requests:";
     }
     ?>
     <table cellpadding="20" cellspacing="20" align="center">
