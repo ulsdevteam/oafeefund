@@ -126,7 +126,6 @@
     <table cellpadding="20" cellspacing="20" align="center">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('author_name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('email') ?></th>
@@ -148,7 +147,6 @@
         <tbody>
             <?php foreach ($requests as $request): ?>
             <tr>
-                <td><?= $this->Number->format($request->id) ?></td>
                 <td><?= h($request->username) ?></td>
                 <td><?= h($request->author_name) ?></td>
                 <td><?= h($request->email) ?></td>

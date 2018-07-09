@@ -104,10 +104,6 @@
             <td><?= $request->has('denial_reason') ? $this->Html->link($request->denial_reason->denial_reason, ['controller' => 'DenialReasons', 'action' => 'view', $request->denial_reason->id]) : '' ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($request->id) ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Amount Requested') ?></th>
             <td><?= $this->Number->format($request->amount_requested) ?></td>
         </tr>
