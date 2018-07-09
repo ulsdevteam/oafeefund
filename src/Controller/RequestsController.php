@@ -6,6 +6,7 @@ use App\Controller\AppController;
 use Cake\Mailer\Email;
 use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\SearchQueryComponent;
+//use Cake\Database\Schema\TableSchema;
 /**
  * Requests Controller
  *
@@ -70,18 +71,14 @@ class RequestsController extends AppController
         $value = $this->request->query('value');
         $action = $this->request->query('action');
         $this->set('value',$value);
-        $requests= $this->SearchQuery->getRequests($action,$parameter,$value);
-        if($requests== false){
+        $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+        if($where_clause== false){
             $this->redirect(['action' => 'index']); 
         }
+        $requests=$this->Requests->find('all')->where($where_clause);
         $requests_for_count=$requests->toArray();
         $count= sizeof($requests_for_count);
-        
-        $this->set('count',$count);
-        $this->set('prev_action',$action);
-        $this->set('prev_value',$value);
-        $this->set('parameter',$parameter);
-        $this->set('requests',$requests);
+        $this->set(compact('count','prev_action','prev_value','parameter','requests'));
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
@@ -128,17 +125,35 @@ class RequestsController extends AppController
         $value = $this->request->query('value');
         $action = $this->request->query('action');
         if($value!=null && $parameter!=null){
-           $requests= $this->SearchQuery->getRequests($action,$parameter,$value); 
+           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
         else{
-           $requests= $this->SearchQuery->getRequests($action);  
+           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
+        if($where_clause=== false){
+            $this->redirect(['action' => 'index']); 
+        }
+        $requests=$this->Requests->find('all')
+                    ->where($where_clause)
+                ->contain(['DenialReasons', 'Articles', 'Transactions']);
+        
+        $data = $requests;
         $this->response->download('export.csv');
-	$requests=$requests->fetchAll('assoc');;
-        $data = $requests->toArray();
-        //$_header=["id","Username","Author Name","Email","School","Department","Publisher","Publication Name","Amount Requested","Article Title","Inquiry Date","Author Status","BMC","HS","Funded?","Denial ID","Internal Note","Other Authors","Application Completed"];
-	$_serialize = 'data';
-   	$this->set(compact('data', '_serialize'));
+        //$_header=["id"];
+	//$_extract=['id','username','transaction.amount_paid'];
+        $column_values_requests=$this->SearchQuery->setCsvColumns($this->Requests->schema()->columns());
+        $this->loadModel('Transactions');
+        $column_values_transactions=$this->SearchQuery->setCsvColumns($this->Transactions->schema()->columns(),'transaction');
+        $this->loadModel('DenialReasons');
+        $column_values_denial_reasons=$this->SearchQuery->setCsvColumns($this->DenialReasons->schema()->columns(),'denial_reason');
+        $this->loadModel('Articles');
+        $column_values_articles=$this->SearchQuery->setCsvColumns($this->Articles->schema()->columns(),'article');
+        $column_values=array_merge($column_values_requests,$column_values_transactions,$column_values_denial_reasons,$column_values_articles);
+        $_extract=$column_values;
+        $_header=$column_values;
+        $this->set(compact('column_values'));
+        $_serialize = 'data';
+   	$this->set(compact('data', '_serialize','_extract','_header'));
 	$this->viewBuilder()->className('CsvView.Csv');
 	return;
         
