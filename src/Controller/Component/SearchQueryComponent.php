@@ -14,28 +14,18 @@ class SearchQueryComponent extends Component{
     public function getRequests($action,$parameter=null,$value=null){
             switch($action){
             case "index":
-                $prev_action="index";
-                $prev_value="All";
-                $query_check="";
+                $query_check="%";
                 break;
             case "pendingrequests":
-                $prev_action="pendingrequests";
-                 $prev_value="Pending";
                 $query_check="Pending";
                 break;
             case "approvedrequests":
-                $prev_action="approvedgrequests";
-                $prev_value="Approved";
                 $query_check="Approved";
                 break;
             case "paidrequests":
-                $prev_action="paidrequests";
-                $prev_value="Paid";
                 $query_check="Paid";
                 break;
             case "deniedrequests":
-                $prev_action="deniedrequests";
-                $prev_value="Denied";
                 $query_check="Denied";
                 break;
             default :

@@ -70,7 +70,6 @@ class RequestsController extends AppController
         $parameter = $this->request->query('Parameter');
         $value = $this->request->query('value');
         $action = $this->request->query('action');
-        $this->set('value',$value);
         $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         if($where_clause== false){
             $this->redirect(['action' => 'index']); 
@@ -78,7 +77,8 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all')->where($where_clause);
         $requests_for_count=$requests->toArray();
         $count= sizeof($requests_for_count);
-        $this->set(compact('count','prev_action','prev_value','parameter','requests'));
+        $this->set('prev_action',$action);
+        $this->set(compact('count','parameter','requests','value'));
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
@@ -128,9 +128,9 @@ class RequestsController extends AppController
            $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
         else{
-           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+           $where_clause= $this->SearchQuery->getRequests($action);
         }
-        if($where_clause=== false){
+        if($where_clause== false){
             $this->redirect(['action' => 'index']); 
         }
         $requests=$this->Requests->find('all')
