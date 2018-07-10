@@ -19,14 +19,113 @@
         <li><//?= $this->Html->link(__('New Transaction'), ['controller' => 'Transactions', 'action' => 'add']) ?> </li>
     </ul>
 </nav> -->
+<?= $this->Html->css('options.css'); ?>
+<style>
+    #export{
+    background: #000;
+    padding: 0.4%;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+  #export:hover{
+    background: #116d76;
+    text-align: center;
+    border-radius: 5px;
+    color: #C5B358;
+    font-weight: bold;
+    
+}
+    
+    form{
+  display: flex; /* 2. display flex to the rescue */
+  flex-direction: row;
+    }
+
+.adjust{
+    margin-top: 0.5%;
+}
+#search{
+    display: block;
+    height:2.4em;
+    width: 7em;
+    -webkit-border-radius:10px;
+    padding: 3px 2px;
+}
+</style>
 <?= $this->Html->css('requests.css') ?>
 <div class="test">
-    <h3><?= __('Requests') ?></h3>
     
+    <ul class="right adjust">
+        
+                <?= $this->Form->create(null,['url' => ['controller'=>'Requests','action' => 'search'],'type' => 'get','div'=>false]); ?>
+                <?php
+                if(!isset($value)){
+                    $value="";
+                }
+                if(!isset($prev_value)){
+                    $prev_value="";
+                }
+                $action=$this->request->params["action"];
+               if($action=="search" & isset($prev_action)){
+                    $action=$prev_action;
+                } 
+                ?>
+        <?= $this->Form->input('action', array('options' => ['index'=>'All','pendingrequests'=>'Pending Requests','approvedrequests'=>'Approved Requests','paidrequests'=>'Paid Requests','deniedrequests'=>'Denied Requests'], 'label' => false, 'default'=>$action));?>
+                <?= $this->Form->input('Parameter',[
+            'options' => ['username' => 'Username', 'author_name' => 'Author Name', 'publisher'=> 'Publisher'],'label' => false]);?>
+                <?= $this->Form->input('value',array( 'label' => false, 'default'=>$value));?>
+              <?= $this->Form->button('search',array('id'=>'search'));?>
+                <?= $this->Form->end();?>
+            </ul>
+    
+    <h3>
+   <?php 
+   if($this->request->params["action"]=="index"){
+   echo 'Requests ';
+   }
+   elseif ($this->request->params["action"]=="pendingrequests") {
+   echo 'Pending Requests';
+    }
+    elseif ($this->request->params["action"]=="approvedrequests") {
+    echo 'Approved Requests';
+    }
+    elseif ($this->request->params["action"]=="deniedrequests") {
+    echo 'Denied Requests';
+    }
+    elseif ($this->request->params["action"]=="paidrequests") {
+    echo 'Paid Requests';
+    } 
+    elseif ($this->request->params["action"]=="search") {
+    echo 'Requests';
+    } 
+   ?></h3>
+    <?php
+    if((isset($prev_action))&&(isset($value))&&(isset($parameter))){
+    echo $this->Html->link('Export to CSV', [
+	'controller' => 'Requests', 
+	'action' => 'export',
+        '_ext' => 'csv',
+        '?'=>["action"=>$prev_action,"parameter"=>$parameter,"value"=>$value]
+        ],["id"=>"export","type"=>"button"]);
+    }
+    else{
+        echo $this->Html->link('Export to CSV', [
+	'controller' => 'Requests', 
+	'action' => 'export',
+        '_ext' => 'csv',
+        '?'=>["action"=>$action]
+        ],["id"=>"export","type"=>"button"]);
+    }
+    ?>
+    <?php if ($this->request->params["action"]=="search") {
+        echo "The parameter '<b>".$parameter."</b>' for the pattern of '<b>".$value."</b>' returned '<b>". $count."</b>' of '<b>".$prev_value."</b>' requests:";
+    }
+    ?>
     <table cellpadding="20" cellspacing="20" align="center">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('author_name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('email') ?></th>
@@ -35,12 +134,12 @@
                 <th scope="col"><?= $this->Paginator->sort('publisher') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('amount_requested') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('inquiry_date') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('funded') ?></th>             
-<!--   <th scope="col"><?php $this->Paginator->sort('author_status') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('bmc') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('hs') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('funded') ?></th>
-                <th scope="col"><?php $this->Paginator->sort('denial_id') ?></th> -->
+               <?php if(($this->request->params["action"]=="index") || ($this->request->params["action"]=="search")){
+                    echo "<th scope='col'>";
+                    echo $this->Paginator->sort('funded');
+                    echo "</th>";
+                } ?>         
+
                 
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -48,7 +147,6 @@
         <tbody>
             <?php foreach ($requests as $request): ?>
             <tr>
-                <td><?= $this->Number->format($request->id) ?></td>
                 <td><?= h($request->username) ?></td>
                 <td><?= h($request->author_name) ?></td>
                 <td><?= h($request->email) ?></td>
@@ -57,7 +155,15 @@
                 <td><?= h($request->publisher) ?></td>
                 <td><?= $this->Number->format($request->amount_requested) ?></td>
                 <td><?= h($request->inquiry_date) ?></td>
-                <td><?= h($request->funded) ?></td>
+               <?php
+                
+                if(($this->request->params["action"]=="index") || ($this->request->params["action"]=="search")){
+                    echo "<td>";
+                echo $request->funded;
+                echo "</td>";
+                }
+                
+                ?>
   <!--    <td><?php //h($request->author_status) ?></td>
                 <td><?php //h($request->bmc) ?></td>
                 <td><?php //h($request->hs) ?></td>
@@ -126,3 +232,8 @@
     </div>
     </div>
 </div>
+
+
+<script>
+    
+</script>

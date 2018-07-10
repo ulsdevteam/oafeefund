@@ -15,7 +15,7 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                <?php // $this->Paginator->sort('id') ?>
                 <th scope="col"><?= $this->Paginator->sort('request_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('publication_date') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -24,8 +24,8 @@
         <tbody>
             <?php foreach ($articles as $article): ?>
             <tr>
-                <td><?= $this->Number->format($article->id) ?></td>
-                <td><?= $article->has('request') ? $this->Html->link($article->request->id, ['controller' => 'Requests', 'action' => 'view', $article->request->id]) : '' ?></td>
+               <?php // $this->Number->format($article->id) ?>
+                <td><?= $article->has('request') ? $this->Html->link($article->request->author_name, ['controller' => 'Requests', 'action' => 'view', $article->request->id]) : '' ?></td>
                 <td><?= h($article->publication_date) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $article->id]) ?>

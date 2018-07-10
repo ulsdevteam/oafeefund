@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Helper;
+namespace App\Controller\Component;
 
-use Cake\View\Helper;
+use Cake\Controller\Component;
 
-class LdapHelper{
+class LdapComponent extends Component{
     /*
      * getInfo method
      * 

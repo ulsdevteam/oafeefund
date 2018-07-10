@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Mailer\Email;
 use Cake\Datasource\ConnectionManager;
-use App\View\Helper\LdapHelper;
-
+use App\Controller\Component\SearchQueryComponent;
+//use Cake\Database\Schema\TableSchema;
 /**
  * Requests Controller
  *
@@ -18,12 +18,9 @@ class RequestsController extends AppController
 {
     /*
      * Add new request method.(adduser)
-     * 
-     * Access is given to every person for this specfic function.
-     * The layout set for this is blank.
-     * @return void
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function adduser()
+    public function add()
     {
          /* Now here you can put your default values */
 	
@@ -37,7 +34,7 @@ class RequestsController extends AppController
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
+                $this->Flash->success(__('The request has been submitted.'));
                return $this->redirect(['action' => 'saved']);
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
@@ -45,6 +42,7 @@ class RequestsController extends AppController
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]); 
         //@var Object $denialReasons It consists of the denialreasons.
         $this->set(compact('request', 'denialReasons'));
+        $this->render("adduser");
     }
      public function saved()
     {
@@ -64,8 +62,28 @@ class RequestsController extends AppController
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
         $role=$this->Auth->user();
-        $this->set('role',$role); 
+        $this->set('role',$role);
     }
+
+    public function search()
+    {
+        $parameter = $this->request->query('Parameter');
+        $value = $this->request->query('value');
+        $action = $this->request->query('action');
+        $this->set('value',$value);
+        $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+        if($where_clause== false){
+            $this->redirect(['action' => 'index']); 
+        }
+        $requests=$this->Requests->find('all')->where($where_clause);
+        $requests_for_count=$requests->toArray();
+        $count= sizeof($requests_for_count);
+        $this->set(compact('count','prev_action','prev_value','parameter','requests'));
+        $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+        $this->render("index");
+    }	
 
     /**
      * View method
@@ -102,26 +120,43 @@ class RequestsController extends AppController
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
-    
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $request = $this->Requests->newEntity();
-        if ($this->request->is('post')) {
-            $request = $this->Requests->patchEntity($request, $this->request->getData());
-            if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The request could not be saved. Please, try again.'));
+    public function export(){
+        $parameter = $this->request->query('parameter');
+        $value = $this->request->query('value');
+        $action = $this->request->query('action');
+        if($value!=null && $parameter!=null){
+           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
-        $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
-        $this->set(compact('request', 'denialReasons'));
+        else{
+           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+        }
+        if($where_clause=== false){
+            $this->redirect(['action' => 'index']); 
+        }
+        $requests=$this->Requests->find('all')
+                    ->where($where_clause)
+                ->contain(['DenialReasons', 'Articles', 'Transactions']);
+        
+        $data = $requests;
+        $this->response->download('export.csv');
+        //$_header=["id"];
+	//$_extract=['id','username','transaction.amount_paid'];
+        $column_values_requests=$this->SearchQuery->setCsvColumns($this->Requests->schema()->columns());
+        $this->loadModel('Transactions');
+        $column_values_transactions=$this->SearchQuery->setCsvColumns($this->Transactions->schema()->columns(),'transaction');
+        $this->loadModel('DenialReasons');
+        $column_values_denial_reasons=$this->SearchQuery->setCsvColumns($this->DenialReasons->schema()->columns(),'denial_reason');
+        $this->loadModel('Articles');
+        $column_values_articles=$this->SearchQuery->setCsvColumns($this->Articles->schema()->columns(),'article');
+        $column_values=array_merge($column_values_requests,$column_values_transactions,$column_values_denial_reasons,$column_values_articles);
+        $_extract=$column_values;
+        $_header=$column_values;
+        $this->set(compact('column_values'));
+        $_serialize = 'data';
+   	$this->set(compact('data', '_serialize','_extract','_header'));
+	$this->viewBuilder()->className('CsvView.Csv');
+	return;
+        
     }
    
     /**
@@ -300,6 +335,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
         
         
     }
@@ -318,6 +354,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Paid requests method
@@ -337,6 +374,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Denied requests method
@@ -353,6 +391,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Denial Checker method

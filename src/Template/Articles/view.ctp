@@ -14,16 +14,15 @@
     </ul>
 </nav>
 <div class="articles view large-9 medium-8 columns content">
-    <h3><?= h($article->id) ?></h3>
+    <h3><?= "Username: ".h($article->request->username) ?></h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Request') ?></th>
             <td><?= $article->has('request') ? $this->Html->link($article->request->id, ['controller' => 'Requests', 'action' => 'view', $article->request->id]) : '' ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($article->id) ?></td>
-        </tr>
+        
+        <?php // __('Id') ?>
+            <?php // $this->Number->format($article->id) ?>
         <tr>
             <th scope="row"><?= __('Publication Date') ?></th>
             <td><?= h($article->publication_date) ?></td>

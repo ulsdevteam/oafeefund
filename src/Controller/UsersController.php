@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Datasource\ConnectionManager;
-use App\View\Helper\LdapHelper;
+use App\Controller\Component\LdapComponent;
 /**
  * Users Controller
  *
@@ -194,7 +194,7 @@ class UsersController extends AppController
          if ($this->request->is('ajax') && $this->request->is('get') )
            {
             $res= $_GET['val'];
-            $var= LdapHelper::getInfo($res);
+            $var= $this->Ldap->getInfo($res);
             $this->set("details",json_encode($var));
            }
         $this->render('ajax');

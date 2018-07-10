@@ -43,15 +43,17 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
+
+Router::extensions(['csv']);
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-    $routes->connect('/', ['controller' => 'requests', 'action' => 'adduser']);
+    $routes->connect('/', ['controller' => 'requests', 'action' => 'add']);
     $routes->connect('/login', ['controller' => 'users', 'action' => 'login']);    
-
+    
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
@@ -81,3 +83,4 @@ Router::scope('/', function (RouteBuilder $routes) {
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();
+
