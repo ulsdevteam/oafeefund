@@ -77,8 +77,6 @@ $cakeDescription = 'OAAFF application';
                     </div>
                 </li>
                 <li><?= $this->Html->link('Users',['controller' => 'Users', 'action' => 'index', '_full' => true]);?></li>
-                <li><?= $this->Html->link('Transactions',['controller' => 'Transactions', 'action' => 'index', '_full' => true]);?></li>
-                <li><?= $this->Html->link('Articles Published',['controller' => 'Articles', 'action' => 'index', '_full' => true]);?></li>
                 <li><?= $this->Html->link('Denial Reasons',['controller' => 'DenialReasons', 'action' => 'index', '_full' => true]);?></li>
                 <li><?= $this->Html->link('Approval Reasons',['controller' => 'ApprovalReasons', 'action' => 'index', '_full' => true]);?></li>
                 <li><?= $this->Html->link('Check Budget',['controller' => 'Budgets', 'action' => 'index', '_full' => true]);?></li>
