@@ -14,16 +14,8 @@
     </ul>
 </nav>
 <div class="budgets view large-9 medium-8 columns content">
-    <h3><?= h($budget->id) ?></h3>
+    <h3><?= h($budget->fiscal_year) ?></h3>
     <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Fiscal Year') ?></th>
-            <td><?= h($budget->fiscal_year) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($budget->id) ?></td>
-        </tr>
         <tr>
             <th scope="row"><?= __('Total Budget') ?></th>
             <td><?= $this->Number->format($budget->total_budget) ?></td>
