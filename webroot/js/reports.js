@@ -16,8 +16,9 @@ dataArray=JSON.parse(dataArray);
 dataArray=replaceEmpty(dataArray);
 dataArray=addIndex(dataArray);
 $("#para").hide();
-createGraph(dataArray);
 
+createGraph(dataArray);
+createPie(dataArray);
 var tooltip = d3.select("body").append("div").attr("id","ttip").style("opacity","0").style("position","absolute");
 
 
@@ -293,9 +294,101 @@ function createGraph(dataArray){
             .attr("y","1200")
             .attr("fill","black")
             .text("Tabular representation:");
-    tabulate(dataArray, ['Index(X-axis)','school', 'count'])
-    
+   // tabulate(dataArray, ['Index(X-axis)','school', 'count'])
 }
+function createPie(data){
+    d3.select("svg").remove();
+
+    
+var text = "";
+
+var width = 1200;
+var height = 1200;
+var thickness = 40;
+var duration = 750;
+var padding = 10;
+var opacity = .8;
+var opacityHover = 1;
+var otherOpacityOnHover = .8;
+var tooltipMargin = 13;
+
+var radius = Math.min(width-padding, height-padding) / 2;
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var svg = d3.select(".container")
+.append('svg')
+.attr('class', 'pie')
+.attr('width', width)
+.attr('height', height);
+
+var g = svg.append('g')
+.attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
+
+var arc = d3.arc()
+.innerRadius(0)
+.outerRadius(radius);
+
+var pie = d3.pie()
+.value(function(d) { return d.count; })
+.sort(null);
+
+var path = g.selectAll('path')
+  .data(pie(data))
+  .enter()
+  .append("g")  
+  .append('path')
+  .attr('d', arc)
+  .attr('fill', (d,i) => color(i))
+  .style('opacity', opacity)
+  .style('stroke', 'white')
+  .on("mouseover", function(d) {
+      d3.selectAll('path')
+        .style("opacity", otherOpacityOnHover);
+      d3.select(this) 
+        .style("opacity", opacityHover);
+      tooltip.style("opacity","1")
+        .style("left",d3.event.pageX+10+"px")
+        .style("top",d3.event.pageY+10+"px");
+        tooltip.html("Number of Requests:"+d.data.count+"</br>School:"+d.data.school);
+      
+    })
+  
+  .on("mouseout", function(d) {   
+     tooltip.style("opacity","0");
+     tooltip.html("");
+    })
+  .on("touchstart", function(d) {
+      d3.select("svg")
+        .style("cursor", "none");    
+  })
+  .each(function(d, i) { this._current = i; });
+
+let legend = d3.select(".container").append('div')
+			.attr('class', 'legend')
+			.style('margin-top', '30px');
+
+let keys = legend.selectAll('.key')
+			.data(data)
+			.enter().append('div')
+			.attr('class', 'key')
+			.style('display', 'flex')
+			.style('align-items', 'center')
+			.style('margin-right', '20px');
+
+		keys.append('div')
+			.attr('class', 'symbol')
+			.style('height', '10px')
+			.style('width', '10px')
+			.style('margin', '5px 5px')
+			.style('background-c\olor', (d, i) => color(i));
+
+		keys.append('div')
+			.attr('class', 'name')
+			.text(d => `${d.school} (${d.count})`);
+
+		keys.exit().remove();
+}
+    
 function tabulate(data, columns) {
         
 		var table = d3.select('.container').append('table').attr("id","requeststable").attr("x","100");
@@ -334,7 +427,6 @@ function tabulate(data, columns) {
 	 // 2 column table
 
 hidden=0;
-
 //$(".rectangle").hide();
 //$(".linex").hide();
 //$(".circlex").hide();
