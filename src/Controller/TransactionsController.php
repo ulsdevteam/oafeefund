@@ -64,7 +64,7 @@ class TransactionsController extends AppController
                 ->where(['id' => $id])
                 ->execute(); 
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(["controller" => "Requests",'action' => 'approvedrequests']);
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
         }
@@ -99,7 +99,7 @@ class TransactionsController extends AppController
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(["controller" => "Requests",'action' => 'approvedrequests']);
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
         }
