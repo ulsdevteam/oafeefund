@@ -15,7 +15,6 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('fiscal_year') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('budget_date_begin') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('budget_date_end') ?></th>
@@ -31,7 +30,6 @@
             foreach ($budgets as $budget): ?>
             
             <tr>
-                <td><?= $this->Number->format($budget->id) ?></td>
                 <td><?= h($budget->fiscal_year) ?></td>
                 <td><?= h($budget->budget_date_begin) ?></td>
                 <td><?= h($budget->budget_date_end) ?></td>

@@ -13,17 +13,7 @@
     </ul>
 </nav>
 <div class="denialReasons view large-9 medium-8 columns content">
-    <h3><?= h($denialReason->id) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Denial Reason') ?></th>
-            <td><?= h($denialReason->denial_reason) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($denialReason->id) ?></td>
-        </tr>
-    </table>
+    <h3><?= h($denialReason->denial_reason).":" ?></h3>
     <div class="row">
         <h4><?= __('Denial Email') ?></h4>
         <?= $denialReason->denial_email ?>

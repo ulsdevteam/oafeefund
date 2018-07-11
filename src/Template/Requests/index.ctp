@@ -199,15 +199,16 @@
                      endif;
                             ?>
                     <?php 
-                    if( (h($request->funded)=="Paid") && ($role->role === 'OSCP_students')){
-                        if(empty($request->articles))
+                    $article=$request->article;
+                    $transaction=$request->transaction;
+                    if( (h($request->funded)=="Paid") && (($role->role === 'OSCP_students') || ($role->role === 'admin'))){
+                        if(empty($request->article))
                         {
                             echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
                         }
-                        elseif(!empty($request->articles))
+                        elseif(!empty($request->article))
                         {
-                            $article_id=$request->articles;
-                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article_id[0]->id ]);  
+                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article->id ]);  
                         }
                      }
                      ?>

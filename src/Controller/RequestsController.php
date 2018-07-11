@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
+use App\Controller\Component\LdapComponent;
 use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\SearchQueryComponent;
 //use Cake\Database\Schema\TableSchema;
@@ -27,10 +28,9 @@ class RequestsController extends AppController
         $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
         
         $request = $this->Requests->newEntity();
-        //$var= LdapHelper::getInfo('HOK14');
-        //$this->set('var', $var);
-        //$var=$this->LdapHelper->getInfo('HOK14');
-	//import('Helper', 'LdapHelper');
+        $res="hok14"; // test case, replace with env('HTTP_EDUPERSONPRINCIPALNAME')
+        $var= $this->Ldap->getInfo($res);
+        $this->set("details",$var);
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
@@ -70,7 +70,6 @@ class RequestsController extends AppController
         $parameter = $this->request->query('Parameter');
         $value = $this->request->query('value');
         $action = $this->request->query('action');
-        $this->set('value',$value);
         $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         if($where_clause== false){
             $this->redirect(['action' => 'index']); 
@@ -78,7 +77,8 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all')->where($where_clause);
         $requests_for_count=$requests->toArray();
         $count= sizeof($requests_for_count);
-        $this->set(compact('count','prev_action','prev_value','parameter','requests'));
+        $this->set('prev_action',$action);
+        $this->set(compact('count','parameter','requests','value'));
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
@@ -128,9 +128,9 @@ class RequestsController extends AppController
            $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
         else{
-           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+           $where_clause= $this->SearchQuery->getRequests($action);
         }
-        if($where_clause=== false){
+        if($where_clause== false){
             $this->redirect(['action' => 'index']); 
         }
         $requests=$this->Requests->find('all')

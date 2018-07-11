@@ -90,12 +90,12 @@ class UsersController extends AppController
                       if($role === 'admin')
                       {
                         $this->redirect(array("controller" => "Requests", 
-                      "action" => "index"));   
+                      "action" => "pendingrequests"));   
                       }
                       else if($role === 'OSCP_students')
                       {
                           $this->redirect(array("controller" => "Articles", 
-                      "action" => "index"));
+                      "action" => "paidrequests"));
                       }
                       else if($role === 'payment_team')
                       {

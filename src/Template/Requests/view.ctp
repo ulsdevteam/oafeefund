@@ -6,7 +6,10 @@
 ?>
 <?= $this->Html->css('options.css'); ?>
 <div class="requests view large-9 medium-8 columns content">
-    
+    <?php  
+        $article=$request->article;
+        $transaction=$request->transaction;
+    ?>
     <h3><?php echo "Author Name: ". h($request->author_name) ."  (Username: ". h($request->username). ")" ?></h3>
     <h3><?php echo "Total amount used: $".h($request3)."";
     ?></h3>
@@ -39,16 +42,16 @@
                     ?>
             
                     <?php 
-                    if( (h($request->funded)=="Paid") && ($role->role === 'OSCP_students')){
-                        if(empty($request->articles))
+                    if( (h($request->funded)=="Paid") && (($role->role === 'OSCP_students') || ($role->role === 'admin'))){
+                        if(empty($request->article))
                         {
                             echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
                             echo "<br>"; 
                         }
-                        elseif(!empty($request->articles))
+                        elseif(!empty($request->article))
                         {
-                            $article_id=$request->articles;
-                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article_id[0]->id ]); 
+                            $article_id=$request->article;
+                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article->id ]); 
                             echo "<br>";   
                         }
                      }
@@ -163,61 +166,51 @@
     </div>
     <div class="related">
         <h4><?= __('Related Articles') ?></h4>
-        <?php if (!empty($request->articles)): ?>
+        <?php if (!empty($request->article)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Request Id') ?></th>
                 <th scope="col"><?= __('Publication Date') ?></th>
                 <th scope="col"><?= __('Article Url') ?></th>
                 <th scope="col"><?= __('Dscholarship Archive') ?></th>
+                <th scope="col"><?= __('DOI') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($request->articles as $articles): ?>
             <tr>
-                <td><?= h($articles->id) ?></td>
-                <td><?= h($articles->request_id) ?></td>
-                <td><?= h($articles->publication_date) ?></td>
-                <td><?= h($articles->article_url) ?></td>
-                <td><?= h($articles->dscholarship_archive) ?></td>
+                <td><?= h($article->publication_date) ?></td>
+                <td><?= h($article->article_url) ?></td>
+                <td><?= h($article->dscholarship_archive) ?></td>
+                <td><?= h($article->doi) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Articles', 'action' => 'view', $articles->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Articles', 'action' => 'edit', $articles->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Articles', 'action' => 'delete', $articles->id], ['confirm' => __('Are you sure you want to delete # {0}?', $articles->id)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Articles', 'action' => 'view', $article->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Articles', 'action' => 'edit', $article->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Articles', 'action' => 'delete', $article->id], ['confirm' => __('Are you sure you want to delete # {0}?', $article->id)]) ?>
                 </td>
             </tr>
-            <?php endforeach; ?>
         </table>
         <?php endif; ?>
     </div>
     <div class="related">
         <h4><?= __('Related Transactions') ?></h4>
-        <?php if (!empty($request->transactions)): ?>
+        <?php if (!empty($request->transaction)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Amount Paid') ?></th>
                 <th scope="col"><?= __('Description') ?></th>
                 <th scope="col"><?= __('Date Paid') ?></th>
                 <th scope="col"><?= __('Cheque Number') ?></th>
-                <th scope="col"><?= __('Request Id') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($request->transactions as $transactions): ?>
             <tr>
-                <td><?= h($transactions->id) ?></td>
-                <td><?= h($transactions->amount_paid) ?></td>
-                <td><?= h($transactions->description) ?></td>
-                <td><?= h($transactions->date_paid) ?></td>
-                <td><?= h($transactions->cheque_number) ?></td>
-                <td><?= h($transactions->request_id) ?></td>
+                <td><?= h($transaction->amount_paid) ?></td>
+                <td><?= h($transaction->description) ?></td>
+                <td><?= h($transaction->date_paid) ?></td>
+                <td><?= h($transaction->cheque_number) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Transactions', 'action' => 'view', $transactions->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Transactions', 'action' => 'edit', $transactions->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Transactions', 'action' => 'delete', $transactions->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transactions->id)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Transactions', 'action' => 'view', $transaction->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Transactions', 'action' => 'edit', $transaction->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Transactions', 'action' => 'delete', $transaction->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transaction->id)]) ?>
                 </td>
             </tr>
-            <?php endforeach; ?>
         </table>
         <?php endif; ?>
     </div>

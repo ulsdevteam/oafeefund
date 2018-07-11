@@ -30,19 +30,11 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
     <div class="requests view large-9 medium-8 columns content">
-    <h3><?= h($request->id) ?></h3>
+    <h3><?= h($request->author_name) ?></h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Username') ?></th>
             <td><?= h($request->username) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('First Name') ?></th>
-            <td><?= h($request->first_name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Last Name') ?></th>
-            <td><?= h($request->last_name) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Email') ?></th>
@@ -79,10 +71,6 @@
         <tr>
             <th scope="row"><?= __('Denial Reason') ?></th>
             <td><?= $request->has('denial_reason') ? $this->Html->link($request->denial_reason->id, ['controller' => 'DenialReasons', 'action' => 'view', $request->denial_reason->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($request->id) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Amount Requested') ?></th>

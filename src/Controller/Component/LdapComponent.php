@@ -36,6 +36,7 @@ class LdapComponent extends Component{
         $result = ldap_search($ldap, $baseDN, $filter,$attributes);
         $array = ldap_get_entries($ldap, $result);
         $info = array(); 
+        $info['username'] = $user;
         $info['first_name'] = $array[0]['givenname'][0];
         $info['last_name'] = $array[0]['sn'][0];
         $info['email'] = $array[0]['mail'][0];
