@@ -36,4 +36,8 @@
         <h4><?= __('Dscholarship Archive') ?></h4>
         <?= $this->Text->autoParagraph(h($article->dscholarship_archive)); ?>
     </div>
+    <div class="row">
+        <h4><?= __('DOI') ?></h4>
+        <?= $this->Text->autoParagraph(h($article->doi)); ?>
+    </div>
 </div>
