@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
+use App\Controller\Component\LdapComponent;
 use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\SearchQueryComponent;
 //use Cake\Database\Schema\TableSchema;
@@ -27,10 +28,9 @@ class RequestsController extends AppController
         $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
         
         $request = $this->Requests->newEntity();
-        //$var= LdapHelper::getInfo('HOK14');
-        //$this->set('var', $var);
-        //$var=$this->LdapHelper->getInfo('HOK14');
-	//import('Helper', 'LdapHelper');
+        $res="hok14"; // test case, replace with env('HTTP_EDUPERSONPRINCIPALNAME')
+        $var= $this->Ldap->getInfo($res);
+        $this->set("details",$var);
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
