@@ -45,6 +45,8 @@ Router::defaultRouteClass(DashedRoute::class);
 
 
 Router::extensions(['csv']);
+Router::extensions(['xls']);
+Router::extensions(['xlsx']);
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
