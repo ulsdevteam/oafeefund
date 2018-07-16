@@ -14,4 +14,4 @@
  */
 
 //echo $this->fetch('content');
-echo $details;
+print_r($details);
