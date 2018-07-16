@@ -64,4 +64,14 @@ class SearchQueryComponent extends Component{
         unset($column_value);
         return $column_values;
     }
+    public function getDates($FY) {
+        if($FY=='')
+        {
+            return '';
+        }
+        $end_date = ''.$FY.'-06-30T00:00:00+00:00';
+        $start_date= ''.($FY-1).'-07-01T00:00:00+00:00';
+        $where_clause=["inquiry_date >=" => $start_date,"inquiry_date <=" =>  $end_date];
+        return $where_clause;
+    }
 }

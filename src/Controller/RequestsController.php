@@ -437,6 +437,103 @@ class RequestsController extends AppController
   }
     }
     
+    
+    public function reports(){
+         $query1=$this->Requests->find('all');
+         $query1->select([
+            'Requests.school',
+            'count' => $query1->func()->count('*'),
+         ])
+        ->group('Requests.school')
+        ->order(['count' => 'DESC']);
+         $query1->hydrate(false); // Results as arrays instead of entities
+         $result = $query1->toList();
+         $result= json_encode($result);
+         $this->set('query1',$result);
+    }
+    /*
+     * Test method created to check if schoolRequests and other actions for the reports wopuld work fine.
+     * 
+     * public function getDates(){
+        $this->viewBuilder()->layout('ajax');
+        $FY='';
+        $where_clause= $this->SearchQuery->getDates($FY);
+        //$this->set("details",$where_clause);
+        $query1=$this->Requests->find('all');
+        $query1->select([
+       'parameter'=>'Requests.school',
+       'value' => $query1->func()->count('*'),
+        ])
+       ->group('Requests.school')
+       ->order(['value' => 'DESC'])
+       ->where($where_clause);
+        $query1->hydrate(false); // Results as arrays instead of entities
+        $result = $query1->toList();
+        $this->set("details", json_encode($result));
+        $this->render('ajax');
+    }*/
+
+    public function schoolRequests(){
+         $this->viewBuilder()->layout('ajax');
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+             $FY= $_GET['FY'];
+             $where_clause= $this->SearchQuery->getDates($FY);
+             $query1=$this->Requests->find('all');
+            $query1->select([
+           'parameter'=>'Requests.school',
+           'value' => $query1->func()->count('*'),
+            ])
+           ->group('Requests.school')
+           ->order(['value' => 'DESC'])
+           ->where($where_clause);
+            $query1->hydrate(false); // Results as arrays instead of entities
+            $result = $query1->toList();
+            $this->set("details", json_encode($result));
+           }
+        $this->render('ajax');
+    }
+        public function budgetRequests(){
+         $this->viewBuilder()->layout('ajax');
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+             $FY= $_GET['FY'];
+             $where_clause= $this->SearchQuery->getDates($FY);
+             $query1=$this->Requests->find('all');
+            $query1->select([
+           'parameter'=>'Requests.school',
+           'value' => $query1->func()->sum('Requests.amount_requested'),
+            ])
+           ->group('Requests.school')
+           ->order(['value' => 'DESC'])
+           ->where($where_clause);
+            $query1->hydrate(false); // Results as arrays instead of entities
+            $result = $query1->toList();
+            $this->set("details", json_encode($result));
+           }
+        $this->render('ajax');
+    }
+    public function publisherCosts(){
+         $this->viewBuilder()->layout('ajax');
+                      $query1=$this->Requests->find('all');
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+             $FY= $_GET['FY'];
+             $where_clause= $this->SearchQuery->getDates($FY);
+             $query1=$this->Requests->find('all');
+            $query1->select([
+           'parameter'=>'Requests.publisher',
+           'value' => $query1->func()->sum('Requests.amount_requested'),
+            ])
+           ->group('Requests.publisher')
+           ->order(['value' => 'DESC'])
+           ->where($where_clause);
+            $query1->hydrate(false); // Results as arrays instead of entities
+            $result = $query1->toList();
+            $this->set("details", json_encode($result));
+           }
+        $this->render('ajax');
+    }
     /*
      * @param string $user is passed, which can  be received from 
      * $this->Auth->user() . This is the array of the current user who 
