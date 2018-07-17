@@ -25,6 +25,7 @@
             echo $this->Form->control('publication_date', ['empty' => true]);
             echo $this->Form->control('article_url', array('type' => 'url','placeholder'=> "http://example.com"));
             echo $this->Form->control('dscholarship_archive', array('type' => 'url','placeholder'=> "http://example.com"));
+            echo $this->Form->control('doi', array('placeholder'=> "0000.0000/000/000 (Format required)"));
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -60,11 +60,18 @@ class ArticlesTable extends Table
 
         $validator
             ->scalar('article_url')
-            ->allowEmpty('article_url');
+            ->allowEmpty('article_url'); // Not empty
 
         $validator
             ->scalar('dscholarship_archive')
             ->allowEmpty('dscholarship_archive');
+        
+        $validator
+            ->scalar('doi')
+            ->allowEmpty('doi')
+            ->add('doi', 'validFormat',[
+             'rule' => array('custom', '/^[0-9]+[.][0-9]+\\//'),
+             'message'=> 'Please enter a valid DOI']);
 
         return $validator;
     }

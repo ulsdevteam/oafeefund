@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Datasource\ConnectionManager;
-use App\View\Helper\LdapHelper;
+use App\Controller\Component\LdapComponent;
 /**
  * Users Controller
  *
@@ -90,12 +90,12 @@ class UsersController extends AppController
                       if($role === 'admin')
                       {
                         $this->redirect(array("controller" => "Requests", 
-                      "action" => "index"));   
+                      "action" => "pendingrequests"));   
                       }
                       else if($role === 'OSCP_students')
                       {
                           $this->redirect(array("controller" => "Articles", 
-                      "action" => "index"));
+                      "action" => "paidrequests"));
                       }
                       else if($role === 'payment_team')
                       {
@@ -191,13 +191,13 @@ class UsersController extends AppController
        /* @var String $res , it gives us the username.
         * @var array $var, it gives us the response from LDAP helper in an */
         $this->viewBuilder()->layout('ajax');
-        $this->render('ajax'); 
          if ($this->request->is('ajax') && $this->request->is('get') )
            {
             $res= $_GET['val'];
-            $var= LdapHelper::getInfo($res);
-            echo json_encode($var);
+            $var= $this->Ldap->getInfo($res);
+            $this->set("details",json_encode($var));
            }
+        $this->render('ajax');
     }
 
     /**

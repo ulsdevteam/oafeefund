@@ -31,6 +31,7 @@ class Article extends Entity
         'publication_date' => true,
         'article_url' => true,
         'dscholarship_archive' => true,
-        'request' => true
+        'request' => true,
+        'doi' => true // I did add this when adding a new field
     ];
 }
