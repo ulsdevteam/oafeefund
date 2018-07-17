@@ -545,12 +545,7 @@ class RequestsController extends AppController
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->getStyle('A5:G5')->getAlignment()->setWrapText(true);
         $sheet->getColumnDimension('A')->setWidth(68);
-        $sheet->getColumnDimension('B')->setWidth(14);
-        $sheet->getColumnDimension('C')->setWidth(14);
-        $sheet->getColumnDimension('D')->setWidth(14);
-        $sheet->getColumnDimension('E')->setWidth(14);
-        $sheet->getColumnDimension('F')->setWidth(14);
-        $sheet->getColumnDimension('G')->setWidth(14);
+        $sheet->getDefaultColumnDimension()->setWidth(14);
         $sheet->getRowDimension('1')->setRowHeight(21);
         $sheet->getRowDimension('2')->setRowHeight(21);
         $sheet->getRowDimension('5')->setRowHeight(45);
@@ -603,10 +598,10 @@ class RequestsController extends AppController
                         $display_arr,  // The data to set
                         NULL,        // Array values with this value will not be set
                         'A6'         // Top left coordinate of the worksheet range where
-                                     //    we want to set these values (default is A1)
+                                     //    we want to set these values 
                     );
          // $this->set('arrayData',$display_arr);
-        $results=$connection->execute('SELECT B.fiscal_year AS fiscal_year, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
+        $arrayData=$connection->execute('SELECT B.fiscal_year AS fiscal_year, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
                               FROM requests R, budgets B
                               WHERE R.inquiry_date >= B.budget_date_begin
                               AND R.inquiry_date <= B.budget_date_end
@@ -624,7 +619,7 @@ class RequestsController extends AppController
                                      //    we want to set these values (default is A1)
                     );
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="Sparc_report.xlsx"');
+        header('Content-Disposition: attachment;filename="Sparc Report.xlsx"');
         //header('Cache-Control: max-age=0');
         $writer->save('php://output');
         //$this->render('ajax');
