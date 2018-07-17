@@ -27,6 +27,10 @@
         color: #C5B358;
         font-weight: bold;
     }
+    #sparc{
+        padding-top: 1%;
+        padding-left: 3%;
+    }
 </style>
 <p id="para"><?php print_r($query1);?></p>
 <?= $this->Html->script('reports'); ?>
@@ -38,7 +42,14 @@
 <?= $this->Form->input('Budgets Per School',['type'=>'button','label'=>false,'onclick'=>"createChart(['/requests/budgetRequests','Budgets Per School','Budget','School'])"]); ?>
 <?php // $this->Form->input('Pie Chart ',['type'=>'button','label'=>false,'onclick'=>'createBPSChart(2)']); ?>
 <?= $this->Form->input('Publisher Costs',['type'=>'button','label'=>false,'onclick'=>"createChart(['/requests/publisherCosts','Publisher Costs','Cost','Publisher'])"]); ?>
-
+<?= $this->Html->image("/img/sparc_report.png", [
+    "alt" => "Sparc Report",
+    "width" => 350,
+    "id"=> "sparc",
+    "onmouseover" => "changeImage()",
+    "onmouseout" => "revertImage()",
+    'url' => ['controller' => 'Requests', 'action' => 'getSparc']
+        ]); ?>
 <?php 
 $options=array(''=>'All','2018'=>'FY2017-2018','2017'=>'FY2016-2017','2016'=>'FY2015-2016','2015'=>'FY2014-2015','2014'=>'FY2013-2014','2013'=>'FY2012-2013');
 echo $this->Form->control('',['options'=>$options,'id'=>'choose-fiscal-year','class'=>'date right','onchange'=>'createChart()']); ?>
@@ -54,6 +65,12 @@ echo $this->Form->control('',['options'=>$options,'id'=>'choose-fiscal-year','cl
             }
         }
     }*/
+    function changeImage(){
+        document.getElementById("sparc").src="/img/sparc_hover.png";
+    }
+    function revertImage(){
+        document.getElementById("sparc").src="/img/sparc_report.png";
+    }
     prev_chart=null;
     chart=null;
     function createChart(chart)
