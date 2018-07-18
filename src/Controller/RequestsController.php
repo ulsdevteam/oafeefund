@@ -9,7 +9,9 @@ use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\SearchQueryComponent;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use \PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 //use Cake\Database\Schema\TableSchema;
 /**
  * Requests Controller
@@ -539,7 +541,8 @@ class RequestsController extends AppController
            }
         $this->render('ajax');
     }
-        public function getSparc(){
+
+    public function getSparc(){
         $spreadsheet = new Spreadsheet();
         $writer = new Xlsx($spreadsheet);
         $sheet = $spreadsheet->getActiveSheet();
@@ -618,12 +621,17 @@ class RequestsController extends AppController
                         'A16'         // Top left coordinate of the worksheet range where
                                      //    we want to set these values (default is A1)
                     );
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="Sparc Report.xlsx"');
-        //header('Cache-Control: max-age=0');
-        $writer->save('php://output');
-        //$this->render('ajax');
-        return;
+        $this->autoRender= false;
+        $export=tempnam(TMP."/xlsx", "export_");
+        $writer->save($export);
+        $file['path']=$export;
+        $this->response->type('application/vnd.ms-excel');
+        $this->response->file(
+            $file['path'],
+            ['download' => true, 'name' => 'Sparc Report.xlsx']
+        );
+        $filed = new File($export);
+        $filed->delete();
     }
 
     /*
