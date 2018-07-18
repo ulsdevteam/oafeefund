@@ -12,15 +12,11 @@
     </ul>
 </nav>
 <div class="transactions view large-9 medium-8 columns content">
-    <h3><?= h($transaction->id) ?></h3>
+    <h3><?= "Username: ".h($transaction->request->username) ?></h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Request') ?></th>
-            <td><?= $transaction->has('request') ? $this->Html->link($transaction->request->id, ['controller' => 'Requests', 'action' => 'view', $transaction->request->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($transaction->id) ?></td>
+            <td><?= $transaction->has('request') ? $this->Html->link($transaction->request->author_name, ['controller' => 'Requests', 'action' => 'view', $transaction->request->id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Amount Paid') ?></th>

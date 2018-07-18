@@ -16,7 +16,9 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
-use App\View\Helper\LdapHelper;
+use App\Controller\Component\LdapComponent;
+use App\Controller\Component\SearchQueryComponent;
+use Cake\View\Helper;
 
 /**
  * Application Controller
@@ -28,8 +30,6 @@ use App\View\Helper\LdapHelper;
  */
 class AppController extends Controller
 {   
-     
-       
         /*
          * If an isAuthorized method is not created in a specific Controller,
          * this will be implemented as the default one, such as there isn't one
@@ -69,6 +69,8 @@ class AppController extends Controller
         //$this->loadHelper('LdapHelper');
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent('Ldap');
+        $this->loadComponent('SearchQuery');
         $this->loadComponent('Auth',[
         'authenticate' => [
             'Form' => [
@@ -102,7 +104,7 @@ class AppController extends Controller
         switch ($this->name) # We get the controller name
         { 
         case 'Requests':
-            $this->Auth->allow(['addUser','saved']); // Allowed if method is addUser or saved
+            $this->Auth->allow(['add','saved']); // Allowed if method is addUser or saved
             break;
         case 'Users':
             $this->Auth->allow(['details']); // Allowed if method is details

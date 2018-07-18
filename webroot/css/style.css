@@ -1,0 +1,49 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 22, 2018, 12:01:21 PM
+    Author     : hok14
+*/
+
+#requeststable{
+    margin-left: 8%;
+    width: 60%;
+}
+
+rect{
+    fill: #15848F;
+}
+
+#ttip{
+    background-color: black;
+    color:white;
+}
+.pie {
+  margin: 20px;
+}
+
+svg {
+    float: left;
+}
+
+.legend {
+  float: left;
+  font-family: "Verdana";
+  font-size: .7em;
+}
+
+.pie text {
+  font-family: "Verdana";
+  fill: #000;
+}
+
+.pie .name-text{
+  font-size: .8em;
+}
+
+.pie .value-text{
+  font-size: 3em;
+}

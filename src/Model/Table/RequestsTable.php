@@ -41,10 +41,10 @@ class RequestsTable extends Table
         $this->belongsTo('DenialReasons', [
             'foreignKey' => 'denial_id'
         ]);
-        $this->hasMany('Articles', [
+        $this->hasOne('Articles', [
             'foreignKey' => 'request_id'
         ]);
-        $this->hasMany('Transactions', [
+        $this->hasOne('Transactions', [
             'foreignKey' => 'request_id'
         ]);
     }

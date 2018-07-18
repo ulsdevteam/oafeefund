@@ -20,7 +20,6 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('userid') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('user') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('role') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
@@ -31,7 +30,6 @@
         <tbody>
             <?php foreach ($users as $user): ?>
             <tr>
-                <td><?= $this->Number->format($user->userid) ?></td>
                 <td><?= h($user->user) ?></td>
                 <td><?= h($user->role) ?></td>
                 <td><?= h($user->created) ?></td>

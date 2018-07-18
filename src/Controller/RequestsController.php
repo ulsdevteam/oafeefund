@@ -4,9 +4,13 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
+use App\Controller\Component\LdapComponent;
 use Cake\Datasource\ConnectionManager;
-use App\View\Helper\LdapHelper;
-
+use App\Controller\Component\SearchQueryComponent;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use \PhpOffice\PhpSpreadsheet\Style\Alignment;
+//use Cake\Database\Schema\TableSchema;
 /**
  * Requests Controller
  *
@@ -18,26 +22,22 @@ class RequestsController extends AppController
 {
     /*
      * Add new request method.(adduser)
-     * 
-     * Access is given to every person for this specfic function.
-     * The layout set for this is blank.
-     * @return void
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function adduser()
+    public function add()
     {
          /* Now here you can put your default values */
 	
         $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
         
         $request = $this->Requests->newEntity();
-        //$var= LdapHelper::getInfo('HOK14');
-        //$this->set('var', $var);
-        //$var=$this->LdapHelper->getInfo('HOK14');
-	//import('Helper', 'LdapHelper');
+        $res="hok14"; // test case, replace with env('HTTP_EDUPERSONPRINCIPALNAME')
+        $var= $this->Ldap->getInfo($res);
+        $this->set("details",$var);
         if ($this->request->is('post')) {
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
+                $this->Flash->success(__('The request has been submitted.'));
                return $this->redirect(['action' => 'saved']);
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
@@ -45,6 +45,7 @@ class RequestsController extends AppController
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]); 
         //@var Object $denialReasons It consists of the denialreasons.
         $this->set(compact('request', 'denialReasons'));
+        $this->render("adduser");
     }
      public function saved()
     {
@@ -64,8 +65,28 @@ class RequestsController extends AppController
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
         $role=$this->Auth->user();
-        $this->set('role',$role); 
+        $this->set('role',$role);
     }
+
+    public function search()
+    {
+        $parameter = $this->request->query('Parameter');
+        $value = $this->request->query('value');
+        $action = $this->request->query('action');
+        $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+        if($where_clause== false){
+            $this->redirect(['action' => 'index']); 
+        }
+        $requests=$this->Requests->find('all')->where($where_clause);
+        $requests_for_count=$requests->toArray();
+        $count= sizeof($requests_for_count);
+        $this->set('prev_action',$action);
+        $this->set(compact('count','parameter','requests','value'));
+        $requests = $this->paginate($requests);
+        $role=$this->Auth->user();
+        $this->set('role',$role);
+        $this->render("index");
+    }	
 
     /**
      * View method
@@ -93,7 +114,7 @@ class RequestsController extends AppController
            $name=$request2->username;
        $date= date('m');
        $results3 = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
-       $date= $results3[0]["inquiry_date"]; 
+       $date= $results3[0]["inquiry_date"];
        $results2 = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")',['name'=>$name,'date'=>$date])->fetchAll('assoc');
         //$this->set('request2', $results);
         //$this->set('request3', $results2[0][total_amount]);
@@ -102,28 +123,45 @@ class RequestsController extends AppController
         $role=$this->Auth->user();
         $this->set('role',$role);
     }
-    
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $request = $this->Requests->newEntity();
-        if ($this->request->is('post')) {
-            $request = $this->Requests->patchEntity($request, $this->request->getData());
-            if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The request could not be saved. Please, try again.'));
+    public function export(){
+        $parameter = $this->request->query('parameter');
+        $value = $this->request->query('value');
+        $action = $this->request->query('action');
+        if($value!=null && $parameter!=null){
+           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
-        $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
-        $this->set(compact('request', 'denialReasons'));
+        else{
+           $where_clause= $this->SearchQuery->getRequests($action);
+        }
+        if($where_clause== false){
+            $this->redirect(['action' => 'index']); 
+        }
+        $requests=$this->Requests->find('all')
+                    ->where($where_clause)
+                ->contain(['DenialReasons', 'Articles', 'Transactions']);
+        
+        $data = $requests;
+        $this->response->download('export.csv');
+        //$_header=["id"];
+	//$_extract=['id','username','transaction.amount_paid'];
+        $column_values_requests=$this->SearchQuery->setCsvColumns($this->Requests->schema()->columns());
+        $this->loadModel('Transactions');
+        $column_values_transactions=$this->SearchQuery->setCsvColumns($this->Transactions->schema()->columns(),'transaction');
+        $this->loadModel('DenialReasons');
+        $column_values_denial_reasons=$this->SearchQuery->setCsvColumns($this->DenialReasons->schema()->columns(),'denial_reason');
+        $this->loadModel('Articles');
+        $column_values_articles=$this->SearchQuery->setCsvColumns($this->Articles->schema()->columns(),'article');
+        $column_values=array_merge($column_values_requests,$column_values_transactions,$column_values_denial_reasons,$column_values_articles);
+        $_extract=$column_values;
+        $_header=$column_values;
+        $this->set(compact('column_values'));
+        $_serialize = 'data';
+   	$this->set(compact('data', '_serialize','_extract','_header'));
+	$this->viewBuilder()->className('CsvView.Csv');
+	return;
+        
     }
-   
+
     /**
      * Edit method
      *
@@ -300,6 +338,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
         
         
     }
@@ -318,6 +357,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Paid requests method
@@ -337,6 +377,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Denied requests method
@@ -353,6 +394,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
         $this->set('role',$role);
+        $this->render("index");
     }
     /*
      * Denial Checker method
@@ -398,6 +440,192 @@ class RequestsController extends AppController
   }
     }
     
+    
+    public function reports(){
+
+
+         $query1=$this->Requests->find('all');
+         $query1->select([
+            'Requests.school',
+            'count' => $query1->func()->count('*'),
+         ])
+        ->group('Requests.school')
+        ->order(['count' => 'DESC']);
+         $query1->hydrate(false); // Results as arrays instead of entities
+         $result = $query1->toList();
+         $result= json_encode($result);
+         $this->set('query1',$result);
+    }
+    /*
+     * Test method created to check if schoolRequests and other actions for the reports wopuld work fine.
+     * 
+     * public function getDates(){
+        $this->viewBuilder()->layout('ajax');
+        $FY='';
+        $where_clause= $this->SearchQuery->getDates($FY);
+        //$this->set("details",$where_clause);
+        $query1=$this->Requests->find('all');
+        $query1->select([
+       'parameter'=>'Requests.school',
+       'value' => $query1->func()->count('*'),
+        ])
+       ->group('Requests.school')
+       ->order(['value' => 'DESC'])
+       ->where($where_clause);
+        $query1->hydrate(false); // Results as arrays instead of entities
+        $result = $query1->toList();
+        $this->set("details", json_encode($result));
+        $this->render('ajax');
+    }*/
+
+    public function schoolRequests(){
+         $this->viewBuilder()->layout('ajax');
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+             $FY= $_GET['FY'];
+             $where_clause= $this->SearchQuery->getDates($FY);
+             $query1=$this->Requests->find('all');
+            $query1->select([
+           'parameter'=>'Requests.school',
+           'value' => $query1->func()->count('*'),
+            ])
+           ->group('Requests.school')
+           ->order(['value' => 'DESC'])
+           ->where($where_clause);
+            $query1->hydrate(false); // Results as arrays instead of entities
+            $result = $query1->toList();
+            $this->set("details", json_encode($result));
+           }
+        $this->render('ajax');
+    }
+        public function budgetRequests(){
+         $this->viewBuilder()->layout('ajax');
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+             $FY= $_GET['FY'];
+             $where_clause= $this->SearchQuery->getDates($FY);
+             $query1=$this->Requests->find('all');
+            $query1->select([
+           'parameter'=>'Requests.school',
+           'value' => $query1->func()->sum('Requests.amount_requested'),
+            ])
+           ->group('Requests.school')
+           ->order(['value' => 'DESC'])
+           ->where($where_clause);
+            $query1->hydrate(false); // Results as arrays instead of entities
+            $result = $query1->toList();
+            $this->set("details", json_encode($result));
+           }
+        $this->render('ajax');
+    }
+    public function publisherCosts(){
+         $this->viewBuilder()->layout('ajax');
+                      $query1=$this->Requests->find('all');
+         if ($this->request->is('ajax') && $this->request->is('get') )
+           {
+             $FY= $_GET['FY'];
+             $where_clause= $this->SearchQuery->getDates($FY);
+             $query1=$this->Requests->find('all');
+            $query1->select([
+           'parameter'=>'Requests.publisher',
+           'value' => $query1->func()->sum('Requests.amount_requested'),
+            ])
+           ->group('Requests.publisher')
+           ->order(['value' => 'DESC'])
+           ->where($where_clause);
+            $query1->hydrate(false); // Results as arrays instead of entities
+            $result = $query1->toList();
+            $this->set("details", json_encode($result));
+           }
+        $this->render('ajax');
+    }
+        public function getSparc(){
+        $spreadsheet = new Spreadsheet();
+        $writer = new Xlsx($spreadsheet);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle('A5:G5')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('A')->setWidth(68);
+        $sheet->getDefaultColumnDimension()->setWidth(14);
+        $sheet->getRowDimension('1')->setRowHeight(21);
+        $sheet->getRowDimension('2')->setRowHeight(21);
+        $sheet->getRowDimension('5')->setRowHeight(45);
+        $sheet->getCell('A1')->setValue('University Library System, University of Pittsburgh');
+        $sheet->getCell('A2')->setValue('Author Fee Fund');
+        $sheet->getCell('A15')->setValue('Expenditures');
+        $styleArray = [
+                    'font' => [
+                        'bold' => true,
+                        'size' => 16
+                    ],
+                ];
+        $sheet->getStyle('A1:A2')->applyFromArray($styleArray);
+        $rowArray = ['# Articles Approved:','# Articles Reimbursed:','# Unique Submitting Authors:','# Unique Departments:','# Unique Journals:','# Unique Publishers:'];
+        $sheet->fromArray(
+                        $rowArray,  // The data to set
+                        NULL,        // Array values with this value will not be set
+                        'B5'         // Top left coordinate of the worksheet range where
+                                     //    we want to set these values (default is A1)
+                    );
+                $styleHeader = [
+                    'font' => [
+                        'bold' => true
+                    ],
+                ];
+        $sheet->getStyle('B5:G5')->applyFromArray($styleHeader);
+        $sheet->getStyle('A15')->applyFromArray($styleHeader);
+        $connection = ConnectionManager::get('default');
+                $arrayData=$connection->execute("SELECT B.fiscal_year AS fiscal_year,
+                    count( DISTINCT case when R.funded= 'Approved' then R.id else null end) AS approved,
+                    count( DISTINCT case when R.funded= 'Paid' then R.id else null end) AS paid,
+                    count( DISTINCT R.author_name) AS unique_authors, 
+                    count( DISTINCT R.department) AS unique_departments,
+                    count( DISTINCT R.publication_name) AS unique_journals,
+                    count( DISTINCT R.publisher) AS unique_publishers
+                                                            FROM requests R, budgets B
+                                                            WHERE R.inquiry_date >= B.budget_date_begin
+                                                            AND R.inquiry_date <= budget_date_end
+                                                            AND ((R.funded='Paid')
+                                                            OR (R.funded='Approved'))
+                                                            GROUP BY B.id;
+                   ")->fetchAll('assoc');
+          //$arrayData[0]=array_values($arrayData[0]);
+                $display_arr=[];
+                foreach ($arrayData as $data){
+          $data=array_values($data);
+          array_push($display_arr,$data);
+                }
+                  $sheet->fromArray(
+                        $display_arr,  // The data to set
+                        NULL,        // Array values with this value will not be set
+                        'A6'         // Top left coordinate of the worksheet range where
+                                     //    we want to set these values 
+                    );
+         // $this->set('arrayData',$display_arr);
+        $arrayData=$connection->execute('SELECT B.fiscal_year AS fiscal_year, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
+                              FROM requests R, budgets B
+                              WHERE R.inquiry_date >= B.budget_date_begin
+                              AND R.inquiry_date <= B.budget_date_end
+                              AND (R.funded="Approved" OR R.funded="Paid")
+                              GROUP BY B.id')->fetchAll('assoc');
+        $display_arr=[];
+                foreach ($arrayData as $data){
+          $data=array_values($data);
+          array_push($display_arr,$data);
+                }
+                  $sheet->fromArray(
+                        $display_arr,  // The data to set
+                        NULL,        // Array values with this value will not be set
+                        'A16'         // Top left coordinate of the worksheet range where
+                                     //    we want to set these values (default is A1)
+                    );
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Sparc Report.xlsx"');
+        //header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+        //$this->render('ajax');
+        return;
+    }
+
     /*
      * @param string $user is passed, which can  be received from 
      * $this->Auth->user() . This is the array of the current user who 

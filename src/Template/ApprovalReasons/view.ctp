@@ -14,17 +14,7 @@
     </ul>
 </nav>
 <div class="approvalReasons view large-9 medium-8 columns content">
-    <h3><?= h($approvalReason->id) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Approval Reason') ?></th>
-            <td><?= h($approvalReason->approval_reason) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($approvalReason->id) ?></td>
-        </tr>
-    </table>
+    <h3><?= h($approvalReason->approval_reason).":" ?></h3>
     <div class="row">
         <h4><?= __('Approval Email') ?></h4>
         <?= $approvalReason->approval_email ?>

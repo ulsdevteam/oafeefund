@@ -11,24 +11,22 @@
     <table cellpadding="20" cellspacing="20">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Author Name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('amount_paid') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_paid') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_completed') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('cheque_number') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('request_id') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($transactions as $transaction): ?>
             <tr>
-                <td><?= $this->Number->format($transaction->id) ?></td>
+                <td><?= $this->Html->link($transaction->request->author_name, ['controller' => 'Requests', 'action' => 'view', $transaction->request->id]) ?></td>
                 <td><?= $this->Number->format($transaction->amount_paid) ?></td>
                 <td><?= h($transaction->date_paid) ?></td>
                 <td><?= h($transaction->date_completed) ?></td>
                 <td><?= $this->Number->format($transaction->cheque_number) ?></td>
-                <td><?= $transaction->has('request') ? $this->Html->link($transaction->request->id, ['controller' => 'Requests', 'action' => 'view', $transaction->request->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $transaction->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $transaction->id]) ?>

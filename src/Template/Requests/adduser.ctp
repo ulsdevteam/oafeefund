@@ -25,13 +25,13 @@
     <fieldset>
         <legend><?= __('OAPPP funding') ?></legend>
         <?php
-            echo $this->Form->control('username');
-            echo $this->Form->button('AutoFill',['type'=>'button','onclick'=>'auto()']);
-            echo "</br>";
-            echo $this->Form->control('author_name');
-            echo $this->Form->control('email');
+            echo $this->Form->control('username',['default'=>$details["username"]]);
+            // echo $this->Form->button('AutoFill',['type'=>'button','onclick'=>'auto()']);
+            //echo "</br>";
+            echo $this->Form->control('author_name',['default'=>$details["first_name"]." ".$details["last_name"]]);
+            echo $this->Form->control('email',['default'=>$details["email"]]);
             echo $this->Form->control('school');
-            echo $this->Form->control('department');
+            echo $this->Form->control('department',['default'=>$details["department"]]);
             echo $this->Form->control('publisher');
             echo $this->Form->control('publication_name');
             echo $this->Form->control('amount_requested');
