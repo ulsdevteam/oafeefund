@@ -81,7 +81,11 @@ class AppController extends Controller
         'authorize'=>array("Controller"),
         'storage' => 'Memory'
             ]);  
-
+	$files = glob('D:\Sites\feefund-openaccess\webroot\xlsx\*'); // get all file names
+        foreach($files as $file){ // iterate files
+  	if(is_file($file))
+    		unlink($file); // delete file
+	}
         /*
          * Enable the following components for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html

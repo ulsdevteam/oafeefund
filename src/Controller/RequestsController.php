@@ -9,6 +9,7 @@ use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\SearchQueryComponent;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
@@ -544,7 +545,7 @@ class RequestsController extends AppController
 
     public function getSparc(){
         $spreadsheet = new Spreadsheet();
-        $writer = new Xlsx($spreadsheet);
+        $writer = new Xls($spreadsheet);
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->getStyle('A5:G5')->getAlignment()->setWrapText(true);
         $sheet->getColumnDimension('A')->setWidth(68);
@@ -621,17 +622,15 @@ class RequestsController extends AppController
                         'A16'         // Top left coordinate of the worksheet range where
                                      //    we want to set these values (default is A1)
                     );
-        $this->autoRender= false;
-        $export=tempnam(TMP."/xlsx", "export_");
-        $writer->save($export);
+	
+	$this->autoRender= false;
+        $export='D:\Sites\feefund-openaccess\webroot\xlsx\Sparc_new.xls';
         $file['path']=$export;
-        $this->response->type('application/vnd.ms-excel');
-        $this->response->file(
-            $file['path'],
-            ['download' => true, 'name' => 'Sparc Report.xlsx']
-        );
+	$writer->save($export);
+	$this->redirect('/xlsx/Sparc_new.xls');
+	/**sleep(10);
         $filed = new File($export);
-        $filed->delete();
+        $filed->delete();**/ 
     }
 
     /*
@@ -642,8 +641,14 @@ class RequestsController extends AppController
      * is given.
      * @return boolean , true if access granted. 
      */
+    public function isInfo(){
+	$this->autoRender = false;
+	phpinfo();
+	$this->response->type('text/plain');
+	exit();
+	}
     public function isAuthorized($user)
-   { 
+    { 
         if (isset($user['role']) && $user['role'] === 'admin') {
         return true;
     }
