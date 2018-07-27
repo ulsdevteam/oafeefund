@@ -174,7 +174,7 @@
                     
                     <?php if(h($request->funded)=="Pending"): 
                     {
-                    if($role->role === 'admin'){
+                    if($role["role"] === 'admin'){
                     echo $this->Html->link(__('Approve'), ['action' => 'approve', $request->id]);
                     }
                     }
@@ -183,7 +183,7 @@
                     <?php 
                      if(h($request->funded)=="Pending"): 
                      {
-                     if($role->role === 'admin'){
+                     if($role["role"] === 'admin'){
                     echo $this->Html->link(__('Deny'), ['action' => 'deny', $request->id]); 
                      }
                      }
@@ -192,7 +192,7 @@
                     <?php 
                      if(h($request->funded)=="Approved"): 
                      {
-                     if($role->role === 'payment_team'){
+                     if($role["role"] === 'payment_team'){
                      echo $this->Html->link(__('Pay'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
                      }
                      }
@@ -201,7 +201,7 @@
                     <?php 
                     $article=$request->article;
                     $transaction=$request->transaction;
-                    if( (h($request->funded)=="Paid") && (($role->role === 'OSCP_students') || ($role->role === 'admin'))){
+                    if( (h($request->funded)=="Paid") && (($role["role"] === 'OSCP_students') || ($role["role"] === 'admin'))){
                         if(empty($request->article))
                         {
                             echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
