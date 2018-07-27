@@ -33,7 +33,7 @@ class RequestsController extends AppController
         $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
         
         $request = $this->Requests->newEntity();
-        $res="hok14"; // test case, replace with env('HTTP_EDUPERSONPRINCIPALNAME')
+        $res= preg_replace('/@.*$/', '', env('HTTP_EDUPERSONPRINCIPALNAME'));
         $var= $this->Ldap->getInfo($res);
         $this->set("details",$var);
         if ($this->request->is('post')) {
