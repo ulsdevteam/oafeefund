@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use App\Auth\EnvAuthenticate;
 use App\Controller\Component\LdapComponent;
 use App\Controller\Component\SearchQueryComponent;
 use Cake\View\Helper;
@@ -73,17 +74,13 @@ class AppController extends Controller
         $this->loadComponent('SearchQuery');
         $this->loadComponent('Auth',[
         'authenticate' => [
-            'Form' => [
+            'Env' => [
                 'fields' => ['username' => 'user']
-            ]
-        ],
-        'loginAction' => [
-            'controller' => 'Users',
-            'action' => 'login'
-        ],
-        'authorize' => array('Controller'), // Added this line
-        'storage' => 'Session'
-    ]);  
+            ],
+    ],
+        'authorize'=>array("Controller"),
+        'storage' => 'Memory'
+            ]);  
 
         /*
          * Enable the following components for recommended CakePHP security settings.
