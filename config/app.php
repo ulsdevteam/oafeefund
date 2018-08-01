@@ -55,7 +55,13 @@ return [
             'locales' => [APP . 'Locale' . DS],
         ],
     ],
-
+    
+    'Ldap' => [
+         'ldapUser' => 'REPLACED_LDAP_USER',  
+         'ldapPassword' => 'REPLACED_LDAP_PASSWORD',
+         'ldapServer' => 'ldap://REPLACED_LDAP_HOST', 
+         'ldapPort' => '389'
+        ],
     /**
      * Security and encryption configuration
      *

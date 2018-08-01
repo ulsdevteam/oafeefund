@@ -3,7 +3,8 @@
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
-
+use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
 class LdapComponent extends Component{
     /*
      * getInfo method
@@ -21,17 +22,18 @@ class LdapComponent extends Component{
      */
     public static function getInfo($user)
     {
+        $Ldap=Configure::read('Ldap');
         $attributes = array('givenName','sn','mail','department'); 
         $filter = "(cn=$user)";
-        $ldapUser = 'REPLACED_LDAP_USER'; 
-        $ldappassword = 'REPLACED_LDAP_PASSWORD';
-        $ldapServer = 'ldap://REPLACED_LDAP_HOST';
-        $ldapPort = '389';
+        $ldapUser = $Ldap['ldapUser'];
+        $ldapPassword = $Ldap['ldapPassword'];
+        $ldapServer = $Ldap['ldapServer'];
+        $ldapPort = $Ldap['ldapPort'];
         $ldap = ldap_connect($ldapServer) 
           or die("Could not connect to $ldapServer");
-        $ldapbind=ldap_bind($ldap, $ldapUser, $ldappassword);
+        $ldapbind=ldap_bind($ldap, $ldapUser, $ldapPassword);
         $baseDN = 'REPLACED_LDAP_CONTEXT';
-        if (ldap_bind($ldap, $ldapUser, $ldappassword))
+        if (ldap_bind($ldap, $ldapUser, $ldapPassword))
               {
         $result = ldap_search($ldap, $baseDN, $filter,$attributes);
         $array = ldap_get_entries($ldap, $result);
