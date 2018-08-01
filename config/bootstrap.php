@@ -218,7 +218,4 @@ if (Configure::read('debug')) {
 //Plugin::load('TinyMCE', ['autoload' => true]);
 
 
-$dsn = 'mysql://hok14:test@localhost/OAAFFApplication';
-ConnectionManager::config('default2', ['url' => $dsn]);
-
 

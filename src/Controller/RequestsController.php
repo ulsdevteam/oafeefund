@@ -11,8 +11,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Cake\Filesystem\Folder;
-use Cake\Filesystem\File;
+
 //use Cake\Database\Schema\TableSchema;
 /**
  * Requests Controller
@@ -641,12 +640,6 @@ class RequestsController extends AppController
      * is given.
      * @return boolean , true if access granted. 
      */
-    public function isInfo(){
-	$this->autoRender = false;
-	phpinfo();
-	$this->response->type('text/plain');
-	exit();
-	}
     public function isAuthorized($user)
     { 
         if (isset($user['role']) && $user['role'] === 'admin') {
