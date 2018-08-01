@@ -624,10 +624,10 @@ class RequestsController extends AppController
                     );
 	
 	$this->autoRender= false;
-        $export='D:\Sites\feefund-openaccess\webroot\xlsx\Sparc_new.xls';
+        $export=WWW_ROOT.'xlsx'.DS.'Sparc Reports.xls';
         $file['path']=$export;
 	$writer->save($export);
-	$this->redirect('/xlsx/Sparc_new.xls');
+	$this->redirect('/xlsx/Sparc Reports.xls');
 	/**sleep(10);
         $filed = new File($export);
         $filed->delete();**/ 

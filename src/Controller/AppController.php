@@ -81,10 +81,17 @@ class AppController extends Controller
         'authorize'=>array("Controller"),
         'storage' => 'Memory'
             ]);  
-	$files = glob('D:\Sites\feefund-openaccess\webroot\xlsx\*'); // get all file names
+	$files = glob(WWW_ROOT.'xlsx'.DS.'*'); // get all file names
         foreach($files as $file){ // iterate files
   	if(is_file($file))
-    		unlink($file); // delete file
+    		$file_time= strtotime(date ("m-d-Y H:i:s.",filemtime($file)));
+                $curr_time= strtotime(date ("m-d-Y H:i:s."));
+                $diff= abs($file_time-$curr_time);
+                $this->Flash->success($diff." ".$diff/60);
+                if(($diff/60)>5)
+                {
+                unlink($file); // delete file
+                }
 	}
         /*
          * Enable the following components for recommended CakePHP security settings.
