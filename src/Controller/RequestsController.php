@@ -229,7 +229,6 @@ class RequestsController extends AppController
          * @var Cake\Mailer\Email Object $email, contains the email template 
          * to be sent.
          */
-        
         $requests=$this->Requests->find('all')
                 ->where(['id' => $id]);
         $results = $requests->first();
@@ -241,7 +240,9 @@ class RequestsController extends AppController
        ]);
         $results2 = $requests2->toArray();
         $this->set('results2',$results2);
-        if($this->request->data != null)
+        if(($this->request->data!= null)) 
+        {
+        if(($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) 
         {
         $approved=$this->Requests->query();
         $approved->update()
@@ -268,6 +269,15 @@ class RequestsController extends AppController
         ->send("$body");
         $this->Flash->success(__('The approval mail has been sent.'));
         return $this->redirect(['action' => 'index']);
+        }
+        else if(($this->request->data["subject"] == null)){
+            $message="Please enter a Subject";
+            $this->Flash->error($message);
+        }
+        else if(($this->request->data["Message_Body"] == null)){
+            $message="Please enter some Content";
+            $this->Flash->error($message);
+        }
         }
     }
      /*
@@ -298,6 +308,8 @@ class RequestsController extends AppController
         $this->set('results2',$results2);
         if($this->request->data != null)
         {
+        if(($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) 
+        {
         $data = $this->request->data;
         $approved=$this->Requests->query();
         $approved->update()
@@ -319,11 +331,18 @@ class RequestsController extends AppController
         //$this->Flash->success(__($data));
         $this->Flash->success(__('The denial mail has been sent.'));
         return $this->redirect(['action' => 'index']);
-        
-        
+        }
+        else if(($this->request->data["subject"] == null)){
+            $message="Please enter a Subject";
+            $this->Flash->error($message);
+        }
+        else if(($this->request->data["Message_Body"] == null)){
+            $message="Please enter some Content";
+            $this->Flash->error($message);
         }
         
  
+    }
     }
     /*
      * Pending requests method
