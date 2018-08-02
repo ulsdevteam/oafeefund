@@ -597,7 +597,7 @@ class RequestsController extends AppController
         $sheet->getStyle('A15')->applyFromArray($styleHeader);
         $connection = ConnectionManager::get('default');
                 $arrayData=$connection->execute("SELECT B.fiscal_year AS fiscal_year,
-                    count( DISTINCT case when R.funded= 'Approved' then R.id else null end) AS approved,
+                    count( DISTINCT case when (R.funded= 'Approved' OR R.funded= 'Paid') then R.id else null end) AS approved,
                     count( DISTINCT case when R.funded= 'Paid' then R.id else null end) AS paid,
                     count( DISTINCT R.author_name) AS unique_authors, 
                     count( DISTINCT R.department) AS unique_departments,
