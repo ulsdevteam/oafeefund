@@ -188,12 +188,12 @@ class RequestsController extends AppController
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
         $this->set(compact('request', 'denialReasons'));
         $this->loadModel('DenialReasons');
-        $requests2=$this->DenialReasons->find('list', [
+        $denial_reasons=$this->DenialReasons->find('list', [
     'keyField' => 'id',
     'valueField' => 'denial_reason'
        ]);
-        $results2 = $requests2->toArray();
-        $this->set('results2',$results2);
+        $denial_reasons = $denial_reasons->toArray();
+        $this->set('denial_reasons',$denial_reasons);
     }
 
     /**

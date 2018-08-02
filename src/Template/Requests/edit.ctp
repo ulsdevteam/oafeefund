@@ -11,8 +11,7 @@
         <legend><?= __('Edit Request') ?></legend>
         <?php
             echo $this->Form->control('username');
-            echo $this->Form->control('first_name');
-            echo $this->Form->control('last_name');
+            echo $this->Form->control('author_name');
             echo $this->Form->control('email');
             echo $this->Form->control('school');
             echo $this->Form->control('department');
@@ -21,11 +20,11 @@
             echo $this->Form->control('amount_requested');
             echo $this->Form->control('article_title');
             echo $this->Form->control('inquiry_date');
-            echo $this->Form->control('author_status');
-            echo $this->Form->control('bmc');
-            echo $this->Form->control('hs');
-            echo $this->Form->control('funded');
-            echo $this->Form->control('denial_id', ['options' => $results2, 'empty' => true]); // Ask Clinton
+            echo $this->Form->control('author_status',['options'=> ['student' => 'Student', 'professor' => 'Professor', 'post-Doc' => 'Post-Doc', 'staff' => 'Staff'], 'empty'=> true]);
+            echo $this->Form->control('bmc',['options'=> ['Y'=> 'Yes','N'=>'No'], 'empty'=> true]);
+            echo $this->Form->control('hs',['options'=> ['Y'=> 'Yes','N'=>'No'], 'empty'=> true]);
+            echo $this->Form->control('funded',['options' => ['Approved' => 'Approved','Denied'=>'Denied','Paid'=>'Paid','Pending'=>'Pending'], 'empty' => false]);
+            echo $this->Form->control('denial_id', ['options' => $denial_reasons, 'empty' => true]); // Ask Clinton
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
