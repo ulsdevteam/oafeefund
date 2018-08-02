@@ -17,13 +17,13 @@
         <tr>
                     <?php if(h($request->funded)=="Pending"): 
                     {
-                    if($role->role === 'admin'){
+                    if($role['role'] === 'admin'){
                     
                     echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id],['class' => 'button', 'target' => '_blank']); //
                     
                     
                     } 
-                     if($role->role === 'admin'){
+                     if($role['role'] === 'admin'){
                     echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id],['class' => 'button', 'target' => '_blank']); 
                     echo "<br>"; 
                     
@@ -33,7 +33,7 @@
                     <?php 
                     if(h($request->funded)=="Approved"): 
                     {
-                     if($role->role === 'payment_team'){
+                     if($role['role'] === 'payment_team'){
                      echo $this->Html->link(__('Payment for this request'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
                      echo "<br>"; 
                      }
@@ -42,7 +42,7 @@
                     ?>
             
                     <?php 
-                    if( (h($request->funded)=="Paid") && (($role->role === 'OSCP_students') || ($role->role === 'admin'))){
+                    if( (h($request->funded)=="Paid") && (($role['role'] === 'OSCP_students') || ($role['role'] === 'admin'))){
                         if(empty($request->article))
                         {
                             echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
