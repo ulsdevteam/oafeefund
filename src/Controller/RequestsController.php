@@ -105,22 +105,20 @@ class RequestsController extends AppController
         ]);
         
         $connection = ConnectionManager::get('default');
-        $this->set('request', $request);
         $other_requests= $connection->execute('SELECT Requests . * FROM requests Requests WHERE Requests.username IN ( SELECT Requests.username AS inquiry_date FROM requests Requests WHERE Requests.id = :id) AND Requests.username!="" AND Requests.id!= :id',['id'=>$id])->fetchAll('assoc');
-        $this->set('other_requests',$other_requests);
-        $this->set('request', $request);
-        $request2= $this->Requests->find('all')
-                ->where(['id'=>$id]);
-           $request2= $request2->first();   
-            $this->loadModel('budgets');
-           $name=$request2->username;
-       $date= date('m');
-       $results3 = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
-       $date= $results3[0]["inquiry_date"];
-       $results2 = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")',['name'=>$name,'date'=>$date])->fetchAll('assoc');
+        $username= $this->Requests->find('all')
+                ->select(['username'])
+                ->where(['id'=>$id])
+                ->first()->username;  
+        $this->loadModel('budgets');
+        $date= date('m');
+        $currentRequestDate = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
+        $date= $currentRequestDate[0]["inquiry_date"];
+        $Requestyear_totalamount = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")',['name'=>$username,'date'=>$date])->fetchAll('assoc');
         //$this->set('request2', $results);
         //$this->set('request3', $results2[0][total_amount]);
-        $this->set('request3', $results2[0]["total_amount"]);
+        $Requestyear_totalamount=$Requestyear_totalamount[0]["total_amount"];
+        $this->set(compact('other_requests','request','Requestyear_totalamount'));
         //$this->set('request3', intval($date));
         $role=$this->Auth->user();
         $this->set('role',$role);
@@ -189,8 +187,8 @@ class RequestsController extends AppController
         $this->set(compact('request', 'denialReasons'));
         $this->loadModel('DenialReasons');
         $denial_reasons=$this->DenialReasons->find('list', [
-    'keyField' => 'id',
-    'valueField' => 'denial_reason'
+            'keyField' => 'id',
+            'valueField' => 'denial_reason'
        ]);
         $denial_reasons = $denial_reasons->toArray();
         $this->set('denial_reasons',$denial_reasons);

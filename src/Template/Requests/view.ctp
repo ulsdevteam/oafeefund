@@ -11,7 +11,7 @@
         $transaction=$request->transaction;
     ?>
     <h3><?php echo "Author Name: ". h($request->author_name) ."  (Username: ". h($request->username). ")" ?></h3>
-    <h3><?php echo "Total amount used: $".h($request3)."";
+    <h3><?php echo "Total amount used: $".h($Requestyear_totalamount)."";
     ?></h3>
         <div class="options1">
         <tr>
