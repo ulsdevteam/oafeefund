@@ -151,7 +151,6 @@
             </tr>
         <?php foreach ($other_requests as $otr): ?>
         <tr>
-                <td><?= h($otr["id"] ) ?></td>
                 <td><?= h($otr["publisher"] ) ?></td>
                 <td><?= h($otr["publication_name"] ) ?></td>
                 <td><?= h($otr["article_title"] ) ?></td>
