@@ -37,7 +37,11 @@ class RequestsController extends AppController
         $var= $this->Ldap->getInfo($res);
         $this->set("details",$var);
         if ($this->request->is('post')) {
-            $request = $this->Requests->patchEntity($request, $this->request->getData());
+            $receivedRequest=$this->request->data;
+            $receivedRequest['bmc']="Unknown";
+            $receivedRequest['hs']="Unknown";
+            $receivedRequest['funded']="Pending";
+            $request = $this->Requests->patchEntity($request, $receivedRequest);
             if ($this->Requests->save($request)) {
                 $this->Flash->success(__('The request has been submitted.'));
                return $this->redirect(['action' => 'saved']);
@@ -106,14 +110,15 @@ class RequestsController extends AppController
         
         $connection = ConnectionManager::get('default');
         $other_requests= $connection->execute('SELECT Requests . * FROM requests Requests WHERE Requests.username IN ( SELECT Requests.username AS inquiry_date FROM requests Requests WHERE Requests.id = :id) AND Requests.username!="" AND Requests.id!= :id',['id'=>$id])->fetchAll('assoc');
-        $username= $this->Requests->find('all')
+       /* $username= $this->Requests->find('all')
                 ->select(['username'])
                 ->where(['id'=>$id])
-                ->first()->username;  
+                ->first()->username;  */
+        $username= $request["username"];
         $this->loadModel('budgets');
         $date= date('m');
-        $currentRequestDate = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
-        $date= $currentRequestDate[0]["inquiry_date"];
+       // $currentRequestDate = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
+        $date= $request["inquiry_date"];
         $Requestyear_totalamount = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")',['name'=>$username,'date'=>$date])->fetchAll('assoc');
         //$this->set('request2', $results);
         //$this->set('request3', $results2[0][total_amount]);

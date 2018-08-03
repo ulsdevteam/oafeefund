@@ -45,10 +45,6 @@
             //$attributes= $this->Form->control('author_status');
 
             echo $this->Form->radio('author_status', $options, $attributes); 
-            echo $this->Form->hidden('bmc');
-            echo $this->Form->hidden('hs');
-            echo $this->Form->hidden('funded');
-            echo $this->Form->hidden('denial_id', ['options' => $denialReasons, 'empty' => true]);
         ?>
     </fieldset>
     
