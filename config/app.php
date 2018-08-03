@@ -57,9 +57,9 @@ return [
     ],
     
     'Ldap' => [
-         'ldapUser' => 'REPLACED_LDAP_USER',  
-         'ldapPassword' => 'REPLACED_LDAP_PASSWORD',
-         'ldapServer' => 'ldap://REPLACED_LDAP_HOST', 
+         'ldapUser' => 'LDAP_USER'
+         'ldapPassword' => 'LDAP_PASSWORD',
+         'ldapServer' => 'LDAP_SERVER', 
          'ldapPort' => '389'
         ],
     /**
@@ -70,7 +70,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', 'REPLACED_SALT_VALUE'),
+        'salt' => env('SECURITY_SALT', 'SALT_VALUE'),
     ],
 
     /**
@@ -236,9 +236,9 @@ return [
              * the following line and set the port accordingly
              */
             //'port' => 'non_standard_port_number',
-            'username' => 'REPLACED_DATABASE_USER',
-            'password' => 'REPLACED_DATABASE_PASSWORD',
-            'database' => 'REPLACED_DATABASE_NAME',
+            'username' => 'DATABASE_USER',
+            'password' => 'DATABASE_PASSWORD',
+            'database' => 'DATABASE_NAME',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'flags' => [],
