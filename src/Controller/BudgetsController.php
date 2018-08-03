@@ -22,8 +22,7 @@ class BudgetsController extends AppController
      */
     public function index()
     {
-        $budgets = $this->paginate($this->Budgets);
-        $this->loadModel('requests');
+        $budgets=$this->paginate($this->Budgets);
         $connection = ConnectionManager::get('default');
         $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
                                         FROM requests R, budgets B
@@ -31,8 +30,18 @@ class BudgetsController extends AppController
                                         AND R.inquiry_date <= B.budget_date_end
                                         AND (R.funded="Approved" OR R.funded="Paid")
                                         GROUP BY B.id')->fetchAll('assoc');
+        $newBudgets=array();
+        foreach ($budgets as $budget){
+            foreach($results as $result){
+         //       $this->Flash->success($result["id"].$budget->id);
+                if($result["id"]==$budget->id){
+                    $budget->sum_amtreqt=$result["sum_amtreqt"];
+                    array_push($newBudgets, $budget);
+                }
+            }
+        }
         $this->set('results',$results);
-        $this->set(compact('budgets'));
+        $this->set('budgets',$newBudgets);
     }
 
     /**

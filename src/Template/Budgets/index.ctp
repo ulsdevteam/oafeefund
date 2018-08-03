@@ -34,7 +34,7 @@
                 <td><?= h($budget->budget_date_begin) ?></td>
                 <td><?= h($budget->budget_date_end) ?></td>
                 <td><?= $this->Number->format($budget->total_budget) ?></td>
-                <td><?= h($results[$i]['sum_amtreqt']) ?></td>
+                <td><?= $this->Number->format($budget->sum_amtreqt) ?></td>
                 <td><?= $this->Number->format($budget->budget_per_person) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $budget->id]) ?>
