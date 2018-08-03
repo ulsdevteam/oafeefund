@@ -141,7 +141,6 @@
         <?php if (!empty($other_requests)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Publisher') ?></th>
                 <th scope="col"><?= __('Publication Date') ?></th>
                 <th scope="col"><?= __('Article Title') ?></th>
