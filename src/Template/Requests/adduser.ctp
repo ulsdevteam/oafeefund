@@ -61,7 +61,10 @@
         $.ajax({
 			type:'GET',
 			cache: false,
-			url: '/users/details',
+			url: '<?=  $this->Url->build([
+                                        "controller" => "Users",
+                                        "action" => "details"
+                                    ]); ?>',
                         data:{val: val},
 			success: function(response) {					
 				//success 
