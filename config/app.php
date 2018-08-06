@@ -61,7 +61,7 @@ return [
          'ldapPassword' => 'LDAP_PASSWORD',
          'ldapServer' => 'LDAP_SERVER', 
          'ldapPort' => '389',
-         'ldapBaseDN' => 'REPLACED_LDAP_CONTEXT',
+         'ldapBaseDN' => 'LDAP_BASE_DN',
         ],
     /**
      * Security and encryption configuration
