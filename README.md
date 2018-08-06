@@ -16,4 +16,9 @@ Software for Normalization of Data: Python (Jupyter Notebook)
 * Effective communication between different teams was not possible.
 
 
+## Copyright and License
+
+Copyright (c) University of Pittsburgh
+
+Licensed under the GNU Public License, version 2.0 or later.  See LICENSE file for details.
 
