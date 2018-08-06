@@ -32,7 +32,7 @@ class LdapComponent extends Component{
         $ldap = ldap_connect($ldapServer) 
           or die("Could not connect to $ldapServer");
         $ldapbind=ldap_bind($ldap, $ldapUser, $ldapPassword);
-        $baseDN = 'REPLACED_LDAP_CONTEXT';
+        $baseDN = $Ldap['ldapBaseDN'];
         if (ldap_bind($ldap, $ldapUser, $ldapPassword))
               {
         $result = ldap_search($ldap, $baseDN, $filter,$attributes);
