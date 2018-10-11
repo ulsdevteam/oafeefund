@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Datasource\ConnectionManager;
+
 /**
  * Budgets Controller
  *
@@ -15,9 +16,9 @@ class BudgetsController extends AppController
 
     /**
      * Index method
-     * This method is used to show the budgets for all the fiscal years, it also 
-     * does an aggregation on each year to compute the total sum of budget which 
-     * was used in each year. 
+     * This method is used to show the budgets for all the fiscal years, it also
+     * does an aggregation on each year to compute the total sum of budget which
+     * was used in each year.
      * @return \Cake\Http\Response|void
      */
     public function index()
@@ -31,17 +32,17 @@ class BudgetsController extends AppController
                                         AND (R.funded="Approved" OR R.funded="Paid")
                                         GROUP BY B.id')->fetchAll('assoc');
         $newBudgets=array();
-        foreach ($budgets as $budget){
-            foreach($results as $result){
-         //       $this->Flash->success($result["id"].$budget->id);
-                if($result["id"]==$budget->id){
+        foreach ($budgets as $budget) {
+            foreach ($results as $result) {
+                //       $this->Flash->success($result["id"].$budget->id);
+                if ($result["id"]==$budget->id) {
                     $budget->sum_amtreqt=$result["sum_amtreqt"];
                     array_push($newBudgets, $budget);
                 }
             }
         }
-        $this->set('results',$results);
-        $this->set('budgets',$newBudgets);
+        $this->set('results', $results);
+        $this->set('budgets', $newBudgets);
     }
 
     /**
@@ -120,7 +121,6 @@ class BudgetsController extends AppController
         } else {
             $this->Flash->error(__('The budget could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }

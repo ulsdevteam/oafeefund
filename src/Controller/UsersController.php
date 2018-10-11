@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\LdapComponent;
+
 /**
  * Users Controller
  *
@@ -14,7 +15,6 @@ use App\Controller\Component\LdapComponent;
  */
 class UsersController extends AppController
 {
-
     /**
      * Index method
      *
@@ -26,7 +26,7 @@ class UsersController extends AppController
 
         $this->set(compact('users'));
     }
-    
+
     /**
      * View method
      *
@@ -39,7 +39,6 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
-        
 
         $this->set('user', $user);
     }
@@ -93,15 +92,14 @@ class UsersController extends AppController
      */
     public function details()
     {
-       /* @var String $res , it gives us the username.
-        * @var array $var, it gives us the response from LDAP helper in an */
+        /* @var String $res , it gives us the username.
+         * @var array $var, it gives us the response from LDAP helper in an */
         $this->viewBuilder()->layout('ajax');
-         if ($this->request->is('ajax') && $this->request->is('get') )
-           {
+        if ($this->request->is('ajax') && $this->request->is('get')) {
             $res= $_GET['val'];
             $var= $this->Ldap->getInfo($res);
-            $this->set("details",json_encode($var));
-           }
+            $this->set("details", json_encode($var));
+        }
         $this->render('ajax');
     }
 
@@ -125,24 +123,23 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     /*
-     * @param string $user is passed, which can  be received from 
-     * $this->Auth->user() . This is the array of the current user who 
-     * has logged in. Depending on the permissions of that user's 
-     * specific role in the organization access to the page requested 
+     * @param string $user is passed, which can  be received from
+     * $this->Auth->user() . This is the array of the current user who
+     * has logged in. Depending on the permissions of that user's
+     * specific role in the organization access to the page requested
      * is given.
-     * @return boolean , true if access granted. 
+     * @return boolean , true if access granted.
      */
     public function isAuthorized($user)
-   { 
-        if (isset($user['role']) && $user['role'] === 'admin' ) {
-        return true;
-    }
-      if(isset($user['role']) && (($this->request->action)=="logout"))
-      {
-          return true;
-      }
-      //if(($this->request->action)=="details"){
+    {
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        if (isset($user['role']) && (($this->request->action)=="logout")) {
+            return true;
+        }
+        //if(($this->request->action)=="details"){
          // return true;
       //}
-   }
+    }
 }

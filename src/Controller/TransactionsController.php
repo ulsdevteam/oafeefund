@@ -52,7 +52,7 @@ class TransactionsController extends AppController
     public function add($id=null)
     {
         $transaction = $this->Transactions->newEntity();
-        $this->set('id',$id);
+        $this->set('id', $id);
         if ($this->request->is('post')) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
             if ($this->Transactions->save($transaction)) {
@@ -62,7 +62,7 @@ class TransactionsController extends AppController
                 $approved->update()
                 ->set(['Funded' => 'Paid'])
                 ->where(['id' => $id])
-                ->execute(); 
+                ->execute();
 
                 return $this->redirect(["controller" => "Requests",'action' => 'approvedrequests']);
             }
@@ -70,15 +70,14 @@ class TransactionsController extends AppController
         }
         $requests = $this->Transactions->Requests->find('list', ['limit' => 200]);
         $this->set(compact('transaction', 'requests'));
-        
-        if($id!=null)
-        {
-        $this->loadModel('Requests');
-        $request = $this->Requests->get($id, [
+
+        if ($id!=null) {
+            $this->loadModel('Requests');
+            $request = $this->Requests->get($id, [
             'contain' => ['DenialReasons', 'Articles', 'Transactions']
         ]);
 
-        $this->set('request', $request);
+            $this->set('request', $request);
         }
     }
 
@@ -127,25 +126,24 @@ class TransactionsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
     /*
-     * @param string $user is passed, which can  be received from 
-     * $this->Auth->user() . This is the array of the current user who 
-     * has logged in. Depending on the permissions of that user's 
-     * specific role in the organization access to the page requested 
+     * @param string $user is passed, which can  be received from
+     * $this->Auth->user() . This is the array of the current user who
+     * has logged in. Depending on the permissions of that user's
+     * specific role in the organization access to the page requested
      * is given.
-     * @return boolean , true if access granted. 
+     * @return boolean , true if access granted.
      */
-    public function isAuthorized($user) {
-    // Admin can access every action
-        
-    if (($this->request->action==="index") && isset($user['role']) && $user['role'] === 'admin') {
-        return true;
-    }
-    else if (isset($user['role']) && $user['role'] === 'payment_team') {
-        return true;
-    }
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
 
-    // Default deny
-    return false;
-       }
-       
+        if (($this->request->action==="index") && isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        } elseif (isset($user['role']) && $user['role'] === 'payment_team') {
+            return true;
+        }
+
+        // Default deny
+        return false;
+    }
 }

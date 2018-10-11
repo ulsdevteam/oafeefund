@@ -101,21 +101,20 @@ class ApprovalReasonsController extends AppController
         } else {
             $this->Flash->error(__('The approval reason could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
     /*
-     * @param string $user is passed, which can  be received from 
-     * $this->Auth->user() . This is the array of the current user who 
-     * has logged in. Depending on the permissions of that user's 
-     * specific role in the organization access to the page requested 
+     * @param string $user is passed, which can  be received from
+     * $this->Auth->user() . This is the array of the current user who
+     * has logged in. Depending on the permissions of that user's
+     * specific role in the organization access to the page requested
      * is given.
-     * @return boolean , true if access granted. 
+     * @return boolean , true if access granted.
      */
-    public function isAuthorized($user){ 
+    public function isAuthorized($user)
+    {
         if (isset($user['role']) && $user['role'] === 'admin') {
-        return true;
+            return true;
         }
     }
-    
 }
