@@ -49,7 +49,7 @@ class AppController extends Controller
         }
         // Default deny
         return false;
-    }
+   }
     /**
      * Initialization hook method.
      *
@@ -67,32 +67,32 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
+
         //$this->loadHelper('LdapHelper');
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Ldap');
         $this->loadComponent('SearchQuery');
-        $this->loadComponent('Auth', [
-        'authenticate' => [
-            'Env' => [
-                'fields' => ['username' => 'user']
-            ],
+        $this->loadComponent('Auth',[
+            'authenticate' => [
+                'Env' => [
+                    'fields' => ['username' => 'user']
+                ],
         ],
         'authorize'=>array("Controller"),
         'storage' => 'Memory'
             ]);
-        $files = glob(WWW_ROOT.'xlsx'.DS.'*'); // get all file names
-        foreach ($files as $file) { // iterate files
-    if (is_file($file)) {
-        $file_time= strtotime(date("m-d-Y H:i:s.", filemtime($file)));
-    }
-            $curr_time= strtotime(date("m-d-Y H:i:s."));
+	    $files = glob(WWW_ROOT.'xlsx'.DS.'*'); // get all file names
+        foreach($files as $file) { // iterate files
+            if(is_file($file))
+                $file_time= strtotime(date ("m-d-Y H:i:s.",filemtime($file)));
+            $curr_time= strtotime(date ("m-d-Y H:i:s."));
             $diff= abs($file_time-$curr_time);
             $this->Flash->success($diff." ".$diff/60);
-            if (($diff/60)>5) {
+            if(($diff/60)>5) {
                 unlink($file); // delete file
             }
-        }
+	    }
         /*
          * Enable the following components for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
@@ -109,7 +109,8 @@ class AppController extends Controller
      */
     public function beforeFilter(Event $event)
     {
-        switch ($this->name) { # We get the controller name
+        switch ($this->name) // We get the controller name
+        {
         case 'Requests':
             $this->Auth->allow(['add','saved']); // Allowed if method is addUser or saved
             break;

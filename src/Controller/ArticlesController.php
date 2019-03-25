@@ -128,5 +128,6 @@ class ArticlesController extends AppController
         if (isset($user['role']) && $user['role'] === 'OSCP_students') {
             return true;
         }
+        return false;
     }
 }

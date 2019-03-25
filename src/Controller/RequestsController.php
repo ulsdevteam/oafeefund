@@ -28,14 +28,14 @@ class RequestsController extends AppController
      */
     public function add()
     {
-        /* Now here you can put your default values */
+         /* Now here you can put your default values */
 
         $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
 
         $request = $this->Requests->newEntity();
-        $res= preg_replace('/@.*$/', '', env('HTTP_EDUPERSONPRINCIPALNAME'));
+        $res= $this->Auth->user('username');//preg_replace('/@.*$/', '', env('HTTP_EDUPERSONPRINCIPALNAME'));
         $var= $this->Ldap->getInfo($res);
-        $this->set("details", $var);
+        $this->set("details",$var);
         if ($this->request->is('post')) {
             $receivedRequest=$this->request->data;
             $receivedRequest['bmc']="Unknown";
@@ -53,10 +53,12 @@ class RequestsController extends AppController
         $this->set(compact('request', 'denialReasons'));
         $this->render("adduser");
     }
-    public function saved()
+
+     public function saved()
     {
-        $this->viewBuilder()->layout('default2');
+       $this->viewBuilder()->layout('default2');
     }
+
     /**
      * Index method
      *
@@ -71,7 +73,7 @@ class RequestsController extends AppController
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
     }
 
     public function search()
@@ -79,18 +81,18 @@ class RequestsController extends AppController
         $parameter = $this->request->query('Parameter');
         $value = $this->request->query('value');
         $action = $this->request->query('action');
-        $where_clause= $this->SearchQuery->getRequests($action, $parameter, $value);
-        if ($where_clause== false) {
+        $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
+        if($where_clause== false){
             $this->redirect(['action' => 'index']);
         }
         $requests=$this->Requests->find('all')->where($where_clause);
         $requests_for_count=$requests->toArray();
         $count= sizeof($requests_for_count);
-        $this->set('prev_action', $action);
-        $this->set(compact('count', 'parameter', 'requests', 'value'));
+        $this->set('prev_action',$action);
+        $this->set(compact('count','parameter','requests','value'));
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
         $this->render("index");
     }
 
@@ -101,7 +103,6 @@ class RequestsController extends AppController
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-
     public function view($id = null)
     {
         $request = $this->Requests->get($id, [
@@ -109,37 +110,37 @@ class RequestsController extends AppController
         ]);
 
         $connection = ConnectionManager::get('default');
-        $other_requests= $connection->execute('SELECT Requests . * FROM requests Requests WHERE Requests.username IN ( SELECT Requests.username AS inquiry_date FROM requests Requests WHERE Requests.id = :id) AND Requests.username!="" AND Requests.id!= :id', ['id'=>$id])->fetchAll('assoc');
-        /* $username= $this->Requests->find('all')
-                 ->select(['username'])
-                 ->where(['id'=>$id])
-                 ->first()->username;  */
+        $other_requests= $connection->execute('SELECT Requests . * FROM requests Requests WHERE Requests.username IN ( SELECT Requests.username AS inquiry_date FROM requests Requests WHERE Requests.id = :id) AND Requests.username!="" AND Requests.id!= :id',['id'=>$id])->fetchAll('assoc');
+       /* $username= $this->Requests->find('all')
+                ->select(['username'])
+                ->where(['id'=>$id])
+                ->first()->username;  */
         $username= $request["username"];
         $this->loadModel('budgets');
         $date= date('m');
-        // $currentRequestDate = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
+       // $currentRequestDate = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
         $date= $request["inquiry_date"];
-        $Requestyear_totalamount = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")', ['name'=>$username,'date'=>$date])->fetchAll('assoc');
+        $Requestyear_totalamount = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")',['name'=>$username,'date'=>$date])->fetchAll('assoc');
         //$this->set('request2', $results);
         //$this->set('request3', $results2[0][total_amount]);
         $Requestyear_totalamount=$Requestyear_totalamount[0]["total_amount"];
-        $this->set(compact('other_requests', 'request', 'Requestyear_totalamount'));
+        $this->set(compact('other_requests','request','Requestyear_totalamount'));
         //$this->set('request3', intval($date));
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
     }
 
-    public function export()
-    {
+    public function export(){
         $parameter = $this->request->query('parameter');
         $value = $this->request->query('value');
         $action = $this->request->query('action');
-        if ($value!=null && $parameter!=null) {
-            $where_clause= $this->SearchQuery->getRequests($action, $parameter, $value);
-        } else {
-            $where_clause= $this->SearchQuery->getRequests($action);
+        if($value!=null && $parameter!=null){
+           $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
         }
-        if ($where_clause== false) {
+        else{
+           $where_clause= $this->SearchQuery->getRequests($action);
+        }
+        if($where_clause== false){
             $this->redirect(['action' => 'index']);
         }
         $requests=$this->Requests->find('all')
@@ -149,20 +150,20 @@ class RequestsController extends AppController
         $data = $requests;
         $this->response->download('export.csv');
         //$_header=["id"];
-        //$_extract=['id','username','transaction.amount_paid'];
+	//$_extract=['id','username','transaction.amount_paid'];
         $column_values_requests=$this->SearchQuery->setCsvColumns($this->Requests->schema()->columns());
         $this->loadModel('Transactions');
-        $column_values_transactions=$this->SearchQuery->setCsvColumns($this->Transactions->schema()->columns(), 'transaction');
+        $column_values_transactions=$this->SearchQuery->setCsvColumns($this->Transactions->schema()->columns(),'transaction');
         $this->loadModel('DenialReasons');
-        $column_values_denial_reasons=$this->SearchQuery->setCsvColumns($this->DenialReasons->schema()->columns(), 'denial_reason');
+        $column_values_denial_reasons=$this->SearchQuery->setCsvColumns($this->DenialReasons->schema()->columns(),'denial_reason');
         $this->loadModel('Articles');
-        $column_values_articles=$this->SearchQuery->setCsvColumns($this->Articles->schema()->columns(), 'article');
-        $column_values=array_merge($column_values_requests, $column_values_transactions, $column_values_denial_reasons, $column_values_articles);
+        $column_values_articles=$this->SearchQuery->setCsvColumns($this->Articles->schema()->columns(),'article');
+        $column_values=array_merge($column_values_requests,$column_values_transactions,$column_values_denial_reasons,$column_values_articles);
         $_extract=$column_values;
         $_header=$column_values;
         $this->set(compact('column_values'));
         $_serialize = 'data';
-        $this->set(compact('data', '_serialize', '_extract', '_header'));
+        $this->set(compact('data', '_serialize','_extract','_header'));
         $this->viewBuilder()->className('CsvView.Csv');
         return;
     }
@@ -196,7 +197,7 @@ class RequestsController extends AppController
             'valueField' => 'denial_reason'
        ]);
         $denial_reasons = $denial_reasons->toArray();
-        $this->set('denial_reasons', $denial_reasons);
+        $this->set('denial_reasons',$denial_reasons);
     }
 
     /**
@@ -218,13 +219,13 @@ class RequestsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
     /*
      *  Approve method
      *
      * @param string|null $id Request id.
      */
-    public function approve($id = null)
-    {
+    public function approve($id = null) {
         /*
          * @var array $results, contains an array
          * of the request for requested id
@@ -236,21 +237,21 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all')
                 ->where(['id' => $id]);
         $results = $requests->first();
-        $this->set('results', $results);
+        $this->set('results',$results);
         $this->loadModel('ApprovalReasons');
         $requests2=$this->ApprovalReasons->find('list', [
             'keyField' => 'id',
             'valueField' => 'approval_reason'
        ]);
         $results2 = $requests2->toArray();
-        $this->set('results2', $results2);
-        if (($this->request->data!= null)) {
-            if (($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) {
+        $this->set('results2',$results2);
+        if(($this->request->data!= null)) {
+            if(($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) {
                 $approved=$this->Requests->query();
                 $approved->update()
-        ->set(['Funded' => 'Approved'])
-        ->where(['id' => $id])
-        ->execute();
+                        ->set(['Funded' => 'Approved'])
+                        ->where(['id' => $id])
+                        ->execute();
                 $data = $this->request->data;
                 //$test = $data["to"];
                 $test=$results->email;
@@ -258,34 +259,33 @@ class RequestsController extends AppController
                 $body= $data["Message_Body"];
                 $internal_note= $data["internal_note"];
                 $this->Requests->updateAll(
-        array('internal_note' => "$internal_note"),
-        array('id' => $id)
-            );
+                array('internal_note' => "$internal_note"), array('id' => $id));
                 //$from_addr=$data["from_addr"];
                 //$from_name=$data["from_name"];
                 $email = new Email('local');
-                $email->from("uls-openaccessfund@pitt.edu", "ULS - Open Access Fund")
-        ->to("$test")
-        ->emailFormat('html')
-        ->subject("$subject")
-        ->send("$body");
+                $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
+                        ->to("$test")
+                        ->emailFormat('html')
+                        ->subject("$subject")
+                        ->send("$body");
                 $this->Flash->success(__('The approval mail has been sent.'));
                 return $this->redirect(['action' => 'index']);
-            } elseif (($this->request->data["subject"] == null)) {
+            } else if(($this->request->data["subject"] == null)) {
                 $message="Please enter a Subject";
                 $this->Flash->error($message);
-            } elseif (($this->request->data["Message_Body"] == null)) {
+            } else if(($this->request->data["Message_Body"] == null)) {
                 $message="Please enter some Content";
                 $this->Flash->error($message);
             }
         }
     }
-    /*
-    *  Denial method
-    *
-    * @param string|null $id Request id.
-    * @return void
-    */
+
+     /*
+     *  Denial method
+     *
+     * @param string|null $id Request id.
+     * @return void
+     */
     public function deny($id = null)
     {
         /*
@@ -298,22 +298,23 @@ class RequestsController extends AppController
         $requests=$this->Requests->find('all')
                 ->where(['id' => $id]);
         $results = $requests->first();
-        $this->set('results', $results);
+        $this->set('results',$results);
         $this->loadModel('DenialReasons');
-        $requests2=$this->DenialReasons->find('list', ['keyField' => 'id',
-                                                       'valueField' => 'denial_reason'
-                                                      ]);
+        $requests2=$this->DenialReasons->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'denial_reason'
+       ]);
         $results2 = $requests2->toArray();
-        // $results2['denial_reason']=striptags($results2['denial_reason'])
-        $this->set('results2', $results2);
-        if ($this->request->data != null) {
-            if (($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) {
+     // $results2['denial_reason']=striptags($results2['denial_reason'])
+        $this->set('results2',$results2);
+        if($this->request->data != null) {
+            if(($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) {
                 $data = $this->request->data;
                 $approved=$this->Requests->query();
                 $approved->update()
-                         ->set(['Funded' => 'Denied','denial_id' => $data["id"]])
-                         ->where(['id' => $id])
-                         ->execute();
+                        ->set(['Funded' => 'Denied','denial_id' => $data["id"]])
+                        ->where(['id' => $id])
+                        ->execute();
                 //$test = $data["to"];
                 $test=$results->email;
                 $subject = $data["subject"];
@@ -321,23 +322,24 @@ class RequestsController extends AppController
                 //$from_addr=$data["from_addr"];
                 //$from_name=$data["from_name"];
                 $email = new Email('local');
-                $email->from("uls-openaccessfund@pitt.edu", "ULS - Open Access Fund")
-                      ->to("$test")
-                      ->emailFormat('html')
-                      ->subject("$subject")
-                      ->send("$body");
+                $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
+                ->to("$test")
+                ->emailFormat('html')
+                ->subject("$subject")
+                ->send("$body");
                 //$this->Flash->success(__($data));
                 $this->Flash->success(__('The denial mail has been sent.'));
                 return $this->redirect(['action' => 'index']);
-            } elseif (($this->request->data["subject"] == null)) {
+            } else if(($this->request->data["subject"] == null)) {
                 $message="Please enter a Subject";
                 $this->Flash->error($message);
-            } elseif (($this->request->data["Message_Body"] == null)) {
+            } else if(($this->request->data["Message_Body"] == null)) {
                 $message="Please enter some Content";
                 $this->Flash->error($message);
             }
         }
     }
+
     /*
      * Pending requests method
      *
@@ -349,12 +351,13 @@ class RequestsController extends AppController
         /* @var Object $requests , entity which contains all pending requests
          * @var array $role, user information.*/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "pending"]);
-        $this->set('requests', $requests);
+        $this->set('requests',$requests);
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
         $this->render("index");
     }
+
     /*
      * Approved requests method
      *
@@ -366,12 +369,13 @@ class RequestsController extends AppController
         /* @var Object $requests , entity which contains all approved requests
          * @var array $role, user information. */
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
-        $this->set('requests', $requests);
+        $this->set('requests',$requests);
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
         $this->render("index");
     }
+
     /*
      * Paid requests method
      *
@@ -383,15 +387,16 @@ class RequestsController extends AppController
         /* @var Object $requests , entity which contains all paid requests
         * @var array $role, user information.*/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Paid"]);
-        $this->set('requests', $requests);
+        $this->set('requests',$requests);
         $this->paginate = [
             'contain' => ['DenialReasons', 'Articles']
         ];
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
         $this->render("index");
     }
+
     /*
      * Denied requests method
      *
@@ -403,12 +408,13 @@ class RequestsController extends AppController
         /* @var Object $requests , entity which contains all denied requests
          * @var array $role, user information.*/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
-        $this->set('requests', $requests);
+        $this->set('requests',$requests);
         $requests = $this->paginate($requests);
         $role=$this->Auth->user();
-        $this->set('role', $role);
+        $this->set('role',$role);
         $this->render("index");
     }
+
     /*
      * Denial Checker method
      *
@@ -425,13 +431,14 @@ class RequestsController extends AppController
             $res= $_GET['id'];
             $this->loadModel('DenialReasons');
             $requests3=$this->DenialReasons->find('all')
-                ->where(['DenialReasons.id' => $res]);
+                    ->where(['DenialReasons.id' => $res]);
             $results3 = $requests3->first()->denial_email;
             //$this->set('results2',$results2);
-            $this->set("details", json_encode($results3));
+            $this->set("details",json_encode($results3));
             $this->render('ajax');
         }
     }
+
     /*
      * Approved Checker method
      *
@@ -444,31 +451,29 @@ class RequestsController extends AppController
         /*@var String $results3 , string which contains the approval email*/
         $this->viewBuilder()->layout('ajax');
         if ($this->request->is('ajax') && $this->request->is('get')) {
-            $res= $_GET['id'];
-            $this->loadModel('ApprovalReasons');
-            $requests3=$this->ApprovalReasons->find('all')
+        $res= $_GET['id'];
+        $this->loadModel('ApprovalReasons');
+        $requests3=$this->ApprovalReasons->find('all')
                 ->where(['ApprovalReasons.id' => $res]);
-            $results3 = $requests3->first()->approval_email;
-            $this->set("details", json_encode($results3));
-            $this->render('ajax');
+        $results3 = $requests3->first()->approval_email;
+        $this->set("details",json_encode($results3));
+        $this->render('ajax');
         }
     }
 
-
-    public function reports()
-    {
+    public function reports() {
         $query1=$this->Requests->find('all');
         $query1->select([
-            'Requests.school',
-            'count' => $query1->func()->count('*'),
-         ])
-        ->group('Requests.school')
-        ->order(['count' => 'DESC']);
-        $query1->hydrate(false); // Results as arrays instead of entities
-        $result = $query1->toList();
-        $result= json_encode($result);
-        $this->set('query1', $result);
+                    'Requests.school',
+                    'count' => $query1->func()->count('*')])
+                ->group('Requests.school')
+                ->order(['count' => 'DESC']);
+         $query1->hydrate(false); // Results as arrays instead of entities
+         $result = $query1->toList();
+         $result= json_encode($result);
+         $this->set('query1',$result);
     }
+
     /*
      * Test method created to check if schoolRequests and other actions for the reports wopuld work fine.
      *
@@ -493,24 +498,24 @@ class RequestsController extends AppController
 
     public function schoolRequests()
     {
-        $this->viewBuilder()->layout('ajax');
-        if ($this->request->is('ajax') && $this->request->is('get')) {
+         $this->viewBuilder()->layout('ajax');
+         if ($this->request->is('ajax') && $this->request->is('get')) {
             $FY= $_GET['FY'];
             $where_clause= $this->SearchQuery->getDates($FY);
             $query1=$this->Requests->find('all');
             $query1->select([
-           'parameter'=>'Requests.school',
-           'value' => $query1->func()->count('*'),
-            ])
-           ->group('Requests.school')
-           ->order(['value' => 'DESC'])
-           ->where($where_clause);
+                'parameter'=>'Requests.school',
+                'value' => $query1->func()->count('*')])
+                   ->group('Requests.school')
+                   ->order(['value' => 'DESC'])
+                   ->where($where_clause);
             $query1->hydrate(false); // Results as arrays instead of entities
             $result = $query1->toList();
             $this->set("details", json_encode($result));
         }
         $this->render('ajax');
     }
+
     public function budgetRequests()
     {
         $this->viewBuilder()->layout('ajax');
@@ -519,12 +524,12 @@ class RequestsController extends AppController
             $where_clause= $this->SearchQuery->getDates($FY);
             $query1=$this->Requests->find('all');
             $query1->select([
-           'parameter'=>'Requests.school',
-           'value' => $query1->func()->sum('Requests.amount_requested'),
-            ])
-           ->group('Requests.school')
-           ->order(['value' => 'DESC'])
-           ->where($where_clause);
+                       'parameter'=>'Requests.school',
+                       'value' => $query1->func()->sum('Requests.amount_requested'),
+                        ])
+                   ->group('Requests.school')
+                   ->order(['value' => 'DESC'])
+                   ->where($where_clause);
             $query1->hydrate(false); // Results as arrays instead of entities
             $result = $query1->toList();
             $this->set("details", json_encode($result));
@@ -541,12 +546,12 @@ class RequestsController extends AppController
             $where_clause= $this->SearchQuery->getDates($FY);
             $query1=$this->Requests->find('all');
             $query1->select([
-           'parameter'=>'Requests.publisher',
-           'value' => $query1->func()->sum('Requests.amount_requested'),
-            ])
-           ->group('Requests.publisher')
-           ->order(['value' => 'DESC'])
-           ->where($where_clause);
+                           'parameter'=>'Requests.publisher',
+                           'value' => $query1->func()->sum('Requests.amount_requested'),
+                            ])
+                   ->group('Requests.publisher')
+                   ->order(['value' => 'DESC'])
+                   ->where($where_clause);
             $query1->hydrate(false); // Results as arrays instead of entities
             $result = $query1->toList();
             $this->set("details", json_encode($result));
@@ -578,11 +583,11 @@ class RequestsController extends AppController
         $rowArray = ['# Articles Approved:','# Articles Reimbursed:','# Unique Submitting Authors:','# Unique Departments:','# Unique Journals:','# Unique Publishers:'];
         $sheet->fromArray(
                         $rowArray,  // The data to set
-                        null,        // Array values with this value will not be set
+                        NULL,        // Array values with this value will not be set
                         'B5'         // Top left coordinate of the worksheet range where
                                      //    we want to set these values (default is A1)
                     );
-        $styleHeader = [
+                $styleHeader = [
                     'font' => [
                         'bold' => true
                     ],
@@ -604,19 +609,19 @@ class RequestsController extends AppController
                                                             OR (R.funded='Approved'))
                                                             GROUP BY B.id;
                    ")->fetchAll('assoc');
-        //$arrayData[0]=array_values($arrayData[0]);
+          //$arrayData[0]=array_values($arrayData[0]);
         $display_arr=[];
-        foreach ($arrayData as $data) {
+        foreach ($arrayData as $data){
             $data=array_values($data);
-            array_push($display_arr, $data);
+            array_push($display_arr,$data);
         }
         $sheet->fromArray(
-                        $display_arr,  // The data to set
-                        null,        // Array values with this value will not be set
-                        'A6'         // Top left coordinate of the worksheet range where
-                                     //    we want to set these values
-                    );
-        // $this->set('arrayData',$display_arr);
+            $display_arr,  // The data to set
+            NULL,        // Array values with this value will not be set
+            'A6'         // Top left coordinate of the worksheet range where
+                         //    we want to set these values
+        );
+         // $this->set('arrayData',$display_arr);
         $arrayData=$connection->execute('SELECT B.fiscal_year AS fiscal_year, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
                               FROM requests R, budgets B
                               WHERE R.inquiry_date >= B.budget_date_begin
@@ -624,16 +629,16 @@ class RequestsController extends AppController
                               AND (R.funded="Approved" OR R.funded="Paid")
                               GROUP BY B.id')->fetchAll('assoc');
         $display_arr=[];
-        foreach ($arrayData as $data) {
+        foreach ($arrayData as $data){
             $data=array_values($data);
-            array_push($display_arr, $data);
+            array_push($display_arr,$data);
         }
         $sheet->fromArray(
-                        $display_arr,  // The data to set
-                        null,        // Array values with this value will not be set
-                        'A16'         // Top left coordinate of the worksheet range where
-                                     //    we want to set these values (default is A1)
-                    );
+            $display_arr,  // The data to set
+            NULL,        // Array values with this value will not be set
+            'A16'         // Top left coordinate of the worksheet range where
+                         //    we want to set these values (default is A1)
+        );
 
         $this->autoRender= false;
         $export=WWW_ROOT.'xlsx'.DS.'Sparc Reports.xls';
@@ -643,7 +648,7 @@ class RequestsController extends AppController
         /**sleep(10);
             $filed = new File($export);
             $filed->delete();**/
-    }
+        }
 
     /*
      * @param string $user is passed, which can  be received from
@@ -659,10 +664,11 @@ class RequestsController extends AppController
             return true;
         }
         if ((($this->request->action==="index")||($this->request->action==="approvedrequests") || ($this->request->action==="pendingrequests") || $this->request->action==="paidrequests") || ($this->request->action==="view") &&  $user['role'] === 'payment_team') {
-            return true;
+                    return true;
         }
         if ((($this->request->action==="index")|| ($this->request->action==="view")||($this->request->action==="approvedrequests") ||  ($this->request->action==="paidrequests")) &&  $user['role'] === 'OSCP_students') {
-            return true;
+                    return true;
         }
+        return false;
     }
 }

@@ -28,7 +28,7 @@
             <?php
             $i=0;
             foreach ($budgets as $budget): ?>
-            
+
             <tr>
                 <td><?= h($budget->fiscal_year) ?></td>
                 <td><?= h($budget->budget_date_begin) ?></td>
@@ -44,9 +44,6 @@
             </tr>
             <?php $i= $i+1; ?>
             <?php endforeach; ?>
-            
-                 <?php //print_r($results) ?>
-            
     </table>
     <div class="paginator">
         <ul class="pagination">

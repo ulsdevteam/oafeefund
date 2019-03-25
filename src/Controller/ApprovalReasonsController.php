@@ -103,6 +103,7 @@ class ApprovalReasonsController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+    
     /*
      * @param string $user is passed, which can  be received from
      * $this->Auth->user() . This is the array of the current user who
@@ -116,5 +117,6 @@ class ApprovalReasonsController extends AppController
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }
+        return false;
     }
 }

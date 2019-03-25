@@ -17,7 +17,7 @@
     </ul>
 </nav> -->
 
-<?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>                                                             
+<?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>
 
 <?= $this->fetch('script'); ?>
 <div class="requests form large-9 medium-8 columns content">
@@ -37,20 +37,17 @@
             echo $this->Form->control('amount_requested');
             echo $this->Form->control('article_title');
           //echo $this->Form->hidden('inquiry_date');
-            ;
+
             $attributes = array();
             $foo= 'student';
             echo nl2br ("Author Status* \n");
             $options = array('student' => 'Student', 'professor' => 'Professor', 'post-Doc' => 'Post-Doc', 'staff' => 'Staff' );
             //$attributes= $this->Form->control('author_status');
-
-            echo $this->Form->radio('author_status', $options, $attributes); 
+            echo $this->Form->radio('author_status', $options, $attributes);
         ?>
     </fieldset>
-    
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
-    
 </div>
 <script>
     function auto()
@@ -59,30 +56,25 @@
         //console.log(val);
         //document.getElementById('first-name').value=val;
         $.ajax({
-			type:'GET',
-			cache: false,
-			url: '<?=  $this->Url->build([
-                                        "controller" => "Users",
-                                        "action" => "details"
-                                    ]); ?>',
-                        data:{val: val},
-			success: function(response) {					
-				//success 
-                                console.log(response);
-                                var json = JSON.parse(response);
-                                console.log(json["first_name"]); 
-                                document.getElementById('author-name').value=json["first_name"]+" "+json["last_name"];
-                                document.getElementById('email').value=json["email"];
-                                document.getElementById('department').value=json["department"];
-                                
-                                
-			},
-			error: function(response) {					
-				console.log(response.responseText);
-			},
-			
-		});
-        
+            type:'GET',
+            cache: false,
+            url: '<?=  $this->Url->build([
+                "controller" => "Users",
+                "action" => "details"
+            ]); ?>',
+            data:{val: val},
+            success: function(response) {
+                //success
+                console.log(response);
+                var json = JSON.parse(response);
+                console.log(json["first_name"]);
+                document.getElementById('author-name').value=json["first_name"]+" "+json["last_name"];
+                document.getElementById('email').value=json["email"];
+                document.getElementById('department').value=json["department"];
+            },
+            error: function(response) {
+                console.log(response.responseText);
+            },
+        });
     }
 </script>
-

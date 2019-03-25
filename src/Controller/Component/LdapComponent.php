@@ -36,7 +36,7 @@ class LdapComponent extends Component
         $ldapbind=ldap_bind($ldap, $ldapUser, $ldapPassword);
         $baseDN = $Ldap['ldapBaseDN'];
         if (ldap_bind($ldap, $ldapUser, $ldapPassword)) {
-            $result = ldap_search($ldap, $baseDN, $filter, $attributes);
+            $result = ldap_search($ldap, $baseDN, $filter,$attributes);
             $array = ldap_get_entries($ldap, $result);
             $info = array();
             $info['username'] = $user;

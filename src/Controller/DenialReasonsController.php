@@ -118,5 +118,6 @@ class DenialReasonsController extends AppController
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }
+        return false;
     }
 }

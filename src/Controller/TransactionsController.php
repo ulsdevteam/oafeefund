@@ -136,14 +136,13 @@ class TransactionsController extends AppController
     public function isAuthorized($user)
     {
         // Admin can access every action
-
         if (($this->request->action==="index") && isset($user['role']) && $user['role'] === 'admin') {
             return true;
-        } elseif (isset($user['role']) && $user['role'] === 'payment_team') {
+        } else if (isset($user['role']) && $user['role'] === 'payment_team') {
             return true;
         }
-
         // Default deny
         return false;
     }
+
 }

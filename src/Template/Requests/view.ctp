@@ -6,7 +6,7 @@
 ?>
 <?= $this->Html->css('options.css'); ?>
 <div class="requests view large-9 medium-8 columns content">
-    <?php  
+    <?php
         $article=$request->article;
         $transaction=$request->transaction;
     ?>
@@ -15,50 +15,40 @@
     ?></h3>
         <div class="options1">
         <tr>
-                    <?php if(h($request->funded)=="Pending"): 
-                    {
+            <?php
+                if(h($request->funded)=="Pending"): {
                     if($role['role'] === 'admin'){
-                    
-                    echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id],['class' => 'button', 'target' => '_blank']); //
-                    
-                    
-                    } 
-                     if($role['role'] === 'admin'){
-                    echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id],['class' => 'button', 'target' => '_blank']); 
-                    echo "<br>"; 
-                    
-                     }
+                        echo $this->Html->link(__('Click here to Approve this request'), ['action' => 'approve', $request->id],['class' => 'button', 'target' => '_blank']); //
                     }
-                    endif; ?>
-                    <?php 
-                    if(h($request->funded)=="Approved"): 
-                    {
-                     if($role['role'] === 'payment_team'){
-                     echo $this->Html->link(__('Payment for this request'), ['controller' => 'Transactions','action' => 'add', $request->id]); 
-                     echo "<br>"; 
-                     }
+                    if($role['role'] === 'admin') {
+                        echo $this->Html->link(__('Click here to Deny this Request'), ['action' => 'deny', $request->id],['class' => 'button', 'target' => '_blank']);
+                        echo "<br>";
                     }
-                     endif;
-                    ?>
-            
-                    <?php 
-                    if( (h($request->funded)=="Paid") && (($role['role'] === 'OSCP_students') || ($role['role'] === 'admin'))){
-                        if(empty($request->article))
-                        {
-                            echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]); 
-                            echo "<br>"; 
-                        }
-                        elseif(!empty($request->article))
-                        {
-                            $article_id=$request->article;
-                            echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article->id ]); 
-                            echo "<br>";   
-                        }
-                     }
-                    
-                    
-                     
-                     ?>
+                }
+                endif;
+            ?>
+            <?php
+                if(h($request->funded)=="Approved"): {
+                    if($role['role'] === 'payment_team') {
+                        echo $this->Html->link(__('Payment for this request'), ['controller' => 'Transactions','action' => 'add', $request->id]);
+                        echo "<br>";
+                    }
+                }
+                endif;
+            ?>
+
+            <?php
+                if( (h($request->funded)=="Paid") && (($role['role'] === 'OSCP_students') || ($role['role'] === 'admin'))){
+                    if(empty($request->article)) {
+                        echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]);
+                        echo "<br>";
+                    } elseif(!empty($request->article)) {
+                        $article_id=$request->article;
+                        echo $this->Html->link(__('Edit Article'), ['controller' => 'Articles','action' => 'edit',$article->id ]);
+                        echo "<br>";
+                    }
+                 }
+             ?>
         </tr>
         </div>
      <table class="vertical-table">
@@ -135,7 +125,7 @@
         <h4><?= __('Article Title') ?></h4>
         <?= $this->Text->autoParagraph(h($request->article_title)); ?>
     </div>
-   
+
     <div class="related">
         <h4><?= __('Other requests made by same username') ?></h4>
         <?php if (!empty($other_requests)): ?>
@@ -160,7 +150,7 @@
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
-         
+
     </div>
     <div class="related">
         <h4><?= __('Related Articles') ?></h4>

@@ -40,6 +40,7 @@ class UsersController extends AppController
             'contain' => []
         ]);
 
+
         $this->set('user', $user);
     }
 
@@ -95,10 +96,10 @@ class UsersController extends AppController
         /* @var String $res , it gives us the username.
          * @var array $var, it gives us the response from LDAP helper in an */
         $this->viewBuilder()->layout('ajax');
-        if ($this->request->is('ajax') && $this->request->is('get')) {
+        if ($this->request->is('ajax') && $this->request->is('get') ) {
             $res= $_GET['val'];
             $var= $this->Ldap->getInfo($res);
-            $this->set("details", json_encode($var));
+            $this->set("details",json_encode($var));
         }
         $this->render('ajax');
     }
@@ -132,14 +133,15 @@ class UsersController extends AppController
      */
     public function isAuthorized($user)
     {
-        if (isset($user['role']) && $user['role'] === 'admin') {
+        if (isset($user['role']) && $user['role'] === 'admin' ) {
             return true;
         }
-        if (isset($user['role']) && (($this->request->action)=="logout")) {
+        if(isset($user['role']) && (($this->request->action)=="logout")) {
             return true;
         }
-        //if(($this->request->action)=="details"){
+      //if(($this->request->action)=="details"){
          // return true;
       //}
+        return false;
     }
 }
