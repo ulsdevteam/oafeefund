@@ -21,3 +21,4 @@
 .remote-sync.json
 
 #config/app.php
+/config/app.php
