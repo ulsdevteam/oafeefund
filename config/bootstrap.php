@@ -216,5 +216,7 @@ if (Configure::read('debug')) {
 }
 //Plugin::load('TinyMCE', ['autoload' => true]);
 
-
-
+// stage site
+//Configure::write('ENV_USER', env('HTTP_EDUPERSONPRINCIPALNAME'));
+// local vm
+Configure::write('ENV_USER', env('REMOTE_USER'));

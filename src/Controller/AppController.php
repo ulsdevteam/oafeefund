@@ -31,14 +31,13 @@ use Cake\View\Helper;
  */
 class AppController extends Controller
 {
-    /*
+    /**
      * If an isAuthorized method is not created in a specific Controller,
      * this will be implemented as the default one, such as there isn't one
      * created for the BudgetsController, so both the admin and
      * payment_team will have access to all of it's actions.
      * @return boolean
      */
-
     public function isAuthorized($user)
     {
         if (isset($user['role']) && $user['role'] === 'admin') {
@@ -49,7 +48,8 @@ class AppController extends Controller
         }
         // Default deny
         return false;
-   }
+    }
+
     /**
      * Initialization hook method.
      *
@@ -73,16 +73,16 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->loadComponent('Ldap');
         $this->loadComponent('SearchQuery');
-        $this->loadComponent('Auth',[
+        $this->loadComponent('Auth', [
             'authenticate' => [
                 'Env' => [
                     'fields' => ['username' => 'user']
                 ],
-        ],
-        'authorize'=>array("Controller"),
-        'storage' => 'Memory'
-            ]);
-	    $files = glob(WWW_ROOT.'xlsx'.DS.'*'); // get all file names
+            ],
+            'authorize' => ['Controller'],
+            'storage' => 'Memory'
+        ]);
+        $files = glob(WWW_ROOT.'xlsx'.DS.'*'); // get all file names
         foreach($files as $file) { // iterate files
             if(is_file($file))
                 $file_time= strtotime(date ("m-d-Y H:i:s.",filemtime($file)));
@@ -92,7 +92,7 @@ class AppController extends Controller
             if(($diff/60)>5) {
                 unlink($file); // delete file
             }
-	    }
+        }
         /*
          * Enable the following components for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
@@ -100,23 +100,36 @@ class AppController extends Controller
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
     }
-    /*
-     * The beforeFilter is applied before accessing the controller requested.
-     * The AddUser page in Requests can be accessed by anyone without any
-     * authentication.
-     * @param Cake\Event\Event Object $event, used to get the current event
-     * @return void
+
+    /**
+     * Block error messages from PHP error messages, show $user issue
+     * Comment beforeRender function to check PHP error messages
      */
-    public function beforeFilter(Event $event)
+    public function beforeRender(Event $event)
     {
-        switch ($this->name) // We get the controller name
-        {
-        case 'Requests':
-            $this->Auth->allow(['add','saved']); // Allowed if method is addUser or saved
-            break;
-        case 'Users':
-            $this->Auth->allow(['details']); // Allowed if method is details
-            break;
+        if ($this->Auth->user()) {
+            $this->set('role', $this->Auth->user());
         }
     }
+
+    // /**
+    //  * The beforeFilter is applied before accessing the controller requested.
+    //  * The AddUser page in Requests can be accessed by anyone without any
+    //  * authentication.
+    //  * @param Cake\Event\Event Object $event, used to get the current event
+    //  * @return void
+    //  */
+    // public function beforeFilter(Event $event)
+    // {
+    //     // $this->Auth->allow();
+    //     switch ($this->name) // We get the controller name
+    //     {
+    //     case 'Requests':
+    //         $this->Auth->allow(['add', 'saved']); // Allowed if method is addUser or saved
+    //         break;
+    //     case 'Users':
+    //         $this->Auth->allow(['details']); // Allowed if method is details
+    //         break;
+    //     }
+    // }
 }

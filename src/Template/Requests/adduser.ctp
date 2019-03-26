@@ -20,7 +20,7 @@
 <?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>
 
 <?= $this->fetch('script'); ?>
-<div class="requests form large-9 medium-8 columns content">
+<div class="requests form large-offset-2 large-8 medium-8 medium-offset-2 columns content">
     <?= $this->Form->create($request) ?>
     <fieldset>
         <legend><?= __('OAPPP funding') ?></legend>

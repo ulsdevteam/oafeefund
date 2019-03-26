@@ -123,6 +123,7 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
     /*
      * @param string $user is passed, which can  be received from
      * $this->Auth->user() . This is the array of the current user who
@@ -134,9 +135,6 @@ class UsersController extends AppController
     public function isAuthorized($user)
     {
         if (isset($user['role']) && $user['role'] === 'admin' ) {
-            return true;
-        }
-        if(isset($user['role']) && (($this->request->action)=="logout")) {
             return true;
         }
       //if(($this->request->action)=="details"){

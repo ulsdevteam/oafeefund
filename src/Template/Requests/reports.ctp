@@ -2,40 +2,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.2.0/json2html.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.json2html/1.2.0/jquery.json2html.min.js"></script>
 <title>Testing Pie Chart</title>
-<style type="text/css">
-.slice text {
-    font-size: 16pt;
-    font-family: Arial;
-}
 
-text {
-    font-size: 15px;
-}
-#reports {
-    font-size: 30px;
-    font-style: bold;
-}
-#max {
-    font-size: 25px;
-}
-#requeststabletext {
-   font-size: 30px;
-}
-.date {
-    width: 10%;
-    background-color: #008CBA;
-    color: #C5B358;
-    font-weight: bold;
-}
-#sparc {
-    padding-top: 1%;
-    padding-left: 3%;
-}
-</style>
 <p id="para"><?php print_r($query1);?></p>
-<?= $this->Html->script('reports'); ?>
 <p id="para1"></p>
 <?= $this->Html->script('reports'); ?>
+<?= $this->Html->css('requests'); ?>
 <?= $this->Html->css('style.css'); ?>
 <?= $this->Form->input('Requests Per School',['type'=>'button','label'=>false,'onclick'=>"createChart(['/requests/schoolRequests','Requests per School','Requests','School'])"]); ?>
 <?php // $this->Form->input('Pie Chart ',['type'=>'button','label'=>false,'onclick'=>'createRPSChart(2)']); ?>

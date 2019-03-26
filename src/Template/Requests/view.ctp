@@ -38,7 +38,7 @@
             ?>
 
             <?php
-                if( (h($request->funded)=="Paid") && (($role['role'] === 'OSCP_students') || ($role['role'] === 'admin'))){
+                if( (h($request->funded)=="Paid") && (($role['role'] === 'OSCP_students') || ($role['role'] === 'admin'))) {
                     if(empty($request->article)) {
                         echo $this->Html->link(__('New Article'), ['controller' => 'Articles','action' => 'add', $request->id]);
                         echo "<br>";

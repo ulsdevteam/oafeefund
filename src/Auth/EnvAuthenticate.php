@@ -22,6 +22,7 @@ namespace App\Auth;
 
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Core\Configure;
 
 use Cake\Auth\BaseAuthenticate;
 /**
@@ -87,18 +88,19 @@ class EnvAuthenticate extends BaseAuthenticate {
     }
 /**
  * Get a user based on information in the request. Used by cookie-less auth for stateless clients.
- *
+ * //TODO: For configuration setting
+ * @see https://book.cakephp.org/3.0/en/development/configuration.html
  * @param CakeRequest $request Request object.
  * @return mixed Either false or an array of user information
  */
     public function getUser(ServerRequest $request)
     {
         //$username = "lauren@pitt.edu";
-        $username = env('HTTP_EDUPERSONPRINCIPALNAME');
+        $username = Configure::read('ENV_USER')
         if (empty($username)) {
             return false;
         }
-        $username = preg_replace('/@.*$/', '', $username);;
+        $username = preg_replace('/@.*$/', '', $username);
         return $this->_findUser($username);
     }
 }

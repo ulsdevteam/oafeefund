@@ -105,7 +105,8 @@ class DenialReasonsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    /*
+    
+    /**
      * @param string $user is passed, which can  be received from
      * $this->Auth->user() . This is the array of the current user who
      * has logged in. Depending on the permissions of that user's

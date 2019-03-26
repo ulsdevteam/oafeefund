@@ -22,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
  */
 class RequestsController extends AppController
 {
-    /*
+    /**
      * Add new request method.(adduser)
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
@@ -30,10 +30,10 @@ class RequestsController extends AppController
     {
          /* Now here you can put your default values */
 
-        $this->viewBuilder()->layout('default2'); // This creates a blank template from the Layout, overides the default one.
+        $this->viewBuilder()->layout('blankStyleView'); // This creates a blank template from the Layout, overides the default one.
 
         $request = $this->Requests->newEntity();
-        $res= $this->Auth->user('username');//preg_replace('/@.*$/', '', env('HTTP_EDUPERSONPRINCIPALNAME'));
+        $res= $this->Auth->user('user');
         $var= $this->Ldap->getInfo($res);
         $this->set("details",$var);
         if ($this->request->is('post')) {
@@ -56,7 +56,7 @@ class RequestsController extends AppController
 
      public function saved()
     {
-       $this->viewBuilder()->layout('default2');
+       $this->viewBuilder()->layout('blankStyleView');
     }
 
     /**
@@ -72,8 +72,6 @@ class RequestsController extends AppController
         ];
         $requests = $this->paginate($this->Requests);
         $this->set(compact('requests'));
-        $role=$this->Auth->user();
-        $this->set('role',$role);
     }
 
     public function search()
@@ -91,8 +89,6 @@ class RequestsController extends AppController
         $this->set('prev_action',$action);
         $this->set(compact('count','parameter','requests','value'));
         $requests = $this->paginate($requests);
-        $role=$this->Auth->user();
-        $this->set('role',$role);
         $this->render("index");
     }
 
@@ -126,21 +122,19 @@ class RequestsController extends AppController
         $Requestyear_totalamount=$Requestyear_totalamount[0]["total_amount"];
         $this->set(compact('other_requests','request','Requestyear_totalamount'));
         //$this->set('request3', intval($date));
-        $role=$this->Auth->user();
-        $this->set('role',$role);
     }
 
-    public function export(){
+    public function export()
+    {
         $parameter = $this->request->query('parameter');
         $value = $this->request->query('value');
         $action = $this->request->query('action');
-        if($value!=null && $parameter!=null){
+        if($value!=null && $parameter!=null) {
            $where_clause= $this->SearchQuery->getRequests($action,$parameter,$value);
-        }
-        else{
+        } else {
            $where_clause= $this->SearchQuery->getRequests($action);
         }
-        if($where_clause== false){
+        if($where_clause== false) {
             $this->redirect(['action' => 'index']);
         }
         $requests=$this->Requests->find('all')
@@ -150,7 +144,7 @@ class RequestsController extends AppController
         $data = $requests;
         $this->response->download('export.csv');
         //$_header=["id"];
-	//$_extract=['id','username','transaction.amount_paid'];
+    //$_extract=['id','username','transaction.amount_paid'];
         $column_values_requests=$this->SearchQuery->setCsvColumns($this->Requests->schema()->columns());
         $this->loadModel('Transactions');
         $column_values_transactions=$this->SearchQuery->setCsvColumns($this->Transactions->schema()->columns(),'transaction');
@@ -220,7 +214,7 @@ class RequestsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /*
+    /**
      *  Approve method
      *
      * @param string|null $id Request id.
@@ -280,7 +274,7 @@ class RequestsController extends AppController
         }
     }
 
-     /*
+    /**
      *  Denial method
      *
      * @param string|null $id Request id.
@@ -340,7 +334,7 @@ class RequestsController extends AppController
         }
     }
 
-    /*
+    /**
      * Pending requests method
      *
      * Show all requests which are still pending
@@ -349,16 +343,14 @@ class RequestsController extends AppController
     public function pendingrequests()
     {
         /* @var Object $requests , entity which contains all pending requests
-         * @var array $role, user information.*/
+         * */
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "pending"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
-        $role=$this->Auth->user();
-        $this->set('role',$role);
         $this->render("index");
     }
 
-    /*
+    /**
      * Approved requests method
      *
      * Show all requests which are approved
@@ -367,16 +359,14 @@ class RequestsController extends AppController
     public function approvedrequests()
     {
         /* @var Object $requests , entity which contains all approved requests
-         * @var array $role, user information. */
+         * */
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "approved"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
-        $role=$this->Auth->user();
-        $this->set('role',$role);
         $this->render("index");
     }
 
-    /*
+    /**
      * Paid requests method
      *
      * Show all requests which are paid
@@ -385,19 +375,17 @@ class RequestsController extends AppController
     public function paidrequests()
     {
         /* @var Object $requests , entity which contains all paid requests
-        * @var array $role, user information.*/
+         * */
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Paid"]);
         $this->set('requests',$requests);
         $this->paginate = [
             'contain' => ['DenialReasons', 'Articles']
         ];
         $requests = $this->paginate($requests);
-        $role=$this->Auth->user();
-        $this->set('role',$role);
         $this->render("index");
     }
 
-    /*
+    /**
      * Denied requests method
      *
      * Show all requests which are denied
@@ -406,16 +394,14 @@ class RequestsController extends AppController
     public function deniedrequests()
     {
         /* @var Object $requests , entity which contains all denied requests
-         * @var array $role, user information.*/
+         **/
         $requests=$this->Requests->find('all')->where(['Requests.funded' => "Denied"]);
         $this->set('requests',$requests);
         $requests = $this->paginate($requests);
-        $role=$this->Auth->user();
-        $this->set('role',$role);
         $this->render("index");
     }
 
-    /*
+    /**
      * Denial Checker method
      *
      * AJAX method call, which checks the ID of the denial reason
@@ -439,7 +425,7 @@ class RequestsController extends AppController
         }
     }
 
-    /*
+    /**
      * Approved Checker method
      *
      * AJAX method call, which checks the ID of the approval reason
@@ -650,7 +636,7 @@ class RequestsController extends AppController
             $filed->delete();**/
         }
 
-    /*
+    /**
      * @param string $user is passed, which can  be received from
      * $this->Auth->user() . This is the array of the current user who
      * has logged in. Depending on the permissions of that user's
@@ -660,14 +646,15 @@ class RequestsController extends AppController
      */
     public function isAuthorized($user)
     {
-        if (isset($user['role']) && $user['role'] === 'admin') {
+        parent::isAuthorized($user);
+        if (isset($user['role']) || $user['role'] === 'admin') {
             return true;
         }
         if ((($this->request->action==="index")||($this->request->action==="approvedrequests") || ($this->request->action==="pendingrequests") || $this->request->action==="paidrequests") || ($this->request->action==="view") &&  $user['role'] === 'payment_team') {
-                    return true;
+            return true;
         }
         if ((($this->request->action==="index")|| ($this->request->action==="view")||($this->request->action==="approvedrequests") ||  ($this->request->action==="paidrequests")) &&  $user['role'] === 'OSCP_students') {
-                    return true;
+            return true;
         }
         return false;
     }
