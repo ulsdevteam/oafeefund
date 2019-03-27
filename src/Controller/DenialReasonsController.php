@@ -105,7 +105,7 @@ class DenialReasonsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    
+
     /**
      * @param string $user is passed, which can  be received from
      * $this->Auth->user() . This is the array of the current user who
@@ -116,6 +116,7 @@ class DenialReasonsController extends AppController
      */
     public function isAuthorized($user)
     {
+        parent::isAuthorized($user);
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }

@@ -136,6 +136,7 @@ class TransactionsController extends AppController
      */
     public function isAuthorized($user)
     {
+        parent::isAuthorized($user);
         // Admin can access every action
         if (($this->request->action==="index") && isset($user['role']) && $user['role'] === 'admin') {
             return true;

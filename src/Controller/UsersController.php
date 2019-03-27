@@ -80,8 +80,12 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+                if ($user->user == $this->Auth->user('user') && $user->user != 'admin') {
+                    return $this->redirect(['controller' => 'requests', 'action' => 'index']);
+                } else {
+                    return $this->redirect(['action' => 'index']);
+                }
 
-                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
@@ -134,6 +138,7 @@ class UsersController extends AppController
      */
     public function isAuthorized($user)
     {
+        parent::isAuthorized($user);
         if (isset($user['role']) && $user['role'] === 'admin' ) {
             return true;
         }

@@ -114,6 +114,7 @@ class ApprovalReasonsController extends AppController
      */
     public function isAuthorized($user)
     {
+        parent::isAuthorized($user);
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }

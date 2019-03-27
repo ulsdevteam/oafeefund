@@ -5,7 +5,7 @@
  */
 ?>
 <?= $this->Html->css('options.css'); ?>
-<div class="requests view large-9 medium-8 columns content">
+<div class="requests view large-offset-2 medium-offset-2 large-8 medium-8 columns content">
     <?php
         $article=$request->article;
         $transaction=$request->transaction;
