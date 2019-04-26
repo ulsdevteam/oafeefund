@@ -25,8 +25,8 @@ class BudgetsController extends AppController
     {
         $budgets=$this->paginate($this->Budgets);
         $connection = ConnectionManager::get('default');
-        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
-                                        FROM requests R, budgets B
+        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( T.amount_paid ),2) AS sum_amtreqt
+                                        FROM requests R, budgets B, transactions T
                                         WHERE R.inquiry_date >= B.budget_date_begin
                                         AND R.inquiry_date <= B.budget_date_end
                                         AND (R.funded="Approved" OR R.funded="Paid")

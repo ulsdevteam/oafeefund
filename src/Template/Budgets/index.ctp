@@ -19,7 +19,7 @@
                 <th scope="col"><?= $this->Paginator->sort('budget_date_begin') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('budget_date_end') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('total_budget') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('approved_amount') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Amount_committed') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('budget_per_person') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
