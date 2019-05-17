@@ -109,4 +109,24 @@ class AppController extends Controller
         }
     }
 
+    /*
+     * The beforeFilter is applied before accessing the controller requested.
+     * The AddUser page in Requests can be accessed by anyone without any 
+     * authentication.
+     * @param Cake\Event\Event Object $event, used to get the current event
+     * @return void
+     */
+    public function beforeFilter(Event $event)
+    {
+        switch ($this->name) # We get the controller name
+        { 
+        case 'Requests':
+            $this->Auth->allow(['add','saved']); // Allowed if method is addUser or saved
+            break;
+        case 'Users':
+            $this->Auth->allow(['details']); // Allowed if method is details
+            break;
+        }
+    }
+
 }
