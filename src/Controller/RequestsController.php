@@ -110,21 +110,17 @@ class RequestsController extends AppController
 
         $connection = ConnectionManager::get('default');
         $other_requests= $connection->execute('SELECT Requests . * FROM requests Requests WHERE Requests.username IN ( SELECT Requests.username AS inquiry_date FROM requests Requests WHERE Requests.id = :id) AND Requests.username!="" AND Requests.id!= :id',['id'=>$id])->fetchAll('assoc');
-       /* $username= $this->Requests->find('all')
-                ->select(['username'])
-                ->where(['id'=>$id])
-                ->first()->username;  */
         $username= $request["username"];
-        $this->loadModel('budgets');
-        $date= date('m');
-       // $currentRequestDate = $connection->execute('SELECT Requests.inquiry_date AS inquiry_date FROM requests Requests WHERE Requests.id= :id',['id'=>$id])->fetchAll('assoc');
         $date= $request["inquiry_date"];
-        $Requestyear_totalamount = $connection->execute('SELECT ROUND(SUM(Requests.amount_requested),2) As total_amount FROM requests Requests, budgets Budgets WHERE Budgets.budget_date_begin<=:date AND Budgets.budget_date_end>=:date AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")',['name'=>$username,'date'=>$date])->fetchAll('assoc');
-        //$this->set('request2', $results);
-        //$this->set('request3', $results2[0][total_amount]);
+        $Requestyear_totalamount = $connection->execute(''
+                . 'SELECT ROUND(SUM(IFNULL(Transactions.amount_paid, Requests.amount_requested)),2) As total_amount '
+                . 'FROM requests Requests '
+                . 'JOIN budgets Budgets ON (Requests.inquiry_date BETWEEN Budgets.budget_date_begin AND Budgets.budget_date_end) '
+                . 'LEFT OUTER JOIN transactions Transactions ON (Transactions.request_id = Requests.id) '
+                . 'WHERE :date BETWEEN Budgets.budget_date_begin AND Budgets.budget_date_end AND Requests.username= :name AND Requests.username!="" AND (Requests.funded= "Approved" OR Requests.funded="Paid")'
+                ,['name'=>$username,'date'=>$date->i18nFormat('yyyy-MM-dd HH:mm:ss')])->fetchAll('assoc');
         $Requestyear_totalamount=$Requestyear_totalamount[0]["total_amount"];
         $this->set(compact('other_requests','request','Requestyear_totalamount'));
-        //$this->set('request3', intval($date));
     }
 
     public function export()
