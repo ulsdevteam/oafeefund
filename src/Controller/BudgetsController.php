@@ -24,13 +24,12 @@ class BudgetsController extends AppController
     {
         $budgets=$this->paginate($this->Budgets);
         $connection = ConnectionManager::get('default');
-        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( R.amount_requested ),2) AS sum_amtreqt
-                                        FROM requests R, budgets B
-                                        WHERE R.inquiry_date >= B.budget_date_begin
-                                        AND R.inquiry_date <= B.budget_date_end
-                                        AND (R.funded="Approved" OR R.funded="Paid")
-                                        GROUP BY B.id')->fetchAll('assoc');
-        $newBudgets=array();
+        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( IFNULL(T.amount_paid, R.amount_requested)  ),2) AS sum_amtreqt
+                                        FROM requests AS R 
+                                        LEFT JOIN budgets AS B ON R.inquiry_date >= B.budget_date_begin AND R.inquiry_date <= B.budget_date_end 
+                                        LEFT JOIN transactions AS T ON T.request_id = R.id
+                                        WHERE (R.funded="Approved" OR R.funded="Paid")
+                                        GROUP BY B.id')->fetchAll('assoc');        $newBudgets=array();
         foreach ($budgets as $budget){
             foreach($results as $result){
          //       $this->Flash->success($result["id"].$budget->id);
