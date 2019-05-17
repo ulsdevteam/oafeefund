@@ -17,8 +17,12 @@
 /logs/*
 !/logs/empty
 
-#Remote-sync.json for atom
+# Remote-sync.json for atom
 .remote-sync.json
 
-#config/app.php
+# Configuration
 /config/app.php
+
+/nbproject/*
+
+/webroot/xlsx/*.xls

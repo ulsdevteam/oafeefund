@@ -81,7 +81,7 @@ class EnvAuthenticate extends BaseAuthenticate {
  */
     public function getUser(ServerRequest $request)
     {
-        $username = Configure::read('ENV_USER');
+        $username = env(Configure::read('ENV_USER'));
         if (empty($username)) {
             return false;
         }

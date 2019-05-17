@@ -55,7 +55,14 @@ return [
             'locales' => [APP . 'Locale' . DS],
         ],
     ],
-
+    
+    'Ldap' => [
+         'ldapUser' => 'LDAP_USER',
+         'ldapPassword' => 'LDAP_PASSWORD',
+         'ldapServer' => 'LDAP_SERVER', 
+         'ldapPort' => '389',
+         'ldapBaseDN' => 'LDAP_BASE_DN',
+        ],
     /**
      * Security and encryption configuration
      *
@@ -64,7 +71,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', '__SALT__'),
+        'salt' => env('SECURITY_SALT', 'SALT_VALUE'),
     ],
 
     /**
@@ -188,7 +195,7 @@ return [
             'client' => null,
             'tls' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
-        ],
+    ],
     ],
 
     /**
@@ -206,7 +213,7 @@ return [
             'from' => 'you@localhost',
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
-        ],
+    ],
     ],
 
     /**
@@ -229,9 +236,9 @@ return [
              * the following line and set the port accordingly
              */
             //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'my_app',
+            'username' => 'DATABASE_USER',
+            'password' => 'DATABASE_PASSWORD',
+            'database' => 'DATABASE_NAME',
             'encoding' => 'utf8',
             'timezone' => 'UTC',
             'flags' => [],
@@ -279,7 +286,7 @@ return [
             'log' => false,
             //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
             'url' => env('DATABASE_TEST_URL', null),
-        ],
+    ],
     ],
 
     /**
@@ -354,4 +361,14 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+    /**
+     * Environment User
+     *
+     * Production Mode: (SAML)
+     * HTTP_EDUPERSONPRINCIPALNAME
+     *
+     * Development Mode: (LDAP / Basic)
+     * REMOTE_USER
+     */
+	'ENV_USER' => 'REMOTE_USER',
 ];
