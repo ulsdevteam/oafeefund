@@ -4,20 +4,9 @@
  * @var \App\Model\Entity\Request $request
  */
 ?>
-<!--<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?=  __('Actions') ?></li>
-        <li><?php //$this->Html->link(__('List Requests'), ['action' => 'index']) ?></li>
-        <li><?php //$this->Html->link(__('List Denial Reasons'), ['controller' => 'DenialReasons', 'action' => 'index']) ?></li>
-        <li><?php //$this->Html->link(__('New Denial Reason'), ['controller' => 'DenialReasons', 'action' => 'add']) ?></li>
-        <li><?php //$this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
-        <li><?php //$this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
-        <li><?php //$this->Html->link(__('List Transactions'), ['controller' => 'Transactions', 'action' => 'index']) ?></li>
-        <li><?php //$this->Html->link(__('New Transaction'), ['controller' => 'Transactions', 'action' => 'add']) ?></li>
-    </ul>
-</nav> -->
 
-<?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>
+
+<?= $this->Html->script(array('//code.jquery.com/jquery-1.11.0.min.js')); ?>
 
 <?= $this->fetch('script'); ?>
 <div class="requests form large-offset-2 large-8 medium-8 medium-offset-2 columns content">
@@ -25,11 +14,12 @@
     <fieldset>
         <legend><?= __('OAPPP funding') ?></legend>
         <?php
-            echo $this->Form->control('username',['default'=>$details["username"]]);
-            echo $this->Form->control('author_name',['default'=>$details["first_name"]." ".$details["last_name"]]);
-            echo $this->Form->control('email',['default'=>$details["email"]]);
+            echo $this->Form->control('username',['default'=>(isset($details["username"]) ? $details["username"] : '')]);
+            echo $this->Form->button('AutoFill',['type'=>'button','onclick'=>'auto()']);
+            echo $this->Form->control('author_name',['default'=>(isset($details["first_name"]) ? $details["first_name"]." ".$details["last_name"] : '')]);
+            echo $this->Form->control('email',['default'=>(isset($details["email"]) ? $details["email"] : '')]);
             echo $this->Form->control('school');
-            echo $this->Form->control('department',['default'=>$details["department"]]);
+            echo $this->Form->control('department',['default'=>(isset($details["department"]) ? $details["department"] : '')]);
             echo $this->Form->control('publisher');
             echo $this->Form->control('publication_name');
             echo $this->Form->control('amount_requested');
@@ -49,8 +39,6 @@
     function auto()
     {
         var val=document.getElementById('username').value;
-        //console.log(val);
-        //document.getElementById('first-name').value=val;
         $.ajax({
             type:'GET',
             cache: false,

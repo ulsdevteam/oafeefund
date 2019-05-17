@@ -31,24 +31,26 @@ class LdapComponent extends Component
         $ldapPassword = $Ldap['ldapPassword'];
         $ldapServer = $Ldap['ldapServer'];
         $ldapPort = $Ldap['ldapPort'];
-        $ldap = ldap_connect($ldapServer)
-          or die("Could not connect to $ldapServer");
-        $ldapbind=ldap_bind($ldap, $ldapUser, $ldapPassword);
-        $baseDN = $Ldap['ldapBaseDN'];
-        if (ldap_bind($ldap, $ldapUser, $ldapPassword)) {
-            $result = ldap_search($ldap, $baseDN, $filter,$attributes);
-            $array = ldap_get_entries($ldap, $result);
-            $info = array();
-            $info['username'] = $user;
-            $info['first_name'] = $array[0]['givenname'][0];
-            $info['last_name'] = $array[0]['sn'][0];
-            $info['email'] = $array[0]['mail'][0];
-            $info['department'] = $array[0]['department'][0];
-            $test=$array["count"]." entries returned\n";
-            return $info;
-        } else {
-            $error='error';
-            return $error;
+        $ldap = ldap_connect($ldapServer);
+        if ($ldap) {
+            $ldapbind=ldap_bind($ldap, $ldapUser, $ldapPassword);
+            $baseDN = $Ldap['ldapBaseDN'];
+            if (ldap_bind($ldap, $ldapUser, $ldapPassword)) {
+                $result = ldap_search($ldap, $baseDN, $filter,$attributes);
+                $array = ldap_get_entries($ldap, $result);
+                $info = array();
+                $info['username'] = $user;
+                if ($array && $array['count'] != 0) {
+                    $info['first_name'] = $array[0]['givenname'][0];
+                    $info['last_name'] = $array[0]['sn'][0];
+                    $info['email'] = $array[0]['mail'][0];
+                    $info['department'] = $array[0]['department'][0];
+                } else {
+                    $info['first_name'] = $info['last_name'] = $info['email'] =  $info['department'] = '';
+                }
+                return $info;
+            }
         }
+        return array('username' => $user, 'first_name' => '' , 'last_name' => '', 'email' => '', 'department' => '');
     }
 }

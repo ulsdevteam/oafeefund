@@ -28,14 +28,7 @@ class RequestsController extends AppController
      */
     public function add()
     {
-         /* Now here you can put your default values */
-
-        $this->viewBuilder()->layout('blankStyleView'); // This creates a blank template from the Layout, overides the default one.
-
         $request = $this->Requests->newEntity();
-        $res= $this->Auth->user('user');
-        $var= $this->Ldap->getInfo($res);
-        $this->set("details",$var);
         if ($this->request->is('post')) {
             $receivedRequest=$this->request->data;
             $receivedRequest['bmc']="Unknown";
@@ -48,6 +41,16 @@ class RequestsController extends AppController
             }
             $this->Flash->error(__('The request could not be saved. Please, try again.'));
         }
+
+        $this->viewBuilder()->layout('blankStyleView'); // This creates a blank template from the Layout, overides the default one.
+
+        $user= $this->Auth->user('user');
+        if ($user) {
+            $var= $this->Ldap->getInfo($user);
+        } else {
+            $var = array();
+        }
+        $this->set("details",$var);
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
         //@var Object $denialReasons It consists of the denialreasons.
         $this->set(compact('request', 'denialReasons'));
