@@ -12,7 +12,7 @@ use App\Controller\AppController;
  */
 class DenialReasonsController extends AppController
 {
-    
+
     /**
      * Index method
      *
@@ -49,10 +49,9 @@ class DenialReasonsController extends AppController
     public function add()
     {
         $denialReason = $this->DenialReasons->newEntity();
-        if ($this->request->is('post')) 
-            {
+        if ($this->request->is('post')) {
             $denialReason = $this->DenialReasons->patchEntity($denialReason, $this->request->getData());
-            
+
             if ($this->DenialReasons->save($denialReason)) {
                 $this->Flash->success(__('The denial reason has been saved.'));
 
@@ -106,17 +105,21 @@ class DenialReasonsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    /*
-     * @param string $user is passed, which can  be received from 
-     * $this->Auth->user() . This is the array of the current user who 
-     * has logged in. Depending on the permissions of that user's 
-     * specific role in the organization access to the page requested 
+
+    /**
+     * @param string $user is passed, which can  be received from
+     * $this->Auth->user() . This is the array of the current user who
+     * has logged in. Depending on the permissions of that user's
+     * specific role in the organization access to the page requested
      * is given.
-     * @return boolean , true if access granted. 
+     * @return boolean , true if access granted.
      */
-    public function isAuthorized($user){ 
+    public function isAuthorized($user)
+    {
+        parent::isAuthorized($user);
         if (isset($user['role']) && $user['role'] === 'admin') {
-        return true;
+            return true;
+        }
+        return false;
     }
-}
 }

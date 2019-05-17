@@ -16,3 +16,9 @@
 /composer.lock
 /logs/*
 !/logs/empty
+
+#Remote-sync.json for atom
+.remote-sync.json
+
+#config/app.php
+/config/app.php

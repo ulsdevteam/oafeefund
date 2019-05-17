@@ -32,7 +32,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('cake.css') ?>
     <?= $this->Html->css('navbar.css') ?>
     <?= $this->Html->css('/app/Froala/css/froala_editor.min.css');
-       $this->Html->script('/app/Froala/js/froala_editor.min.js'); ?>
+        $this->Html->script('/app/Froala/js/froala_editor.min.js'); ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -51,24 +51,23 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>-->
             </ul>
         </div>
-        
     </nav>
-        <div id="navbar1">
-            <ul>
-                <li>
-                    <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/">Requests</a></ul>
-                    <div class="additionalmethods">
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/pendingrequests" >Pending Requests</a></ul>
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/approvedrequests">Approved Requests</a></ul>
-                         <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/paidrequests">Paid Requests</a></ul>
-                    </div>
-                </li>
-                <li><a href="/app/users">Users</a></li>
-                <li><a href="/app/transactions">Transactions</a></li>
-                <li><a href="/app/articles">Articles Published</a></li>
-                <li><a href="/app/denial-reasons">Denial Reasons</a></li>
-            </ul>
-        </div>
+    <div id="navbar1">
+        <ul>
+            <li>
+                <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/">Requests</a></ul>
+                <div class="additionalmethods">
+                    <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/pendingrequests" >Pending Requests</a></ul>
+                    <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/approvedrequests">Approved Requests</a></ul>
+                    <ul><a onmouseover="additionalmethod(1)" onmouseout="additionalmethod(2)" href="/app/requests/paidrequests">Paid Requests</a></ul>
+                </div>
+            </li>
+            <li><a href="/app/users">Users</a></li>
+            <li><a href="/app/transactions">Transactions</a></li>
+            <li><a href="/app/articles">Articles Published</a></li>
+            <li><a href="/app/denial-reasons">Denial Reasons</a></li>
+        </ul>
+    </div>
     <?= $this->Flash->render() ?>
     <div class="container clearfix">
         <?= $this->fetch('content') ?>
@@ -77,18 +76,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </footer>
     <script>
         $('.additionalmethods').hide();
-        function additionalmethod(num){
-            if(num == "1")
-            {
-               $('.additionalmethods').show(); 
+        function additionalmethod(num) {
+            if(num == "1") {
+               $('.additionalmethods').show();
+            } else if(num == "2") {
+                $('.additionalmethods').hide();
             }
-            else if(num == "2")
-            {
-                $('.additionalmethods').hide(); 
-            }
-    
         }
     </script>
 </body>
 </html>
-

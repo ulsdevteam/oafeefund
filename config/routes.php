@@ -54,8 +54,8 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
     $routes->connect('/', ['controller' => 'requests', 'action' => 'add']);
-    $routes->connect('/login', ['controller' => 'users', 'action' => 'login']);    
-    
+    //$routes->connect('/login', ['controller' => 'users', 'action' => 'login']);
+
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
@@ -85,4 +85,3 @@ Router::scope('/', function (RouteBuilder $routes) {
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();
-

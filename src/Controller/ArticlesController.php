@@ -51,7 +51,7 @@ class ArticlesController extends AppController
      */
     public function add($id=null)
     {
-        $this->set('id',$id);
+        $this->set('id', $id);
         $article = $this->Articles->newEntity();
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
@@ -110,24 +110,25 @@ class ArticlesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    /*
-     * @param string $user is passed, which can  be received from 
-     * $this->Auth->user() . This is the array of the current user who 
-     * has logged in. Depending on the permissions of that user's 
-     * specific role in the organization access to the page requested 
+
+    /**
+     * @param string $user is passed, which can  be received from
+     * $this->Auth->user() . This is the array of the current user who
+     * has logged in. Depending on the permissions of that user's
+     * specific role in the organization access to the page requested
      * is given.
      * OSCP students and admin are allowed to edit the articles
-     * @return boolean , true if access granted. 
+     * @return boolean , true if access granted.
      */
-    
-     public function isAuthorized($user) { 
+    public function isAuthorized($user)
+    {
+        parent::isAuthorized($user);
         if (isset($user['role']) && $user['role'] === 'admin') {
-        return true;
+            return true;
+        }
+        if (isset($user['role']) && $user['role'] === 'OSCP_students') {
+            return true;
+        }
+        return false;
     }
-    if (isset($user['role']) && $user['role'] === 'OSCP_students') {
-        return true;
-    }
-    
-    
-}
 }

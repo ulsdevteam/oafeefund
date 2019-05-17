@@ -32,7 +32,7 @@
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $user->userid]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->userid]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->userid], ['confirm' => __('Are you sure you want to delete # {0}?', $user->userid)]) ?>
+                    <?php if ($role['user'] != $user->user) echo $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->userid], ['confirm' => __('Are you sure you want to delete # {0}?', $user->userid)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

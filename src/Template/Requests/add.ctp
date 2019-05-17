@@ -5,7 +5,7 @@
  */
 ?>
 
-<div class="requests form large-9 medium-8 columns content">
+<div class="requests form large-offset-2 large-8 medium-8 medium-offset-2 columns content">
     <?= $this->Form->create($request) ?>
     <fieldset>
         <legend><?= __('Add Request') ?></legend>

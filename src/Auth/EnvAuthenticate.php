@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -22,6 +22,7 @@ namespace App\Auth;
 
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
+use Cake\Core\Configure;
 
 use Cake\Auth\BaseAuthenticate;
 /**
@@ -42,22 +43,8 @@ use Cake\Auth\BaseAuthenticate;
  *	);
  * ```
  *
- * Available options include stripping a scope of the username, and forcing the
- * username to lowercase.
- *    FORCE_LOWERCASE is a boolean
- *    DROP_SCOPE will take a boolean, string, or array of strings
- *      true will remove all scopes
- *      a string or array will remove specific matched scopes
- * ```
- *	public $components = array(
- *		'Auth' => array(
- *			'authenticate' => array('EnvAuth.Env' => array(
- * 				'FORCE_LOWERCASE' => true,
- * 			)
- *		)
- *	);
- * ```
- *
+ * This expects a configuration variable "ENV_USER" to declare which environment 
+ * variable represents the username.  For example, "REMOTE_USER" would be common.
  * You should also set `AuthComponent::$sessionKey = false;` in your AppController's
  * beforeFilter() to prevent CakePHP from sending a session cookie to the client.
  *
@@ -81,23 +68,24 @@ class EnvAuthenticate extends BaseAuthenticate {
  * @param CakeResponse $response The response to add headers to.
  * @return mixed Either false on failure, or an array of user data on success.
  */
-	public function authenticate(ServerRequest $request, Response $response) {
-		return $this->getUser($request);
-	}
+    public function authenticate(ServerRequest $request, Response $response)
+    {
+        return $this->getUser($request);
+    }
 /**
  * Get a user based on information in the request. Used by cookie-less auth for stateless clients.
- *
+ * //TODO: For configuration setting
+ * @see https://book.cakephp.org/3.0/en/development/configuration.html
  * @param CakeRequest $request Request object.
  * @return mixed Either false or an array of user information
  */
-	public function getUser(ServerRequest $request) {
-                //$username = "lauren@pitt.edu";
-                $username = env('HTTP_EDUPERSONPRINCIPALNAME');
-                if (empty($username)) {
-                    return false;
-                }
-                $username = preg_replace('/@.*$/', '', $username);;
-                return $this->_findUser($username);
-	}
-   
+    public function getUser(ServerRequest $request)
+    {
+        $username = Configure::read('ENV_USER');
+        if (empty($username)) {
+            return false;
+        }
+        $username = preg_replace('/@.*$/', '', $username);
+        return $this->_findUser($username);
+    }
 }

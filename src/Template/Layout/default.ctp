@@ -25,45 +25,19 @@ $cakeDescription = 'OAAFF application';
         <?= $this->fetch('title') ?>
     </title>
     <?= $this->Html->meta('icon') ?>
-    <?php // $this->Html->script(array('https://code.jquery.com/jquery-1.11.0.min.js')); ?>  
     <?= $this->Html->script('jquery-3.3.1.min') ?>
-
-    <?= $this->fetch('script'); ?>
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
     <?= $this->Html->css('navbar.css') ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
-    <style>
-        #image2{
-            width:15%;
-            height: 100%;
-            margin-left: 15%;
-            margin-bottom: 0.5%;
-        }
-        
-        .bottom{
-           margin-top: 10%;
-           margin-right: 5%;
-        }
-    </style>
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
         <div class="top-bar-section">
             <img src="//www.pitt.edu/sites/default/files/pitt_logo.png">
-            
-               <!--<li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>-->
-
         </div>
-        
     </nav>
         <div id="navbar1">
             <ul>
@@ -82,10 +56,7 @@ $cakeDescription = 'OAAFF application';
                 <li><?= $this->Html->link('Check Budget',['controller' => 'Budgets', 'action' => 'index', '_full' => true]);?></li>
                 <li><?= $this->Html->link('Reports',['controller' => 'Requests', 'action' => 'reports', '_full' => true]);?></li>
             </ul>
-                 
-                
         </div>
-   
     <?= $this->Flash->render() ?>
     <div class="container clearfix">
         <?= $this->fetch('content') ?>
@@ -96,17 +67,12 @@ $cakeDescription = 'OAAFF application';
     <script>
         $('.additionalmethods').hide();
         $('.paginator').show();
-        function additionalmethod(num){
-            if(num == "1")
-            {
-               $('.additionalmethods').show(); 
+        function additionalmethod(num) {
+            if(num == "1") {
+                $('.additionalmethods').show();
+            } else if(num == "2") {
+                $('.additionalmethods').hide();
             }
-            else if(num == "2")
-            {
-                $('.additionalmethods').hide(); 
-            }
-    
         }
     </script>
-
 </html>

@@ -52,13 +52,11 @@ class DenialReasonsTable extends Table
             ->scalar('denial_reason')
             ->maxLength('denial_reason', 512)
             ->requirePresence('denial_reason', 'create');
-               
 
         $validator
             ->scalar('denial_email')
             ->requirePresence('denial_email', 'create')
-            ->allowEmpty('denial_email');  
-            
+            ->allowEmpty('denial_email');
 
         return $validator;
     }
