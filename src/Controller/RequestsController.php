@@ -618,10 +618,9 @@ class RequestsController extends AppController
         );
 
         $this->autoRender= false;
-        $export=WWW_ROOT.'xlsx'.DS.'Sparc Reports.xls';
-        $file['path']=$export;
+        $export=WWW_ROOT.'xlsx'.DS.'SparcReport-'.date("Y-m-d").'.xls';
         $writer->save($export);
-        $this->redirect('/xlsx/Sparc Reports.xls');
+        $this->redirect('/xlsx/SparcReport-'.date("Y-m-d").'.xls');
         }
 
     /**
