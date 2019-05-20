@@ -11,6 +11,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Cake\Core\Configure;
+
 
 //use Cake\Database\Schema\TableSchema;
 /**
@@ -233,7 +235,7 @@ class RequestsController extends AppController
         $requests2=$this->ApprovalReasons->find('list', [
             'keyField' => 'id',
             'valueField' => 'approval_reason'
-       ]);
+        ]);
         $results2 = $requests2->toArray();
         $this->set('results2',$results2);
         if(($this->request->data!= null)) {
@@ -244,19 +246,13 @@ class RequestsController extends AppController
                         ->where(['id' => $id])
                         ->execute();
                 $data = $this->request->data;
-                $test=$results->email;
-                $subject = $data["subject"];
-                $body= $data["Message_Body"];
                 $internal_note= $data["internal_note"];
-                $this->Requests->updateAll(
-                array('internal_note' => "$internal_note"), array('id' => $id));
-                $email = new Email('local');
-                $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
-                        ->to("$test")
-                        ->emailFormat('html')
-                        ->subject("$subject")
-                        ->send("$body");
-                $this->Flash->success(__('The approval mail has been sent.'));
+                $this->Requests->updateAll(array('internal_note' => "$internal_note"), array('id' => $id));
+                if ($this->sendMessage($results->email, $data['subject'], $data['Message_Body'])) {
+                    $this->Flash->success(__('The approval mail has been sent.'));
+                } else {
+                    $this->Flash->error(__('The approval mail could not be sent.'));
+                }
                 return $this->redirect(['action' => 'index']);
             } else if(($this->request->data["subject"] == null)) {
                 $message="Please enter a Subject";
@@ -303,17 +299,11 @@ class RequestsController extends AppController
                         ->set(['Funded' => 'Denied','denial_id' => $data["id"]])
                         ->where(['id' => $id])
                         ->execute();
-                $test=$results->email;
-                $subject = $data["subject"];
-                $body= $data["Message_Body"];
-                $email = new Email('local');
-                $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
-                ->to("$test")
-                ->emailFormat('html')
-                ->subject("$subject")
-                ->send("$body");
-                //$this->Flash->success(__($data));
-                $this->Flash->success(__('The denial mail has been sent.'));
+                if ($this->sendMessage($results->email, $data['subject'], $data['Message_Body'])) {
+                    $this->Flash->success(__('The denial mail has been sent.'));
+                } else {
+                    $this->Flash->error(__('The denial mail could not be sent.'));
+                }
                 return $this->redirect(['action' => 'index']);
             } else if(($this->request->data["subject"] == null)) {
                 $message="Please enter a Subject";
@@ -644,4 +634,29 @@ class RequestsController extends AppController
         }
         return false;
     }
+    
+    /**
+     * @param string $to destination email address
+     * @param string $subject email subject
+     * @param string $body HTML email body
+     * @return boolean true if successful
+     */
+    private function sendMessage($to, $subject, $body) {
+        if (Configure::read('debug') === true) {
+            $to = str_replace('@', '.', $to).'@mailinator.com';
+        }
+        $email = new Email('local');
+        try {
+            $email->from("uls-openaccessfund@pitt.edu","ULS - Open Access Fund")
+                    ->to($to)
+                    ->emailFormat('html')
+                    ->subject($subject)
+                    ->send($body);
+            return true;
+        } catch (Exception $e) {
+            Cake\Log\Log::error($e);
+        }
+        return false;
+    }
+
 }
