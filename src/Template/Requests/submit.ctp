@@ -10,27 +10,33 @@
 
 <?= $this->fetch('script'); ?>
 <div class="requests form large-offset-2 large-8 medium-8 medium-offset-2 columns content">
+    <h1><?= __('Open Access Author Fee Fund Application ') ?></h1>
+    <p class="instructions"><?= __('Please fill out this form completely. Questions? See our <a href="http://library.pitt.edu/open-access-author-fee-fund-policy" target="_blank">Policy</a> and our <a href="http://library.pitt.edu/open-access-author-fee-fund-faq" target="_blank">FAQ</a>.') ?></p>
     <?= $this->Form->create($request) ?>
     <fieldset>
-        <legend><?= __('Open Access Author Fee Fund Application ') ?></legend>
-        <div class="instructions">Please fill out this form completely. Questions? See our <a href="http://library.pitt.edu/open-access-author-fee-fund-policy" target="_blank">Policy</a> and our <a href="http://library.pitt.edu/open-access-author-fee-fund-faq" target="_blank">FAQ</a>.</div>
+        <legend><?= __('Author requesting funding') ?></legend>
         <?php
-            echo $this->Form->control('username',['default'=>(isset($details["username"]) ? $details["username"] : '')]);
+            echo $this->Form->control('username',['label' => 'Pitt computing account username', 'default'=>(isset($details["username"]) ? $details["username"] : '')]);
             echo $this->Form->button('AutoFill',['type'=>'button','onclick'=>'auto()']);
             echo $this->Form->control('author_name',['default'=>(isset($details["first_name"]) ? $details["first_name"]." ".$details["last_name"] : '')]);
             echo $this->Form->control('email',['default'=>(isset($details["email"]) ? $details["email"] : '')]);
-            echo $this->Form->control('school');
-            echo $this->Form->control('department',['default'=>(isset($details["department"]) ? $details["department"] : '')]);
-            echo $this->Form->control('publisher');
-            echo $this->Form->control('publication_name');
-            echo $this->Form->control('amount_requested');
-            echo $this->Form->control('article_title');
-
             $attributes = array();
-            $foo= 'student';
-            echo nl2br ("Author Status* \n");
+            echo '<div class="input required">';
+            echo '<label>'.__('Status with Pitt').'</label>';
+            echo '</div>';
             $options = array('faculty' => 'Faculty', 'postdoc' => 'Post-Doctoral', 'student' => 'Student', 'staff' => 'Staff');
             echo $this->Form->radio('author_status', $options, $attributes);
+            echo $this->Form->control('school');
+            echo $this->Form->control('department',['default'=>(isset($details["department"]) ? $details["department"] : '')]);
+        ?>
+    </fieldset>
+    <fieldset>
+        <legend><?= __('Article Information') ?></legend>
+        <?php
+            echo $this->Form->control('article_title',['label' => 'Title of article']);
+            echo $this->Form->control('publication_name',['label' => 'Title of the journal to which the article has been accepted']);
+            echo $this->Form->control('publisher',['label' => 'Journal publisher']);
+            echo $this->Form->control('amount_requested',['label' => 'Amount Reqested in U.S. Dollars']);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
