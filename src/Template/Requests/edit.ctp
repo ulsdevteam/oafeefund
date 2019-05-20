@@ -20,7 +20,7 @@
             echo $this->Form->control('amount_requested');
             echo $this->Form->control('article_title');
             echo $this->Form->control('inquiry_date');
-            echo $this->Form->control('author_status',['options'=> ['student' => 'Student', 'professor' => 'Professor', 'post-Doc' => 'Post-Doc', 'staff' => 'Staff'], 'empty'=> true]);
+            echo $this->Form->control('author_status',['options'=> ['faculty' => 'Faculty', 'postdoc' => 'Post-Doctoral', 'student' => 'Student', 'staff' => 'Staff'], 'empty'=> true]);
             echo $this->Form->control('bmc',['options'=> ['Y'=> 'Yes','N'=>'No'], 'empty'=> true]);
             echo $this->Form->control('hs',['options'=> ['Y'=> 'Yes','N'=>'No'], 'empty'=> true]);
             echo $this->Form->control('funded',['options' => ['Approved' => 'Approved','Denied'=>'Denied','Paid'=>'Paid','Pending'=>'Pending'], 'empty' => false]);

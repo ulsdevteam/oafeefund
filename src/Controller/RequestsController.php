@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class RequestsController extends AppController
 {
     /**
-     * Add new request method.(adduser)
+     * Add new request method.(request submission)
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
@@ -54,7 +54,7 @@ class RequestsController extends AppController
         $denialReasons = $this->Requests->DenialReasons->find('list', ['limit' => 200]);
         //@var Object $denialReasons It consists of the denialreasons.
         $this->set(compact('request', 'denialReasons'));
-        $this->render("adduser");
+        $this->render("submit");
     }
 
      public function saved()

@@ -92,7 +92,7 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
     /*
-     * AJAX call made from Requests Template adduser to Users/details.
+     * AJAX call made from Requests Template submit to Users/details.
      * array format containing all the necessary information.
      */
     public function details()

@@ -13,7 +13,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'OAAFF application';
+$cakeDescription = 'Open Access Author Fee Fund Administration';
 ?>
 <!DOCTYPE html>
 <html>

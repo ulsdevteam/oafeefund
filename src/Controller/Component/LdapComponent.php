@@ -25,18 +25,17 @@ class LdapComponent extends Component
     public static function getInfo($user)
     {
         $Ldap=Configure::read('Ldap');
-        $attributes = array('givenName','sn','mail','department');
+        $attributes = array('givenName','sn','mail','department','PittAffiliate');
         $filter = "(cn=$user)";
         $ldapUser = $Ldap['ldapUser'];
         $ldapPassword = $Ldap['ldapPassword'];
         $ldapServer = $Ldap['ldapServer'];
         $ldapPort = $Ldap['ldapPort'];
-        $ldap = ldap_connect($ldapServer);
+        $ldap = ldap_connect($ldapServer, $ldapPort);
         if ($ldap) {
-            $ldapbind=ldap_bind($ldap, $ldapUser, $ldapPassword);
             $baseDN = $Ldap['ldapBaseDN'];
             if (ldap_bind($ldap, $ldapUser, $ldapPassword)) {
-                $result = ldap_search($ldap, $baseDN, $filter,$attributes);
+                $result = ldap_search($ldap, $baseDN, $filter, $attributes);
                 $array = ldap_get_entries($ldap, $result);
                 $info = array();
                 $info['username'] = $user;
@@ -45,12 +44,21 @@ class LdapComponent extends Component
                     $info['last_name'] = $array[0]['sn'][0];
                     $info['email'] = $array[0]['mail'][0];
                     $info['department'] = $array[0]['department'][0];
+                    $info['status'] = '';
+                    if (isset($array[0]['pittaffiliate']) && is_array($array[0]['pittaffiliate'])) {
+                        foreach (array('faculty', 'student', 'staff') as $s) {
+                            if (in_array($s, $array[0]['pittaffiliate']) !== FALSE) {
+                                $info['status'] = $s;
+                                break;
+                            }
+                        }
+                    }
                 } else {
-                    $info['first_name'] = $info['last_name'] = $info['email'] =  $info['department'] = '';
+                    $info['first_name'] = $info['last_name'] = $info['email'] =  $info['department'] = $info['status'] = '';
                 }
                 return $info;
             }
         }
-        return array('username' => $user, 'first_name' => '' , 'last_name' => '', 'email' => '', 'department' => '');
+        return array('username' => $user, 'first_name' => '' , 'last_name' => '', 'email' => '', 'department' => '', 'status' => '');
     }
 }
