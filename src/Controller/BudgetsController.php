@@ -25,7 +25,7 @@ class BudgetsController extends AppController
     {
         $budgets=$this->paginate($this->Budgets);
         $connection = ConnectionManager::get('default');
-        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( IFNULL(T.amount_paid, R.amount_requested)  ),2) AS sum_amtreqt
+        $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( IFNULL(T.amount_paid, R.amount_requested)  ),2) AS sum_amtreqt, ROUND(SUM(T.amount_paid),2) AS sum_amtpaid
                                         FROM requests AS R 
                                         LEFT JOIN budgets AS B ON R.inquiry_date >= B.budget_date_begin AND R.inquiry_date <= B.budget_date_end 
                                         LEFT JOIN transactions AS T ON T.request_id = R.id
@@ -37,6 +37,7 @@ class BudgetsController extends AppController
 
                 if ($result["id"]==$budget->id) {
                     $budget->sum_amtreqt=$result["sum_amtreqt"];
+                    $budget->sum_amtpaid=$result["sum_amtpaid"];
                     array_push($newBudgets, $budget);
                 }
             }

@@ -20,6 +20,7 @@
                 <th scope="col"><?= $this->Paginator->sort('budget_date_end') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('total_budget') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('approved_amount') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('paid_amount') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('budget_per_person') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -35,6 +36,7 @@
                 <td><?= h($budget->budget_date_end) ?></td>
                 <td><?= $this->Number->format($budget->total_budget) ?></td>
                 <td><?= $this->Number->format($budget->sum_amtreqt) ?></td>
+                <td><?= $this->Number->format($budget->sum_amtpaid) ?></td>
                 <td><?= $this->Number->format($budget->budget_per_person) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $budget->id]) ?>
