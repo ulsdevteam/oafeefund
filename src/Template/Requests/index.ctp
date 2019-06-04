@@ -110,11 +110,6 @@
                 }
 
                 ?>
-  <!--    <td><?php //h($request->author_status) ?></td>
-                <td><?php //h($request->bmc) ?></td>
-                <td><?php //h($request->hs) ?></td>
-                <td><?php //h($request->funded) ?></td>
-                <td><?php // $request->has('denial_reason') ? $this->Html->link($request->denial_reason->id, ['controller' => 'DenialReasons', 'action' => 'view', $request->denial_reason->id]) : '' ?></td> -->
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $request->id]) ?>
 
