@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\DenialReason $denialReason
  */
 ?>
-<script src='http://code.jquery.com/jquery-1.11.0.min.js'></script>
+<script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
     tinymce.init({ selector:'.edittextarea', height: 500,  plugins: [

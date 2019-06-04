@@ -4,7 +4,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
 ?>
 <?php echo $this->Html->css('forms'); ?>
 
-<?= $this->Html->script(array('http://code.jquery.com/jquery-1.11.0.min.js')); ?>
+<?= $this->Html->script(array('//code.jquery.com/jquery-1.11.0.min.js')); ?>
 
 <?= $this->fetch('script'); ?>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
