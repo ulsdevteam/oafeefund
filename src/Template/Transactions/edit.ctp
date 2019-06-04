@@ -13,8 +13,7 @@
                 ['confirm' => __('Are you sure you want to delete # {0}?', $transaction->id)]
             )
         ?></li>
-        <li><?= $this->Html->link(__('List Transactions'), ['action' => 'index']) ?></li>
-     
+        <li><?= $transaction->has('request') ? $this->Html->link(_('Go to Request'), ['controller' => 'Requests', 'action' => 'view', $transaction->request->id]) : '' ?> </li>
     </ul>
 </nav>
 <div class="transactions form large-9 medium-8 columns content">
