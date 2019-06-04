@@ -21,18 +21,11 @@ $this->assign('title', __('Send mail to Author for Approval.'));
 <div class="MailForm">
     <fieldset>
         <legend><?php echo $this->fetch('title'); ?></legend>
+        <div>
+            <b><?= h($results->author_name) ?></b> (<?= h($results->email) ?>) is approved for <b><?php $fmt = new NumberFormatter( 'en_US', NumberFormatter::CURRENCY ); echo $fmt->formatCurrency($results->amount_requested, 'USD'); ?></b> to publish <i><?= h($results->article_title) ?></i> in <b><?= h($results->publication_name) ?></b>.
+        </div>
         <?php
-            echo "<b>Mail will be sent to:</b> ";
-            echo "<br />\n";
-            echo h($results-> first_name);
-            echo " ";
-            echo h($results-> last_name);
-            echo "<br />\n";
-            echo '<b>Mail will be received on the below email address: </b>';
-            echo "<br />\n";
-            echo h($results-> email);
-            echo "<br />\n";
-            echo $this->Form->input('id',array('options' => $results2, 'empty' =>'(Choose one)'));
+            echo $this->Form->input('id', array('options' => $approvalReasons, 'empty' =>'(Choose one)', 'label' => 'Mail Template'));
             echo $this->Form->button('AutoFill',['onclick'=>'approvalcheck()']);
         ?>
         </br>

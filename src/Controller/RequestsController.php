@@ -222,7 +222,7 @@ class RequestsController extends AppController
         /*
          * @var array $results, contains an array
          * of the request for requested id
-         * @var array $results2 , contains an array
+         * @var array $approvalReasons , contains an array
          * of the Approved reasons, with id and approval reason.
          * @var Cake\Mailer\Email Object $email, contains the email template
          * to be sent.
@@ -236,8 +236,8 @@ class RequestsController extends AppController
             'keyField' => 'id',
             'valueField' => 'approval_reason'
         ]);
-        $results2 = $requests2->toArray();
-        $this->set('results2',$results2);
+        $approvalReasons = $requests2->toArray();
+        $this->set('approvalReasons',$approvalReasons);
         if(($this->request->data!= null)) {
             if(($this->request->data["subject"] != null) && ($this->request->data["Message_Body"] != null)) {
                 $approved=$this->Requests->query();
