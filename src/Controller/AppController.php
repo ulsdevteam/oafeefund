@@ -74,6 +74,7 @@ class AppController extends Controller
         $this->loadComponent('Ldap');
         $this->loadComponent('SearchQuery');
         $this->loadComponent('Auth', [
+            'unauthorizedRedirect' => false,
             'authenticate' => [
                 'Env' => [
                     'fields' => ['username' => 'user']

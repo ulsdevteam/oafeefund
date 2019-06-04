@@ -30,10 +30,6 @@
             <th scope="row"><?= __('Date Paid') ?></th>
             <td><?= h($transaction->date_paid) ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Date Completed') ?></th>
-            <td><?= h($transaction->date_completed) ?></td>
-        </tr>
     </table>
     <div class="row">
         <h4><?= __('Description') ?></h4>

@@ -31,7 +31,6 @@ class Transaction extends Entity
         'amount_paid' => true,
         'description' => true,
         'date_paid' => true,
-        'date_completed' => true,
         'cheque_number' => true,
         'request_id' => true,
         'request' => true
