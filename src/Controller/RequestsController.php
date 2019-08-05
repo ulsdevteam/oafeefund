@@ -46,7 +46,7 @@ class RequestsController extends AppController
 
         $this->viewBuilder()->layout('blankStyleView'); // This creates a blank template from the Layout, overides the default one.
 
-        $user= $this->Auth->user('user');
+        $user= $this->Auth ? $this->Auth->user('user') : false;
         if ($user) {
             $var= $this->Ldap->getInfo($user);
         } else {

@@ -105,7 +105,7 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
-        if ($this->Auth->user()) {
+        if ($this->Auth && $this->Auth->user()) {
             $this->set('role', $this->Auth->user());
         }
     }
