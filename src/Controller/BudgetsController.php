@@ -26,10 +26,9 @@ class BudgetsController extends AppController
         $budgets=$this->paginate($this->Budgets);
         $connection = ConnectionManager::get('default');
         $results=$connection->execute('SELECT B.id AS id, ROUND(SUM( IFNULL(T.amount_paid, R.amount_requested)  ),2) AS sum_amtreqt, ROUND(SUM(T.amount_paid),2) AS sum_amtpaid
-                                        FROM requests AS R 
-                                        LEFT JOIN budgets AS B ON R.inquiry_date >= B.budget_date_begin AND R.inquiry_date <= B.budget_date_end 
+                                        FROM budgets AS B
+                                        LEFT JOIN requests AS R ON R.inquiry_date >= B.budget_date_begin AND R.inquiry_date <= B.budget_date_end AND (R.funded="Approved" OR R.funded="Paid")
                                         LEFT JOIN transactions AS T ON T.request_id = R.id
-                                        WHERE (R.funded="Approved" OR R.funded="Paid")
                                         GROUP BY B.id')->fetchAll('assoc');
         $newBudgets=array();
         foreach ($budgets as $budget) {
