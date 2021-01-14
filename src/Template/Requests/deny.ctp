@@ -7,7 +7,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
 <?= $this->Html->script(array('//code.jquery.com/jquery-1.11.0.min.js')); ?>
 
 <?= $this->fetch('script'); ?>
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
 <script>
     tinymce.init({ selector: '.edittextarea', height: 500,
         force_br_newlines: false,
@@ -15,7 +15,7 @@ $this->assign('title', __('Send mail to Author for Denial.'));
         forced_root_block: '',
         plugins: [
             'advlist autolink lists link print preview anchor',
-            'insertdatetime table contextmenu paste code'
+            'insertdatetime table paste code'
         ], });
 </script>
 

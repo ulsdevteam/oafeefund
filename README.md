@@ -8,6 +8,10 @@ Software Stack: CakePHP, JavaScript, Jquery, HTML, CSS
 
 Software for Normalization of Data: Python (Jupyter Notebook)
 
+## Installation note
+
+The TinyMCE library must be manually installed by placing the extracted files in the webroot/js/ folder, such that the tool can be loaded as "/js/tinymce/js/tinymce/tinymce.min.js".
+
 
 ## Situation of concern
 

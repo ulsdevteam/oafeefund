@@ -6,7 +6,7 @@ $this->assign('title', __('Send mail to Author for Approval.'));
 <?= $this->Html->script(array('//code.jquery.com/jquery-1.11.0.min.js')); ?>
 
 <?= $this->fetch('script'); ?>
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script src="/js/tinymce/js/tinymce/tinymce.min.js"></script>
 <script>
     tinymce.init({
         mode : "textareas",
@@ -14,7 +14,7 @@ $this->assign('title', __('Send mail to Author for Approval.'));
         force_p_newlines: false,
         selector: '.edittextarea', height: 500,  plugins: [
             'advlist autolink lists link print preview anchor',
-            'insertdatetime table contextmenu paste code'
+            'insertdatetime table paste code'
     ], });
 </script>
 
